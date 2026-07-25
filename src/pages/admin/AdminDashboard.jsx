@@ -10,7 +10,7 @@ const STATS = [
 
 const AdminDashboard = () => (
   <>
-    <Helmet><title>Admin Dashboard | American Tech Global</title></Helmet>
+    <Helmet><title>Admin Dashboard | American FutureTech</title></Helmet>
     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
     <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {STATS.map((s) => (

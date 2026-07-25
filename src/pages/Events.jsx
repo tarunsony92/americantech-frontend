@@ -10,7 +10,7 @@ const Events = () => {
 
   return (
     <>
-      <Helmet><title>Events | American Tech Global</title></Helmet>
+      <Helmet><title>Events | American FutureTech</title></Helmet>
       <PageHeader title="Events" subtitle="Career fairs, webinars, and workshops." breadcrumbItems={[{ label: "Events" }]} />
 
       <section className="container-page py-16">

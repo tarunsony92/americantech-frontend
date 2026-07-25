@@ -9,7 +9,7 @@ const Testimonials = () => {
 
   return (
     <>
-      <Helmet><title>Testimonials | American Tech Global</title></Helmet>
+      <Helmet><title>Testimonials | American FutureTech</title></Helmet>
       <PageHeader title="Testimonials" subtitle="What our students say about their experience." breadcrumbItems={[{ label: "Testimonials" }]} />
 
       <section className="container-page py-16">

@@ -28,7 +28,16 @@ const NAV_LINKS = [
   // { label: "Blog", to: "/blog" },
   // { label: "Events", to: "/events" },
   // { label: "Gallery", to: "/gallery" },
-  { label: "Terms & Conditions", to: "/terms-and-conditions" },
+  {
+    label: "More",
+    to: "",
+    children: [
+      { label: "Terms & Conditions", to: "/terms-and-conditions" },
+      { label: "Cookies Policy", to: "/cookie-policy" },
+      { label: "Refund and Return Policy", to: "/refund-policy" },
+    ],
+  },
+  { label: "About Us", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -42,8 +51,8 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <nav className="container-page flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-white">AT</span>
-          American Tech
+          <span className="flex h-15 w-30 items-center border justify-center rounded-lg  text-white"><img src="../../static/images/logo.png" alt="Logo" className="h-full w-full object-contain" /></span>
+          American FutureTech
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">

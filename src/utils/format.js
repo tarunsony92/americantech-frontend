@@ -18,5 +18,5 @@ export const timeAgo = (isoString) => {
 export const formatCurrencyINR = (value) => {
   const num = Number(value);
   if (Number.isNaN(num)) return value;
-  return `₹${num.toLocaleString("en-IN")}`;
+  return `$${num.toLocaleString("en-IN")}`;
 };

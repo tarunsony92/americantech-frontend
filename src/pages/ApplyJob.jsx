@@ -31,7 +31,7 @@ const ApplyJob = () => {
 
   return (
     <>
-      <Helmet><title>Apply — {job?.title || "Job"} | American Tech Global</title></Helmet>
+      <Helmet><title>Apply — {job?.title || "Job"} | American FutureTech</title></Helmet>
       <PageHeader
         title={`Apply for ${job?.title || "this role"}`}
         subtitle={job?.company?.name}

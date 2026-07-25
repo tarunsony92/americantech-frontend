@@ -23,7 +23,7 @@ const MyCertificates = () => {
 
   return (
     <>
-      <Helmet><title>My Certificates | American Tech Global</title></Helmet>
+      <Helmet><title>My Certificates | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Certificates</h1>
 
       {status === "loading" && <p className="mt-6 text-slate-500">Loading your certificates...</p>}

@@ -31,7 +31,7 @@ const Profile = () => {
 
   return (
     <>
-      <Helmet><title>Profile | American Tech Global</title></Helmet>
+      <Helmet><title>Profile | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Profile</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="card mt-6 max-w-lg space-y-5 p-6">
         <div>

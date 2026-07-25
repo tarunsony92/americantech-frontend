@@ -13,7 +13,7 @@ const Overview = () => {
 
   return (
     <>
-      <Helmet><title>Dashboard | American Tech Global</title></Helmet>
+      <Helmet><title>Dashboard | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome back{user?.fullName ? `, ${user.fullName}` : ""}</h1>
       <p className="mt-1 text-sm text-slate-500">Here's a snapshot of your learning journey.</p>
 

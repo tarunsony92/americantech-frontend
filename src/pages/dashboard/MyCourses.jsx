@@ -24,7 +24,7 @@ const MyCourses = () => {
 
   return (
     <>
-      <Helmet><title>My Courses | American Tech Global</title></Helmet>
+      <Helmet><title>My Courses | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Courses</h1>
 
       {status === "loading" && <p className="mt-6 text-slate-500">Loading your courses...</p>}

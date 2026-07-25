@@ -10,7 +10,7 @@ const Certifications = () => {
 
   return (
     <>
-      <Helmet><title>Certifications | American Tech Global</title></Helmet>
+      <Helmet><title>Certifications | American FutureTech</title></Helmet>
       <PageHeader title="Certifications" subtitle="Every program ends with an industry-recognized certificate." breadcrumbItems={[{ label: "Certifications" }]} />
 
       <section className="container-page py-16">

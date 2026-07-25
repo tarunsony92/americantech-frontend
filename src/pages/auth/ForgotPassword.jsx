@@ -20,7 +20,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <Helmet><title>Forgot Password | American Tech Global</title></Helmet>
+      <Helmet><title>Forgot Password | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Reset your password</h1>
       <p className="mt-1 text-sm text-slate-500">Enter your email and we'll send you a reset link.</p>
 

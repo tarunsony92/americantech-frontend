@@ -28,7 +28,7 @@ const AdminLogin = () => {
 
   return (
     <>
-      <Helmet><title>Admin Login | American Tech Global</title></Helmet>
+      <Helmet><title>Admin Login | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Portal</h1>
       <p className="mt-1 text-sm text-slate-500">Restricted access. Administrator credentials only.</p>
 

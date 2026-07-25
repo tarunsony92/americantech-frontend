@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 
 const NotFound = () => (
   <>
-    <Helmet><title>Page Not Found | American Tech Global</title></Helmet>
+    <Helmet><title>Page Not Found | American FutureTech</title></Helmet>
     <div className="container-page flex min-h-[70vh] flex-col items-center justify-center text-center">
       <p className="text-7xl font-extrabold text-primary-600">404</p>
       <h1 className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">Page not found</h1>

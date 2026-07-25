@@ -9,7 +9,7 @@ const HiringPartners = () => {
 
   return (
     <>
-      <Helmet><title>Hiring Partners | American Tech Global</title></Helmet>
+      <Helmet><title>Hiring Partners | American FutureTech</title></Helmet>
       <PageHeader title="Hiring Partners" subtitle="Companies that trust our graduates." breadcrumbItems={[{ label: "Hiring Partners" }]} />
 
       <section className="container-page py-16">

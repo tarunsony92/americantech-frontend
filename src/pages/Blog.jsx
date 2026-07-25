@@ -22,7 +22,7 @@ const Blog = () => {
 
   return (
     <>
-      <Helmet><title>Blog | American Tech Global</title></Helmet>
+      <Helmet><title>Blog | American FutureTech</title></Helmet>
       <PageHeader title="Blog" subtitle="Career advice and industry insights." breadcrumbItems={[{ label: "Blog" }]} />
 
       <section className="container-page py-16">

@@ -5,7 +5,7 @@ import ContactForm from "../components/ContactForm";
 
 const Contact = () => (
   <>
-    <Helmet><title>Contact Us | American Tech Global</title></Helmet>
+    <Helmet><title>Contact Us | American FutureTech</title></Helmet>
     <PageHeader title="Contact Us" subtitle="We'd love to hear from you." breadcrumbItems={[{ label: "Contact" }]} />
 
     <section className="container-page grid grid-cols-1 gap-10 py-16 lg:grid-cols-2">

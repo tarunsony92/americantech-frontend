@@ -29,7 +29,7 @@ const JobDetails = () => {
 
   return (
     <>
-      <Helmet><title>{job.title} | American Tech Global</title></Helmet>
+      <Helmet><title>{job.title} | American FutureTech</title></Helmet>
       <PageHeader
         title={job.title}
         subtitle={job.company?.name}

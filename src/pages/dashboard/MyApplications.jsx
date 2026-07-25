@@ -14,7 +14,7 @@ const APPLICATIONS = JOBS.slice(0, 3).map((job, i) => ({
 
 const MyApplications = () => (
   <>
-    <Helmet><title>My Applications | American Tech Global</title></Helmet>
+    <Helmet><title>My Applications | American FutureTech</title></Helmet>
     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Applications</h1>
     <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
       <table className="w-full text-left text-sm">

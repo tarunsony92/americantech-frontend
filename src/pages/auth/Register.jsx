@@ -21,7 +21,7 @@ const Register = () => {
 
   return (
     <>
-      <Helmet><title>Register | American Tech Global</title></Helmet>
+      <Helmet><title>Register | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Create your account</h1>
       <p className="mt-1 text-sm text-slate-500">Start your journey with us today.</p>
 

@@ -28,7 +28,7 @@ const Careers = () => {
 
   return (
     <>
-      <Helmet><title>Career Opportunities | American Tech Global</title></Helmet>
+      <Helmet><title>Career Opportunities | American FutureTech</title></Helmet>
       <PageHeader title="Career Opportunities" subtitle="Open roles from our network of hiring partners." breadcrumbItems={[{ label: "Careers" }]} />
 
       <section className="container-page grid grid-cols-1 gap-8 py-12 lg:grid-cols-[280px_1fr]">

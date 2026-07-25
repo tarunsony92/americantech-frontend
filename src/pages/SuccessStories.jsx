@@ -9,7 +9,7 @@ const SuccessStories = () => {
 
   return (
     <>
-      <Helmet><title>Success Stories | American Tech Global</title></Helmet>
+      <Helmet><title>Success Stories | American FutureTech</title></Helmet>
       <PageHeader title="Success Stories" subtitle="Real graduates, real career transitions." breadcrumbItems={[{ label: "Success Stories" }]} />
 
       <section className="container-page py-16">

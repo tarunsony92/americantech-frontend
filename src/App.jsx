@@ -30,6 +30,7 @@ const Faq = lazy(() => import("./pages/Faq"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const TermsAndConditions = lazy(() => import("./pages/t&c"));
+const CookiePolicy = lazy(() => import("./pages/cokiePolicy"));
 
 // Auth pages
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -62,6 +63,7 @@ const ManageNewsletters = lazy(() => import("./pages/admin/ManageNewsletters"));
 const MediaLibrary = lazy(() => import("./pages/admin/MediaLibrary"));
 const Settings = lazy(() => import("./pages/admin/Settings"));
 const AuditLogs = lazy(() => import("./pages/admin/AuditLogs"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -96,6 +98,8 @@ function App() {
                 <Route path="/faq" element={<Faq />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
 
               </Route>
 

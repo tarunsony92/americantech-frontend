@@ -15,7 +15,7 @@ const BlogDetails = () => {
   return (
     <>
       <Helmet>
-        <title>{post.title} | American Tech Global</title>
+        <title>{post.title} | American FutureTech</title>
         <meta property="og:title" content={post.title} />
       </Helmet>
       <PageHeader

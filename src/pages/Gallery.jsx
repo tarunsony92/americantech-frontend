@@ -8,7 +8,7 @@ const Gallery = () => {
 
   return (
     <>
-      <Helmet><title>Gallery | American Tech Global</title></Helmet>
+      <Helmet><title>Gallery | American FutureTech</title></Helmet>
       <PageHeader title="Gallery" subtitle="Moments from our campus, events, and graduations." breadcrumbItems={[{ label: "Gallery" }]} />
 
       <section className="container-page py-16">

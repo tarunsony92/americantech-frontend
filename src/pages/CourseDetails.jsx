@@ -50,7 +50,7 @@ const CourseDetails = () => {
 
   return (
     <>
-      <Helmet><title>{course.title} | American Tech Global</title></Helmet>
+      <Helmet><title>{course.title} | American FutureTech</title></Helmet>
       <PageHeader
         title={course.title}
         subtitle={course.category?.name}

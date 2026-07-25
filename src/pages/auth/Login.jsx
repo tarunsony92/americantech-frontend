@@ -21,7 +21,7 @@ const Login = () => {
 
   return (
     <>
-      <Helmet><title>Login | American Tech Global</title></Helmet>
+      <Helmet><title>Login | American FutureTech</title></Helmet>
       <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Welcome back</h1>
       <p className="mt-1 text-sm text-slate-500">Log in to access your dashboard.</p>
 

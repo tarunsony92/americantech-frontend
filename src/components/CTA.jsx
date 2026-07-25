@@ -7,7 +7,7 @@ const CTA = ({
   ctaLabel = "Enroll Today",
   ctaTo = "/courses",
 }) => (
-  <section className="bg-gradient-to-r from-primary-700 to-primary-500 py-16 text-white">
+  <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-16 text-white">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}

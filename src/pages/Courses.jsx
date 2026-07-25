@@ -44,7 +44,7 @@ const Courses = () => {
 
   return (
     <>
-      <Helmet><title>Courses | American Tech Global</title></Helmet>
+      <Helmet><title>Courses | American FutureTech</title></Helmet>
       <PageHeader title="Explore Our Courses" subtitle="Career-focused programs across web, data, cloud, security and design." breadcrumbItems={[{ label: "Courses" }]} />
 
       <section className="container-page grid grid-cols-1 gap-8 py-12 lg:grid-cols-[280px_1fr]">

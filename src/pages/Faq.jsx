@@ -9,7 +9,7 @@ const Faq = () => {
 
   return (
     <>
-      <Helmet><title>FAQ | American Tech Global</title></Helmet>
+      <Helmet><title>FAQ | American FutureTech</title></Helmet>
       <PageHeader title="Frequently Asked Questions" breadcrumbItems={[{ label: "FAQ" }]} />
 
       <section className="container-page max-w-3xl py-16">
