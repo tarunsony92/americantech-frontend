@@ -16,15 +16,15 @@ const NAV_LINKS = [
       { label: "Certifications", to: "/certifications" },
     ],
   },
-  {
-    label: "Careers",
-    to: "/careers",
-    children: [
-      { label: "Job Opportunities", to: "/careers" },
-      { label: "Success Stories", to: "/success-stories" },
-      { label: "Hiring Partners", to: "/hiring-partners" },
-    ],
-  },
+  // {
+  //   label: "Careers",
+  //   to: "/careers",
+  //   children: [
+  //     { label: "Job Opportunities", to: "/careers" },
+  //     { label: "Success Stories", to: "/success-stories" },
+  //     { label: "Hiring Partners", to: "/hiring-partners" },
+  //   ],
+  // },
   // { label: "Blog", to: "/blog" },
   // { label: "Events", to: "/events" },
   // { label: "Gallery", to: "/gallery" },
@@ -33,8 +33,9 @@ const NAV_LINKS = [
     to: "",
     children: [
       { label: "Terms & Conditions", to: "/terms-and-conditions" },
-      { label: "Cookies Policy", to: "/cookie-policy" },
       { label: "Refund and Return Policy", to: "/refund-policy" },
+      { label: "Cookies Policy", to: "/cookie-policy" },
+      
     ],
   },
   { label: "About Us", to: "/about" },
@@ -51,8 +52,13 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <nav className="container-page flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400">
-          <span className="flex h-15 w-30 items-center border justify-center rounded-lg  text-white"><img src="../../static/images/logo.png" alt="Logo" className="h-full w-full object-contain" /></span>
-          American FutureTech
+<span className="flex h-23 w-50 items-center justify-center rounded-lg overflow-hidden">
+  <img
+    src="../../static/images/logo.png"
+    alt="Logo"
+    className="h-full w-full object-contain"
+  />
+</span>          
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
