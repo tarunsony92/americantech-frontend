@@ -189,10 +189,10 @@ const sections = [
             American FutureTech LLC
           </p>
           <a
-            href="mailto:info@americantechgloballlc.com"
+            href="mailto:info@americanfuturetechllc.com"
             className="flex items-center gap-2 text-primary hover:underline"
           >
-            <Mail size={16} /> info@americantechgloballlc.com
+            <Mail size={16} /> info@americanfuturetechllc.com
           </a>
         </div>
       </>

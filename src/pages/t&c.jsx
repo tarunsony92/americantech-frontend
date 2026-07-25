@@ -194,18 +194,18 @@ const sections = [
             American FutureTech LLC
           </p>
           <a
-            href="mailto:info@americantechgloballlc.com"
+            href="mailto:info@americanfuturetechllc.com"
             className="flex items-center gap-2 text-primary hover:underline"
           >
-            <Mail size={16} /> info@americantechgloballlc.com
+            <Mail size={16} /> info@americanfuturetechllc.com
           </a>
           <a
-            href="https://americantechgloballlc.com/"
+            href="https://americanfuturetechllc.com/"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 text-primary hover:underline"
           >
-            <Globe size={16} /> americantechgloballlc.com
+            <Globe size={16} /> americanfuturetechllc.com
           </a>
         </div>
       </>
@@ -287,12 +287,12 @@ const TermsAndConditions = () => {
             This page explains how we gather, use, share, and protect your
             information when you visit{" "}
             <a
-              href="https://americantechgloballlc.com/"
+              href="https://americanfuturetechllc.com/"
               target="_blank"
               rel="noreferrer"
               className="text-primary underline"
             >
-              americantechgloballlc.com
+              americanfuturetechllc.com
             </a>{" "}
             and use our courses, training programs, and related services
             (together, the "Services").

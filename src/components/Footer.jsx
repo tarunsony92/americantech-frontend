@@ -47,8 +47,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400">
-              <span className="flex h-15 w-30 items-center border justify-center rounded-lg  text-white"><img src="../../static/images/logo.png" alt="Logo" className="h-full w-full object-contain" /></span>
-              American FutureTech
+<span className="flex h-15 w-30 items-center justify-center rounded-lg overflow-hidden">
+  <img
+    src="../../static/images/logo.png"
+    alt="Logo"
+    className="h-full w-full object-contain"
+  />
+</span>               American FutureTech
             </Link>
             <p className="mt-4 max-w-sm text-sm text-slate-600 dark:text-slate-400">
               Career-focused technology training and placement programs, built to move students from classroom to career.
