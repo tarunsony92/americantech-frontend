@@ -44,11 +44,11 @@ const DashboardLayout = () => {
       to: "/dashboard/certificates",
       icon: HiOutlineBadgeCheck,
     },
-    {
-      label: "Applications",
-      to: "/dashboard/applications",
-      icon: HiOutlineDocumentText,
-    },
+    // {
+    //   label: "Applications",
+    //   to: "/dashboard/applications",
+    //   icon: HiOutlineDocumentText,
+    // },
     {
       label: "Profile",
       to: "/dashboard/profile",

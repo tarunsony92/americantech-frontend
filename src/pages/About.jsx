@@ -3,11 +3,11 @@ import PageHeader from "../components/PageHeader";
 import CTA from "../components/CTA";
 
 const PARTNER_LOGOS = [
-  { name: "Accenture", src: "/logos/accenture.svg" },
-  { name: "IBM", src: "https://cdn.simpleicons.org/ibm" },
-  { name: "Wipro", src: "/logos/wipro.svg" },
-  { name: "Cognizant", src: "/logos/cognizant.svg" },
-  { name: "Infosys", src: "/logos/infosys.svg" },
+  { name: "Accenture", src: "/static/images/accenturre.png" },
+  { name: "IBM", src: "/static/images/ibm.png" },
+  { name: "Microsoft", src: "/static/images/microsoft.jpg" },
+  { name: "Wipro", src: "/static/images/wipo.png" },
+  { name: "Infosys", src: "/static/images/infosys.png" },
 ];
 
 const WHY_CHOOSE = [
@@ -225,34 +225,27 @@ const About = () => (
 
 {/* Trusted by / Partner Logos */}
 <section className="border-y border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 py-14">
-      <div className="container-page">
-        <p className="text-center text-xs font-semibold tracking-widest text-slate-400 uppercase mb-10">
-          Trusted by professionals from
-        </p>
+  <div className="container-page">
+    <p className="text-center text-xs font-semibold tracking-widest text-slate-400 uppercase mb-10">
+      Trusted by professionals from
+    </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-8 items-center justify-items-center">
-          {PARTNER_LOGOS.map((logo) => (
-            <div
-              key={logo.name}
-              className="flex items-center justify-center h-10 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100"
-            >
-              <img
-                src={logo.src}
-                alt={logo.name}
-                className="h-8 w-auto max-w-[110px] object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                  e.currentTarget.nextSibling.style.display = "inline";
-                }}
-              />
-              <span className="hidden text-lg font-bold tracking-tight text-slate-500 dark:text-slate-400">
-                {logo.name}
-              </span>
-            </div>
-          ))}
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-8 items-center justify-items-center">
+      {PARTNER_LOGOS.map((logo) => (
+        <div
+          key={logo.name}
+          className="flex items-center justify-center"
+        >
+          <img
+            src={logo.src}
+            alt={logo.name}
+            className="h-full w-full max-w-[110px] object-contain"
+          />
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
+  </div>
+</section>
 
     {/* Why Choose Us */}
     <section className="container-page py-16">
