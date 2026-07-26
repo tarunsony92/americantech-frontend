@@ -122,7 +122,7 @@ const PROGRAM_FEATURES = [
   },
   {
     tag: "EXPERT MENTORSHIP",
-    title: "1-on-1 Guidance from Industry Pros",
+    title: "1-on-1 Guidance from Industry Professionals",
     desc: "Get personalised mentorship from professionals actively working in your field.",
     image: "/static/images/why2.png",
   },
