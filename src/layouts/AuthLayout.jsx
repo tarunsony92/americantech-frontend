@@ -5,8 +5,13 @@ const AuthLayout = () => (
     <div className="relative hidden items-center justify-center bg-gradient-to-br from-primary-800 to-primary-600 p-12 text-white lg:flex">
       <div className="max-w-md">
         <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
-          <span className="flex h-15 w-30 items-center border justify-center rounded-lg  text-white"><img src="../../static/images/logo.png" alt="Logo" className="h-full w-full object-contain" /></span>
-          American FutureTech
+          <span className="group flex h-full w-full items-center justify-center rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-200 transition-all duration-300 hover:scale-105 hover:shadow-xl dark:bg-slate-800 dark:ring-slate-700">
+  <img
+    src="/static/images/logo.png"
+    alt="American FutureTech Logo"
+    className="h-full w-full object-contain transition-transform duration-300 "
+  />
+</span>
         </Link>
         <h2 className="mt-8 text-3xl font-bold leading-snug">
           Join thousands building careers in technology.

@@ -450,8 +450,8 @@ const Home = () => {
         </div>
 
         {/* Marquee strip */}
-        <div className="border-y border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-4 overflow-hidden">
-          <div className="flex w-max animate-marquee whitespace-nowrap gap-12 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:[animation-play-state:paused]">
+        <div className="border-y border-slate-100 bg-[#DEDC7E] py-4 overflow-hidden dark:border-slate-800 dark:bg-[#DEDC7E]">
+          <div className="flex w-max animate-marquee whitespace-nowrap gap-12 text-sm font-semibold text-black dark:text-slate-400 hover:[animation-play-state:paused]">
             {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map(
               (item, i) => (
                 <span

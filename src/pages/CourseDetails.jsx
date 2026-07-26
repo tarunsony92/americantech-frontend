@@ -324,29 +324,36 @@ const CourseDetails = () => {
 
       {/* ---------------- TOOLS COVERED ---------------- */}
       <section className="bg-gradient-to-b from-slate-50 to-white py-16 dark:from-slate-900/40 dark:to-slate-950">
-        <div className="container-page">
-          <SectionHeading
-            center
-            eyebrow="Hands-On Toolkit"
-            title={`${course.title} Tools Covered`}
-            subtitle="Master industry-leading tools used by professionals worldwide."
-          />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {tools.map((tool, idx) => (
-              <div
-                key={tool}
-className="flex items-center justify-center gap-3 rounded-xl bg-white p-4 text-center text-sm font-semibold text-slate-700 shadow-md ring-1 ring-black/5 transition-transform hover:-translate-y-1 dark:bg-slate-800 dark:text-slate-200"              >
-                <span
-                  className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${TOOL_COLORS[idx % TOOL_COLORS.length]} text-white shadow`}
-                >
-                  <HiOutlineShieldCheck className="h-5 w-5" />
-                </span>
-                {tool}
-              </div>
-            ))}
-          </div>
+  <div className="container-page">
+    <SectionHeading
+      center
+      eyebrow="Hands-On Toolkit"
+      title={`${course.title} Tools Covered`}
+      subtitle="Master industry-leading tools used by professionals worldwide."
+    />
+
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+      {tools.map((tool, idx) => (
+        <div
+          key={tool}
+          className="group flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-800 dark:ring-slate-700"
+        >
+          <span
+            className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${
+              TOOL_COLORS[idx % TOOL_COLORS.length]
+            } text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
+          >
+            <HiOutlineShieldCheck className="h-6 w-6" />
+          </span>
+
+          <h3 className="text-sm font-semibold leading-6 text-slate-800 dark:text-slate-100">
+            {tool}
+          </h3>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="container-page py-16">
