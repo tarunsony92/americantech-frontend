@@ -17,7 +17,7 @@ const NAV_LINKS = [
   },
   {
     label: "More",
-    to: "",
+    to: "/terms-and-conditions",
     children: [
       { label: "Terms & Conditions", to: "/terms-and-conditions" },
       { label: "Refund and Return Policy", to: "/refund-policy" },
@@ -43,7 +43,7 @@ const Navbar = () => {
           <img
             src="/static/images/logo.png"
             alt="American Futuretech LLC"
-            className="h-10 w-auto object-contain sm:h-12"
+            className="h-10 w-auto object-contain sm:h-16"
           />
         </Link>
 

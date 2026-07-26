@@ -118,26 +118,25 @@ const PROGRAM_FEATURES = [
     tag: "HANDS-ON LEARNING",
     title: "Industry-Ready Tech Curriculum",
     desc: "Learn by building real projects with tools used by top companies — from day one.",
-    image: "https://loremflickr.com/800/600/coding,laptop,programmer?lock=8",
+    image: "/static/images/why1.jpg",
   },
   {
     tag: "EXPERT MENTORSHIP",
     title: "1-on-1 Guidance from Industry Pros",
     desc: "Get personalised mentorship from professionals actively working in your field.",
-    image: "https://loremflickr.com/800/600/mentor,mentoring?lock=9",
+    image: "/static/images/why2.jpg",
   },
   {
     tag: "LIVE CLASSROOMS",
     title: "Interactive Cohort-Based Sessions",
     desc: "Join live classes, collaborate with peers, and learn in a structured cohort format.",
-    image: "https://loremflickr.com/800/600/classroom,students,laptop?lock=10",
+    image: "/static/images/why3.jpg",
   },
   {
     tag: "CAREER SUPPORT",
     title: "Placement Assistance & Resume Help",
     desc: "From portfolio reviews to mock interviews — we support you until you land the job.",
-    image: "https://loremflickr.com/800/600/jobinterview,handshake?lock=11",
-  },
+    image: "/static/images/why4.jpg",  },
 ];
 
 const FAQS = [
@@ -674,18 +673,18 @@ const Home = () => {
             </h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
             {PROGRAM_FEATURES.map((f, i) => (
               <Reveal key={f.title} delay={i * 80}>
                 <div className="group rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-primary/30">
-                  <div className="h-40 overflow-hidden">
-                    <img
-                      src={f.image}
-                      alt={f.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
+                 <div className="h-64  w-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+  <img
+    src={f.image}
+    alt={f.title}
+    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+    loading="lazy"
+  />
+</div>
                   <div className="p-6">
                     <span className="text-xs font-semibold tracking-widest text-primary uppercase">
                       {f.tag}

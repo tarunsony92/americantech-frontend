@@ -1,70 +1,75 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { HiOutlineClock, HiOutlineAcademicCap, HiStar, HiArrowRight } from "react-icons/hi";
 import PageHeader from "../components/PageHeader";
-import CTA from "../components/CTA";
-import { courses } from "../data/courses";
+import CourseCard from "../components/CourseCard";
+import CourseFilters from "../components/CourseFilters";
+import SearchBar from "../components/SearchBar";
+import Pagination from "../components/Pagination";
+import SkeletonCard from "../components/SkeletonCard";
+import courseService from "../services/courseService";
+import useResourceList from "../hooks/useResourceList";
 import { formatCurrencyINR } from "../utils/format";
 
-const LEVEL_STYLES = {
-  Beginner: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-  Intermediate: "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-  Advanced: "bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
-};
+const FILTER_GROUPS = [{ title: "Level", options: ["Beginner", "Intermediate", "Advanced"] }];
+
+// Adapts the API's raw shape (category as an object, price as a decimal string) to what
+// the shared CourseCard component expects.
+const toCardProps = (course) => ({
+  ...course,
+  category: course.category?.name || "General",
+  price: formatCurrencyINR(course.price),
+});
 
 const Courses = () => {
+  const { items, meta, params, setParams, loading, error } = useResourceList(courseService, { limit: 6 });
+  const [activeFilters, setActiveFilters] = useState({});
+
+  const handleSearch = (value) => setParams((p) => ({ ...p, search: value, page: 1 }));
+  const handlePageChange = (page) => setParams((p) => ({ ...p, page }));
+
+  // Level filtering happens client-side over the current page's results since it's the
+  // only facet the backend course list doesn't already support via `search`.
+  const handleFilterChange = (groupTitle, option) => {
+    setActiveFilters((prev) => {
+      const current = prev[groupTitle] || [];
+      const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
+      return { ...prev, [groupTitle]: next };
+    });
+  };
+
+  const visibleCourses = items.filter((c) => {
+    const levelFilters = activeFilters.Level || [];
+    return !levelFilters.length || levelFilters.includes(c.level);
+  });
+
   return (
     <>
       <Helmet><title>Courses | American FutureTech</title></Helmet>
-      <PageHeader
-        title="Explore Our Courses"
-        subtitle="Three career-focused programs in cyber security and data science, built around live instruction, real tools, and a portfolio of capstone projects."
-        breadcrumbItems={[{ label: "Courses" }]}
-      />
+      <PageHeader title="Explore Our Courses" subtitle="Career-focused programs across web, data, cloud, security and design." breadcrumbItems={[{ label: "Courses" }]} />
 
-      <section className="container-page py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {courses.map((course) => (
-            <Link
-              key={course.id}
-              to={`/courses/${course.id}`}
-              className="card group flex flex-col overflow-hidden p-0 transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="relative h-44 w-full overflow-hidden bg-slate-900">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="h-full w-full object-cover opacity-90 transition group-hover:scale-105 group-hover:opacity-100"
-                  onError={(e) => { e.currentTarget.style.display = "none"; }}
-                />
-                <span className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold ${LEVEL_STYLES[course.level]}`}>
-                  {course.level}
-                </span>
-              </div>
+      <section className="container-page grid grid-cols-1 gap-8 py-12 lg:grid-cols-[280px_1fr]">
+        <CourseFilters filters={FILTER_GROUPS} activeFilters={activeFilters} onChange={handleFilterChange} />
 
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{course.title}</h3>
-                <p className="mt-2 flex-1 text-sm text-slate-600 dark:text-slate-300">{course.tagline}</p>
+        <div>
+          <div className="mb-6 max-w-md">
+            <SearchBar value={params.search} onChange={handleSearch} placeholder="Search courses..." />
+          </div>
 
-                <div className="mt-4 flex flex-wrap gap-4 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1"><HiOutlineClock className="h-4 w-4" /> {course.duration}</span>
-                  <span className="flex items-center gap-1"><HiOutlineAcademicCap className="h-4 w-4" /> {course.tools.length}+ tools</span>
-                  <span className="flex items-center gap-1"><HiStar className="h-4 w-4 text-amber-400" /> {course.rating}</span>
-                </div>
+          {error && <p className="mb-6 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950 dark:text-red-300">{error}</p>}
 
-                <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <span className="text-xl font-bold text-slate-900 dark:text-white">{formatCurrencyINR(course.price)}</span>
-                  <span className="flex items-center gap-1 text-sm font-medium text-primary-600 transition group-hover:gap-2">
-                    View details <HiArrowRight className="h-4 w-4" />
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {loading
+              ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+              : visibleCourses.map((course) => <CourseCard key={course.id} course={toCardProps(course)} />)}
+          </div>
+
+          {!loading && !error && visibleCourses.length === 0 && (
+            <p className="mt-10 text-center text-slate-500">No courses match your filters.</p>
+          )}
+
+          <Pagination currentPage={meta.page} totalPages={meta.totalPages} onPageChange={handlePageChange} />
         </div>
       </section>
-
-      <CTA />
     </>
   );
 };
