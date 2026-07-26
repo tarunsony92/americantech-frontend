@@ -335,8 +335,7 @@ const CourseDetails = () => {
             {tools.map((tool, idx) => (
               <div
                 key={tool}
-                className="flex items-center gap-3 rounded-xl bg-white p-4 text-sm font-semibold text-slate-700 shadow-md ring-1 ring-black/5 transition-transform hover:-translate-y-1 dark:bg-slate-800 dark:text-slate-200"
-              >
+className="flex items-center justify-center gap-3 rounded-xl bg-white p-4 text-center text-sm font-semibold text-slate-700 shadow-md ring-1 ring-black/5 transition-transform hover:-translate-y-1 dark:bg-slate-800 dark:text-slate-200"              >
                 <span
                   className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${TOOL_COLORS[idx % TOOL_COLORS.length]} text-white shadow`}
                 >
