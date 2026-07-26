@@ -8,12 +8,18 @@ import {
   ShieldCheck,
   ExternalLink,
   Sparkles,
+  Users,
+  BookOpen,
+  Zap,
+  Award,
 } from "lucide-react";
 import CourseCard from "../components/CourseCard";
 import CTA from "../components/CTA";
 import courseService from "../services/courseService";
 import useResourceList from "../hooks/useResourceList";
 import { formatCurrencyINR } from "../utils/format";
+import heroDeskImg from "../assets/hero-desk.png";
+
 
 /* ---------------- Static content (from site copy) ---------------- */
 
@@ -24,34 +30,54 @@ const MARQUEE_ITEMS = [
   "Data Science",
 ];
 
+/*
+  IMAGE NOTE:
+  Each item below has an `image` field pointing to LoremFlickr
+  (https://loremflickr.com), a free keyword-based placeholder service.
+  Every URL includes a `?lock=N` parameter with a unique number —
+  this pins LoremFlickr to a single specific photo instead of picking
+  a new random match on every page load/refresh, so images stay stable.
+
+  IMPORTANT: This is still only safe for local dev/staging. LoremFlickr
+  images are sourced from Flickr's Creative Commons pool, and even a
+  "locked" image carries whatever license/attribution terms that Flickr
+  photo has. Swap these for your own licensed photos (or Microsoft-
+  approved partner assets for the certificate art) before going to
+  production — nothing else in the markup needs to change.
+*/
+
 const WHY_CHOOSE = [
   {
     icon: "🖥️",
     title: "Microsoft Certificate",
     desc: "American FutureTech LLC collaboration with Microsoft — get industry-recognised credentials.",
+    image: "https://loremflickr.com/800/600/graduation,diploma,certificate?lock=1",
   },
   {
     icon: "🧑‍🤝‍🧑",
     title: "Industry Connections",
     desc: "Access our network of 200+ industry hiring partners and unlock real career opportunities.",
+    image: "https://loremflickr.com/800/600/handshake,business,partnership?lock=2",
   },
   {
     icon: "✅",
     title: "Career Acceleration",
     desc: "Our mentees see 3x faster career growth compared to traditional learning paths.",
+    image: "https://loremflickr.com/800/600/success,growth,career?lock=3",
   },
   {
     icon: "👥",
     title: "1-on-1 Sessions",
     desc: "Regular private sessions with your dedicated mentor for fully personalised support.",
+    image: "https://loremflickr.com/800/600/mentor,coaching,meeting?lock=4",
   },
 ];
 
 const STATS = [
-  { value: 10200, suffix: "+", label: "Students Trained" },
-  { value: 200, suffix: "+", label: "Hiring Partners" },
-  { value: 3, suffix: "x", label: "Faster Career Growth" },
-  { value: 98, suffix: "%", label: "Satisfaction Rate" },
+  { icon: Users, value: 10200, suffix: "+", label: "Students Trained" },
+  { icon: Award, value: 200, suffix: "+", label: "Hiring Partners" },
+  { icon: Zap, value: 3, suffix: "x", label: "Faster Career Growth" },
+  { icon: BookOpen, value: 98, suffix: "%", label: "Satisfaction Rate" },
 ];
 
 const PARTNER_LOGOS = [
@@ -69,18 +95,21 @@ const CERTIFICATES = [
     title: "Advanced Generative AI Professional Certificate",
     date: "Feb 2, 2024",
     tier: "FUNDAMENTALS",
+    image: "https://loremflickr.com/800/450/artificialintelligence,robot?lock=5",
   },
   {
     provider: "Microsoft",
     title: "Data Science Professional Certificate",
     date: "Jun 23, 2023",
     tier: "FUNDAMENTALS",
+    image: "https://loremflickr.com/800/450/datascience,analytics?lock=6",
   },
   {
     provider: "Microsoft",
     title: "Cyber Security with AI Professional Certificate",
     date: "Oct 29, 2022",
     tier: "EXPERT",
+    image: "https://loremflickr.com/800/450/cybersecurity,hacking?lock=7",
   },
 ];
 
@@ -89,21 +118,25 @@ const PROGRAM_FEATURES = [
     tag: "HANDS-ON LEARNING",
     title: "Industry-Ready Tech Curriculum",
     desc: "Learn by building real projects with tools used by top companies — from day one.",
+    image: "https://loremflickr.com/800/600/coding,laptop,programmer?lock=8",
   },
   {
     tag: "EXPERT MENTORSHIP",
     title: "1-on-1 Guidance from Industry Pros",
     desc: "Get personalised mentorship from professionals actively working in your field.",
+    image: "https://loremflickr.com/800/600/mentor,mentoring?lock=9",
   },
   {
     tag: "LIVE CLASSROOMS",
     title: "Interactive Cohort-Based Sessions",
     desc: "Join live classes, collaborate with peers, and learn in a structured cohort format.",
+    image: "https://loremflickr.com/800/600/classroom,students,laptop?lock=10",
   },
   {
     tag: "CAREER SUPPORT",
     title: "Placement Assistance & Resume Help",
     desc: "From portfolio reviews to mock interviews — we support you until you land the job.",
+    image: "https://loremflickr.com/800/600/jobinterview,handshake?lock=11",
   },
 ];
 
@@ -382,10 +415,17 @@ const Home = () => {
             </div>
           </Reveal>
 
-          {/* Hero visual */}
+          {/* Hero visual — local photo (desk/laptop scene) */}
           <Reveal delay={150} className="relative flex justify-center">
-            <div className="relative w-72 sm:w-80 animate-float">
-              <div className="h-96 w-full rounded-[2.5rem] bg-gradient-to-b from-emerald-400 to-emerald-500 shadow-2xl transition-transform duration-500 hover:scale-[1.02]" />
+            <div className="relative w-full max-w-md animate-float">
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
+                <img
+                  src={heroDeskImg}
+                  alt="American FutureTech workspace with laptop and course materials"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+              </div>
               <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[90%] rounded-2xl bg-white dark:bg-slate-800 px-5 py-4 shadow-xl flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl">
                 <div className="flex -space-x-2">
                   {["AK", "JD", "MR"].map((i) => (
@@ -448,17 +488,27 @@ const Home = () => {
           {WHY_CHOOSE.map((item, i) => (
             <Reveal key={item.title} delay={i * 80}>
               <TiltCard>
-                <div className="group relative rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 text-center shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30 cursor-default overflow-hidden">
-                  <span className="absolute inset-0 scale-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent transition-transform duration-500 group-hover:scale-100" />
-                  <div className="relative mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                    {item.icon}
+                <div className="group relative rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30 cursor-default">
+                  <div className="relative h-36 w-full overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <span className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                      {item.icon}
+                    </div>
                   </div>
-                  <h3 className="relative text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="relative text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <div className="p-6 text-center">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
               </TiltCard>
             </Reveal>
@@ -467,80 +517,43 @@ const Home = () => {
       </section>
 
       {/* ---------------- STATS + PARTNERS ---------------- */}
-      <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-16 text-white">
-        <div className="container-page">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center mb-14">
-            {STATS.map((s) => (
-              <StatCounter key={s.label} stat={s} />
-            ))}
-          </div>
+<section className="bg-gradient-to-b from-slate-900 to-slate-800 py-16 text-white">
+  <div className="container-page">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-14">
+      {STATS.map((s) => (
+        <StatCounter key={s.label} stat={s} />
+      ))}
+    </div>
 
-          <Reveal>
-            <p className="text-center text-xs font-semibold tracking-widest text-slate-400 uppercase mb-8">
-              Trusted by professionals at
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {PARTNER_LOGOS.map((name) => (
-                <div
-                  key={name}
-                  className="rounded-xl bg-white/5 border border-white/10 px-4 py-4 text-center text-sm font-semibold text-slate-200 transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:-translate-y-1 hover:text-white cursor-default"
-                >
-                  {name}
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
+    <Reveal>
+      <div className="flex items-center justify-center gap-4 mb-10">
+        <span className="h-px flex-1 max-w-[80px] bg-gradient-to-r from-transparent to-slate-700" />
+        <p className="text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase whitespace-nowrap">
+          Trusted by professionals at
+        </p>
+        <span className="h-px flex-1 max-w-[80px] bg-gradient-to-l from-transparent to-slate-700" />
+      </div>
 
-      {/* ---------------- ABOUT ---------------- */}
-      {/* <section className="container-page py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <Reveal className="relative">
-            <div className="rounded-[2rem] bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 h-80 w-full transition-transform duration-500 hover:scale-[1.01]" />
-            <div className="absolute -top-6 -left-6 rounded-xl bg-blue-600 text-white px-5 py-4 shadow-xl text-center animate-float [animation-duration:4s]">
-              <p className="text-xl font-extrabold">12+</p>
-              <p className="text-xs">Years of Experiences</p>
-            </div>
-          </Reveal>
+      <div className="relative overflow-hidden">
+        <span className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-900 to-transparent z-10" />
+        <span className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-800 to-transparent z-10" />
 
-          <Reveal delay={120}>
-            <div className="flex flex-wrap gap-6 mb-6 text-sm font-semibold">
-              <span className="text-primary border-b-2 border-primary pb-1">
-                About Company
-              </span>
-              <span className="text-slate-500 dark:text-slate-400 transition-colors hover:text-primary cursor-pointer">
-                Our Mission
-              </span>
-              <span className="text-slate-500 dark:text-slate-400 transition-colors hover:text-primary cursor-pointer">
-                Our Vision
-              </span>
-            </div>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Learn what matters. Achieve what you dream — your future in
-              tech starts here. At American FutureTech, we transform careers
-              through industry-driven, practical education. Our expert-led
-              training, real-world projects, and personalized mentorship
-              ensure true skill mastery. We equip learners with in-demand,
-              future-ready skills aligned with the global digital economy.
-              Our programs build confidence, making you job-ready for
-              competitive international opportunities. We don't just
-              teach — we empower, innovate, and create globally competitive
-              professionals.
-            </p>
-            <Link
-              to="/about"
-              className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+        <div className="flex w-max animate-marquee gap-6 hover:[animation-play-state:paused]">
+          {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((name, i) => (
+            <div
+              key={`${name}-${i}`}
+              className="group flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm px-8 py-5 min-w-[160px] transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 cursor-default"
             >
-              Learn more{" "}
-              <ArrowRight
-                size={16}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-          </Reveal>
+              <span className="text-sm font-semibold tracking-wide text-slate-400 grayscale opacity-70 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 group-hover:text-white whitespace-nowrap">
+                {name}
+              </span>
+            </div>
+          ))}
         </div>
-      </section> */}
+      </div>
+    </Reveal>
+  </div>
+</section>
 
       {/* ---------------- POPULAR COURSES ---------------- */}
       <section className="bg-slate-50 dark:bg-slate-900/40 py-16">
@@ -610,9 +623,18 @@ const Home = () => {
           {CERTIFICATES.map((cert, i) => (
             <Reveal key={cert.title} delay={i * 80}>
               <div className="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-primary/30">
-                <div className="relative h-40 bg-gradient-to-br from-blue-900 to-slate-800 flex items-center justify-center text-white/40 text-xs font-semibold uppercase tracking-widest overflow-hidden">
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
+                  <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-800">
+                    {cert.tier}
+                  </span>
                   <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                  {cert.tier}
                 </div>
                 <div className="p-6">
                   <p className="text-xs font-semibold text-slate-400 mb-1">
@@ -656,7 +678,14 @@ const Home = () => {
             {PROGRAM_FEATURES.map((f, i) => (
               <Reveal key={f.title} delay={i * 80}>
                 <div className="group rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-primary/30">
-                  <div className="h-40 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 transition-transform duration-500 group-hover:scale-105" />
+                  <div className="h-40 overflow-hidden">
+                    <img
+                      src={f.image}
+                      alt={f.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
                   <div className="p-6">
                     <span className="text-xs font-semibold tracking-widest text-primary uppercase">
                       {f.tag}
@@ -725,40 +754,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* ---------------- NEWSLETTER ---------------- */}
-      {/* <section className="relative overflow-hidden bg-slate-900 py-16 text-white">
-        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-72 w-72 rounded-full bg-primary/20 blur-3xl animate-blob" />
-        <div className="container-page relative flex flex-col lg:flex-row items-center justify-between gap-8">
-          <Reveal>
-            <h2 className="text-2xl sm:text-3xl font-bold text-center lg:text-left max-w-xl">
-              Quickly Get Updates About Your Class Event and News!
-            </h2>
-          </Reveal>
-          <Reveal delay={100} className="w-full max-w-md">
-            <form
-              onSubmit={handleSubscribe}
-              className="flex w-full items-center gap-2 rounded-full bg-white/5 border border-white/10 p-1.5 transition-all duration-300 focus-within:border-primary/60 focus-within:bg-white/10"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-primary/90 active:scale-95"
-              >
-                {subscribed ? "Subscribed ✓" : "Subscribe"}
-                {!subscribed && <ArrowRight size={16} />}
-              </button>
-            </form>
-          </Reveal>
-        </div>
-      </section> */}
 
       <CTA />
 
