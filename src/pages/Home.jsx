@@ -50,7 +50,7 @@ const WHY_CHOOSE = [
   {
     icon: "🖥️",
     title: "Microsoft Certificate",
-    desc: "American FutureTech LLC collaboration with Microsoft — get industry-recognised credentials.",
+    desc: "Get industry-recognised Microsoft credentials.",
     image: "https://loremflickr.com/800/600/graduation,diploma,certificate?lock=1",
   },
   {
@@ -124,7 +124,7 @@ const PROGRAM_FEATURES = [
     tag: "EXPERT MENTORSHIP",
     title: "1-on-1 Guidance from Industry Pros",
     desc: "Get personalised mentorship from professionals actively working in your field.",
-    image: "/static/images/why2.jpg",
+    image: "/static/images/why2.png",
   },
   {
     tag: "LIVE CLASSROOMS",
@@ -350,9 +350,9 @@ const Home = () => {
             </span>
 
             <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-slate-900 dark:text-white">
-              Boost Your Skills.
+              Build Skills.
               <br />
-              Secure Your Future with{" "}
+              Get Certified with{" "}
               <span className="relative inline-block text-primary">
                 American FutureTech
                 <Sparkles
@@ -484,35 +484,42 @@ const Home = () => {
         </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {WHY_CHOOSE.map((item, i) => (
-            <Reveal key={item.title} delay={i * 80}>
-              <TiltCard>
-                <div className="group relative rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30 cursor-default">
-                  <div className="relative h-36 w-full overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <span className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                      {item.icon}
-                    </div>
-                  </div>
-                  <div className="p-6 text-center">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </TiltCard>
-            </Reveal>
-          ))}
+  {WHY_CHOOSE.map((item, i) => (
+    <Reveal key={item.title} delay={i * 80}>
+      <TiltCard className="h-full">
+        <div className="group h-90 flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30 cursor-default">
+
+          {/* Fixed Image Height */}
+          <div className="relative h-52 w-full overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <span className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+
+            <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+              {item.icon}
+            </div>
+          </div>
+
+          {/* Equal Content Height */}
+          <div className="flex flex-col flex-1 p-6 text-center">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white min-h-[56px]">
+              {item.title}
+            </h3>
+
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-1">
+              {item.desc}
+            </p>
+          </div>
+
         </div>
+      </TiltCard>
+    </Reveal>
+  ))}
+</div>
       </section>
 
       {/* ---------------- STATS + PARTNERS ---------------- */}
@@ -618,50 +625,59 @@ const Home = () => {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CERTIFICATES.map((cert, i) => (
-            <Reveal key={cert.title} delay={i * 80}>
-              <div className="group rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-primary/30">
-                <div className="relative h-40 overflow-hidden">
-                  <img
-                    src={cert.image}
-                    alt={cert.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
-                  <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-800">
-                    {cert.tier}
-                  </span>
-                  <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                </div>
-                <div className="p-6">
-                  <p className="text-xs font-semibold text-slate-400 mb-1">
-                    {cert.provider}
-                  </p>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-4 leading-snug">
-                    {cert.title}
-                  </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
-                      {cert.date}
-                    </span>
-                    <a
-                      href="#"
-                      className="group/link inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
-                    >
-                      View credential{" "}
-                      <ExternalLink
-                        size={14}
-                        className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                      />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {CERTIFICATES.map((cert, i) => (
+    <Reveal key={cert.title} delay={i * 80}>
+      <div className="group h-full flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:border-primary/30">
+
+        {/* Fixed Image Size */}
+        <div className="relative h-56 w-full overflow-hidden">
+          <img
+            src={cert.image}
+            alt={cert.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+          />
+          <span className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
+
+          <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-800">
+            {cert.tier}
+          </span>
+
+          <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
         </div>
+
+        {/* Equal Content Height */}
+        <div className="flex flex-col flex-1 p-6">
+          <p className="text-xs font-semibold text-slate-400 mb-1">
+            {cert.provider}
+          </p>
+
+          <h3 className="font-semibold text-slate-900 dark:text-white leading-snug min-h-[56px]">
+            {cert.title}
+          </h3>
+
+          <div className="mt-auto flex items-center justify-between pt-4">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              {cert.date}
+            </span>
+
+            <a
+              href="#"
+              className="group/link inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
+              View credential
+              <ExternalLink
+                size={14}
+                className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  ))}
+</div>
       </section>
 
       {/* ---------------- PROGRAM FEATURES ---------------- */}
