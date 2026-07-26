@@ -20,8 +20,9 @@ import courseService from "../services/courseService";
 import enrollmentService from "../services/enrollmentService";
 import useResourceItem from "../hooks/useResourceItem";
 import { formatCurrencyINR } from "../utils/format";
+import { COURSE_CONTENT, getCourseContentKey } from "../data/courseContent";
 
-// ---- Fallback / default content (used when the course record doesn't supply its own) ----
+// ---- Fallback / default content (used only when a course matches NOTHING) ----
 
 const DEFAULT_TOOLS = [
   "Python", "Kali Linux", "Nmap", "Metasploit", "Wireshark", "Burp Suite", "Nessus", "Hashcat",
@@ -88,14 +89,7 @@ const DEFAULT_WHO_CAN_APPLY = [
   "Anyone who wants ample career options and competitive salaries in this field.",
 ];
 
-const DEFAULT_STATS = [
-  { icon: HiOutlineAcademicCap, value: "50%+", label: "Graduates & Freshers Welcome", color: "from-indigo-500 to-blue-500" },
-  { icon: HiOutlineBriefcase, value: "3+", label: "Career Sessions Included", color: "from-fuchsia-500 to-pink-500" },
-  { icon: HiOutlineGlobeAlt, value: "100%", label: "Online & Flexible Learning", color: "from-emerald-500 to-teal-500" },
-  { icon: HiOutlineShieldCheck, value: `${DEFAULT_TOOLS.length}+`, label: "Tools Covered in Program", color: "from-amber-500 to-orange-500" },
-];
-
-const DEFAULT_CAREER_ROLES = [
+const DEFAULT_CAREER_ROLE_COLORS = [
   { name: "Analyst", color: "from-blue-500 to-cyan-500" },
   { name: "Engineer", color: "from-violet-500 to-purple-500" },
   { name: "Consultant", color: "from-emerald-500 to-green-500" },
@@ -196,13 +190,30 @@ const CourseDetails = () => {
 
   const categoryName = course.category?.name || "this field";
 
-  const tools = course.tools?.length ? course.tools : DEFAULT_TOOLS;
-  const curriculum = course.curriculum?.length ? course.curriculum : DEFAULT_CURRICULUM;
-  const capstoneProjects = course.capstoneProjects?.length ? course.capstoneProjects : DEFAULT_CAPSTONE_PROJECTS;
-  const whoCanApply = course.eligibility?.length ? course.eligibility : DEFAULT_WHO_CAN_APPLY;
-  const careerRoles = course.careerRoles?.length
-    ? course.careerRoles.map((r, i) => ({ name: r, color: DEFAULT_CAREER_ROLES[i % DEFAULT_CAREER_ROLES.length].color }))
-    : DEFAULT_CAREER_ROLES;
+  // ---- Resolve content: backend data > matched static course content > generic defaults ----
+  const contentKey = getCourseContentKey(course.title || "");
+  const matched = contentKey ? COURSE_CONTENT[contentKey] : null;
+
+  const tools = course.tools?.length ? course.tools : matched?.tools?.length ? matched.tools : DEFAULT_TOOLS;
+  const curriculum = course.curriculum?.length ? course.curriculum : matched?.curriculum?.length ? matched.curriculum : DEFAULT_CURRICULUM;
+  const capstoneProjects = course.capstoneProjects?.length
+    ? course.capstoneProjects
+    : matched?.capstoneProjects?.length
+    ? matched.capstoneProjects
+    : DEFAULT_CAPSTONE_PROJECTS;
+  const whoCanApply = course.eligibility?.length ? course.eligibility : matched?.eligibility?.length ? matched.eligibility : DEFAULT_WHO_CAN_APPLY;
+
+  const rawCareerRoles = course.careerRoles?.length
+    ? course.careerRoles
+    : matched?.careerRoles?.length
+    ? matched.careerRoles
+    : DEFAULT_CAREER_ROLE_COLORS.map((r) => r.name);
+
+  const careerRoles = rawCareerRoles.map((r, i) => ({
+    name: r,
+    color: DEFAULT_CAREER_ROLE_COLORS[i % DEFAULT_CAREER_ROLE_COLORS.length].color,
+  }));
+
   const moduleColors = ["from-indigo-500 to-blue-500", "from-violet-500 to-fuchsia-500", "from-emerald-500 to-teal-500", "from-amber-500 to-orange-500", "from-rose-500 to-pink-500", "from-cyan-500 to-sky-500", "from-purple-500 to-indigo-500"];
 
   return (
@@ -256,7 +267,12 @@ const CourseDetails = () => {
 
             {/* Quick stats strip */}
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {DEFAULT_STATS.map((stat) => (
+              {[
+                { icon: HiOutlineAcademicCap, value: "50%+", label: "Graduates & Freshers Welcome", color: "from-indigo-500 to-blue-500" },
+                { icon: HiOutlineBriefcase, value: "3+", label: "Career Sessions Included", color: "from-fuchsia-500 to-pink-500" },
+                { icon: HiOutlineGlobeAlt, value: "100%", label: "Online & Flexible Learning", color: "from-emerald-500 to-teal-500" },
+                { icon: HiOutlineShieldCheck, value: `${tools.length}+`, label: "Tools Covered in Program", color: "from-amber-500 to-orange-500" },
+              ].map((stat) => (
                 <div
                   key={stat.label}
                   className="flex flex-col items-center gap-1 rounded-2xl bg-white p-4 text-center shadow-md ring-1 ring-black/5 dark:bg-slate-800"
