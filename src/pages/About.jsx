@@ -68,7 +68,7 @@ const STATS = [
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    value: "10.2K+",
+    value: "1.2K+",
     label: "Student Enrolled",
     bg: "bg-blue-50 dark:bg-blue-500/10",
     color: "text-blue-600 dark:text-blue-400",
@@ -92,7 +92,7 @@ const STATS = [
         <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" />
       </svg>
     ),
-    value: "100%",
+    value: "98%",
     label: "Satisfaction Rate",
     bg: "bg-emerald-50 dark:bg-emerald-500/10",
     color: "text-emerald-600 dark:text-emerald-400",

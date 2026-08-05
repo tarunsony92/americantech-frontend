@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ChevronDown, Mail, RotateCcw } from "lucide-react";
+import { ChevronDown, Mail, RotateCcw, Phone, Globe } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 
 const sections = [
@@ -193,6 +193,26 @@ const sections = [
             className="flex items-center gap-2 text-primary hover:underline"
           >
             <Mail size={16} /> info@americanfuturetechllc.com
+          </a>
+          <a
+            href="mailto:support@americanfuturetechllc.com"
+            className="flex items-center gap-2 text-primary hover:underline"
+          >
+            <Mail size={16} /> support@americanfuturetechllc.com
+          </a>
+          <a
+            href="tel:+919170096668"
+            className="flex items-center gap-2 text-primary hover:underline"
+          >
+            <Phone size={16} /> +91 92178 72078
+          </a>
+          <a
+            href="https://americanfuturetechllc.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 text-primary hover:underline"
+          >
+            <Globe size={16} /> americanfuturetechllc.com
           </a>
         </div>
       </>

@@ -74,8 +74,8 @@ const WHY_CHOOSE = [
 ];
 
 const STATS = [
-  { icon: Users, value: 10200, suffix: "+", label: "Students Trained" },
-  { icon: Award, value: 200, suffix: "+", label: "Hiring Partners" },
+  { icon: Users, value: 1200, suffix: "+", label: "Students Trained" },
+  { icon: Award, value: 10, suffix: "+", label: "Hiring Partners" },
   { icon: Zap, value: 3, suffix: "x", label: "Faster Career Growth" },
   { icon: BookOpen, value: 98, suffix: "%", label: "Satisfaction Rate" },
 ];
@@ -391,7 +391,7 @@ const Home = () => {
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <div className="rounded-full border border-slate-200 dark:border-slate-700 px-6 py-3 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5 cursor-default">
                 <p className="text-xl font-extrabold text-slate-900 dark:text-white">
-                  10.2K+
+                  1.2K+
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Total Happy Students

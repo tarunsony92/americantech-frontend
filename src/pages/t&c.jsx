@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { ChevronDown, Mail, Globe, ShieldCheck } from "lucide-react";
+import { ChevronDown, Mail, Globe, ShieldCheck,Phone } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 
 const sections = [
@@ -200,6 +200,18 @@ const sections = [
             <Mail size={16} /> info@americanfuturetechllc.com
           </a>
           <a
+            href="mailto:support@americanfuturetechllc.com"
+            className="flex items-center gap-2 text-primary hover:underline"
+          >
+            <Mail size={16} /> support@americanfuturetechllc.com
+          </a>
+          <a
+            href="tel:+919170096668"
+            className="flex items-center gap-2 text-primary hover:underline"
+          >
+            <Phone size={16} /> +91 92178 72078
+          </a>
+          <a
             href="https://americanfuturetechllc.com/"
             target="_blank"
             rel="noreferrer"
@@ -257,11 +269,11 @@ const TermsAndConditions = () => {
   return (
     <>
       <Helmet>
-        <title>Terms & Conditions | American FutureTech</title>
+        <title>Privacy Policy | American FutureTech</title>
       </Helmet>
       <PageHeader
-        title="Terms & Conditions"
-        breadcrumbItems={[{ label: "Terms & Conditions" }]}
+        title="Privacy Policy"
+        breadcrumbItems={[{ label: "Privacy Policy" }]}
       />
 
       <section className="container-page max-w-7xl mx-auto py-16 bg-slate-50 dark:bg-slate-900">
@@ -272,7 +284,7 @@ const TermsAndConditions = () => {
               <ShieldCheck size={20} />
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
-              Student Terms & Conditions
+              Student Privacy Policy
             </h1>
           </div>
 
