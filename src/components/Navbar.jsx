@@ -19,7 +19,7 @@ const NAV_LINKS = [
     label: "More",
     to: "/terms-and-conditions",
     children: [
-      { label: "Terms & Conditions", to: "/terms-and-conditions" },
+      { label: "Privacy Policy", to: "/terms-and-conditions" },
       { label: "Refund and Return Policy", to: "/refund-policy" },
       { label: "Cookies Policy", to: "/cookie-policy" },
     ],
