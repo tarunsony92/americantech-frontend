@@ -164,21 +164,13 @@ const CourseDetails = () => {
   const [enrollError, setEnrollError] = useState(null);
   const [openModule, setOpenModule] = useState(0);
 
-  const handleEnroll = async () => {
-    if (!isAuthenticated) {
-      navigate("/register", { state: { from: { pathname: `/courses/${id}` } } });
-      return;
-    }
-    setEnrollStatus("loading");
-    setEnrollError(null);
-    try {
-      await enrollmentService.enrollSelf(id);
-      setEnrollStatus("success");
-    } catch (err) {
-      setEnrollError(err.response?.data?.message || "Couldn't enroll. Please try again.");
-      setEnrollStatus("error");
-    }
-  };
+  const handleEnroll = () => {
+  if (!isAuthenticated) {
+    navigate("/register", { state: { from: { pathname: `/courses/${id}/checkout` } } });
+    return;
+  }
+  navigate(`/courses/${id}/checkout`);
+};
 
   if (loading) {
     return <div className="container-page py-24 text-center text-slate-500">Loading course...</div>;

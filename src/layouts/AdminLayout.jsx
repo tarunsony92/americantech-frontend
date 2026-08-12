@@ -38,6 +38,8 @@ const AdminLayout = () => {
     { label: "Media Library", to: "/admin/media", icon: HiOutlinePhotograph },
     { label: "Audit Logs", to: "/admin/audit-logs", icon: HiOutlineClipboardList },
     { label: "Settings", to: "/admin/settings", icon: HiOutlineCog },
+    { label: "Coupons", to: "/admin/coupons", icon: HiOutlineCog }, // Added Coupons link
+    { label: "Contact Queries", to: "/admin/contact-queries", icon: HiOutlineChatAlt2 },
 
     // Logout Sidebar Item
     {

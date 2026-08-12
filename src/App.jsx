@@ -64,6 +64,8 @@ const MediaLibrary = lazy(() => import("./pages/admin/MediaLibrary"));
 const Settings = lazy(() => import("./pages/admin/Settings"));
 const AuditLogs = lazy(() => import("./pages/admin/AuditLogs"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
+const CouponList = lazy(() => import("./features/coupons/CouponList"));
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -100,6 +102,8 @@ function App() {
                 <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/courses/:id/checkout" element={<CheckoutPage />} />
+              
 
               </Route>
 
@@ -148,6 +152,8 @@ function App() {
                   <Route path="/admin/media" element={<MediaLibrary />} />
                   <Route path="/admin/settings" element={<Settings />} />
                   <Route path="/admin/audit-logs" element={<AuditLogs />} />
+                  <Route path="/admin/coupons" element={<CouponList />} />
+
                 </Route>
               </Route>
 
