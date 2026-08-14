@@ -158,18 +158,19 @@ const AccordionItem = ({ item, isOpen, onToggle, color }) => (
 const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  // const { isAuthenticated } = useSelector((state) => state.auth);
   const { item: course, loading, error } = useResourceItem(courseService, id);
   const [enrollStatus, setEnrollStatus] = useState("idle"); // idle | loading | success | error
   const [enrollError, setEnrollError] = useState(null);
   const [openModule, setOpenModule] = useState(0);
 
   const handleEnroll = () => {
-  if (!isAuthenticated) {
-    navigate("/register", { state: { from: { pathname: `/courses/${id}/checkout` } } });
-    return;
-  }
+  // if (!isAuthenticated) {
   navigate(`/courses/${id}/checkout`);
+    // navigate("/register", { state: { from: { pathname: `/courses/${id}/checkout` } } });
+    return;
+  // }
+  
 };
 
   if (loading) {

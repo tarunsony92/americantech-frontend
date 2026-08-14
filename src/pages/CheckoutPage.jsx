@@ -350,11 +350,11 @@ const finalAmount = Math.max(
 );
 
   // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/register", { state: { from: location } });
-    }
-  }, [isAuthenticated, navigate, location]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     navigate("/register", { state: { from: location } });
+  //   }
+  // }, [isAuthenticated, navigate, location]);
 
   // Create the PaymentIntent as soon as course is loaded
   useEffect(() => {
