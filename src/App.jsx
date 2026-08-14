@@ -31,6 +31,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const TermsAndConditions = lazy(() => import("./pages/t&c"));
 const CookiePolicy = lazy(() => import("./pages/cokiePolicy"));
+const CheckoutConfirmation = lazy(() => import("./pages/Checkoutconfirmationpage"));
 
 // Auth pages
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -66,6 +67,7 @@ const AuditLogs = lazy(() => import("./pages/admin/AuditLogs"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const CheckoutPage = lazy(() => import("./pages/CheckoutPage"));
 const CouponList = lazy(() => import("./features/coupons/CouponList"));
+const ManageOrders = lazy(() => import("./pages/admin/Manageorders"));
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -103,7 +105,7 @@ function App() {
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/refund-policy" element={<RefundPolicy />} />
                 <Route path="/courses/:id/checkout" element={<CheckoutPage />} />
-              
+                <Route path="/courses/:id/checkout/success" element={<CheckoutConfirmation />} />
 
               </Route>
 
@@ -153,6 +155,7 @@ function App() {
                   <Route path="/admin/settings" element={<Settings />} />
                   <Route path="/admin/audit-logs" element={<AuditLogs />} />
                   <Route path="/admin/coupons" element={<CouponList />} />
+                  <Route path="/admin/orders" element={<ManageOrders />} />
 
                 </Route>
               </Route>

@@ -79,10 +79,15 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
+        // Token refresh failed (expired/invalid refresh token). We just clear the stored
+        // tokens and reject — we do NOT force-navigate to /login here. A hard redirect from
+        // an interceptor fires no matter what page the user is on (e.g. right after a
+        // successful Stripe payment redirect back to /checkout), which was kicking users to
+        // the login page even when their action (payment/enrollment) had already succeeded.
+        // Let the calling component/route guard decide what to do with the rejected request.
         processQueue(refreshError, null);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
