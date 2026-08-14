@@ -44,7 +44,7 @@ const MyCourses = () => {
             <p className="mt-1 text-sm text-slate-500">{enrollment.course?.duration} · {enrollment.course?.level}</p>
             <div className="mt-4 flex items-center justify-between">
               <span className="text-sm text-slate-500">Progress: {enrollment.progress || 0}%</span>
-              <span className="text-sm font-semibold text-primary-600">{formatCurrencyINR(enrollment.course?.price)}</span>
+              <span className="text-sm font-semibold text-primary-600">{formatCurrencyUSD(enrollment.course?.price)}</span>
             </div>
             <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
               <div className="h-full bg-primary-600" style={{ width: `${enrollment.progress || 0}%` }} />

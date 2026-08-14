@@ -408,14 +408,14 @@ const OrderSummary = ({
         </div>
       </div>
       <span className="whitespace-nowrap text-sm font-semibold text-slate-800 dark:text-slate-100">
-        {formatCurrencyINR(course.price)}
+        {formatCurrencyUSD(course.price)}
       </span>
     </div>
 
     <div className="flex justify-between border-b border-slate-200 py-3 text-sm dark:border-slate-700">
       <span className="text-slate-500 dark:text-slate-400">Subtotal</span>
       <span className="font-medium text-slate-800 dark:text-slate-100">
-        {formatCurrencyINR(subtotal)}
+        {formatCurrencyUSD(subtotal)}
       </span>
     </div>
 
@@ -438,14 +438,14 @@ const OrderSummary = ({
       <div className="flex justify-between border-b border-slate-200 py-3 text-sm text-emerald-600 dark:border-slate-700">
         <span>Discount ({appliedCoupon.code})</span>
         <span className="font-semibold">
-          − {formatCurrencyINR(discountAmount)}
+          − {formatCurrencyUSD(discountAmount)}
         </span>
       </div>
     )}
 
     <div className="flex justify-between py-4 text-base font-bold text-slate-900 dark:text-white">
       <span>Total</span>
-      <span>{formatCurrencyINR(finalAmount)}</span>
+      <span>{formatCurrencyUSD(finalAmount)}</span>
     </div>
 
     <div>

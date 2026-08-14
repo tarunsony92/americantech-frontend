@@ -84,7 +84,7 @@ const OrderDetailDrawer = ({ order, onClose }) => {
             <div className="flex justify-between text-sm">
               <span className="text-slate-500 dark:text-slate-400">Course price</span>
               <span className="font-medium text-slate-800 dark:text-slate-100">
-                {order.coursePrice != null ? formatCurrencyINR(order.coursePrice) : "—"}
+                {order.coursePrice != null ? formatCurrencyUSD(order.coursePrice) : "—"}
               </span>
             </div>
             {order.couponCode && (
@@ -93,19 +93,19 @@ const OrderDetailDrawer = ({ order, onClose }) => {
                   <HiOutlineTicket className="h-3.5 w-3.5" /> {order.couponCode}
                 </span>
                 <span className="font-medium text-emerald-600">
-                  − {formatCurrencyINR(order.discountAmount || 0)}
+                  − {formatCurrencyUSD(order.discountAmount || 0)}
                 </span>
               </div>
             )}
             <div className="mt-2 flex justify-between border-t border-slate-200 pt-2 text-sm font-bold text-slate-900 dark:border-slate-700 dark:text-white">
               <span>Final amount</span>
-              <span>{formatCurrencyINR(order.finalAmount)}</span>
+              <span>{formatCurrencyUSD(order.finalAmount)}</span>
             </div>
             {order.status === "succeeded" && (
               <div className="mt-1.5 flex justify-between text-sm">
                 <span className="text-slate-500 dark:text-slate-400">Amount paid</span>
                 <span className="font-medium text-emerald-600">
-                  {formatCurrencyINR(order.amountPaid)}
+                  {formatCurrencyUSD(order.amountPaid)}
                 </span>
               </div>
             )}
@@ -361,8 +361,8 @@ const ManageOrders = () => {
                         </td>
                         <td className="px-4 py-3 text-sm font-semibold text-slate-800 dark:text-slate-100">
                           {order.status === "succeeded"
-                            ? formatCurrencyINR(order.amountPaid)
-                            : formatCurrencyINR(order.finalAmount)}
+                            ? formatCurrencyUSD(order.amountPaid)
+                            : formatCurrencyUSD(order.finalAmount)}
                         </td>
                         <td className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
                           {order.couponCode || "—"}

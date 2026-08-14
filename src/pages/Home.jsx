@@ -586,7 +586,7 @@ const Home = () => {
                       course={{
                         ...course,
                         category: course.category?.name,
-                        price: formatCurrencyINR(course.price),
+                        price: formatCurrencyUSD(course.price),
                       }}
                     />
                   </TiltCard>

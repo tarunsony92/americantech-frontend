@@ -77,15 +77,15 @@ const downloadReceiptPdf = ({ course, pr }) => {
   sectionTitle("Payment Details");
   row("Receipt date", dateStr);
   row("Course", course.title);
-  row("Course price", formatCurrencyINR(course.price));
+  row("Course price", formatCurrencyUSD(course.price));
   if (pr?.appliedCoupon) {
     row(
       `Coupon (${pr.appliedCoupon.code})`,
-      `− ${formatCurrencyINR(pr.appliedCoupon.discountAmount || 0)}`
+      `− ${formatCurrencyUSD(pr.appliedCoupon.discountAmount || 0)}`
     );
   }
   y += 4;
-  row("Amount paid", formatCurrencyINR(pr?.amountPaid ?? course.price), { bold: true });
+  row("Amount paid", formatCurrencyUSD(pr?.amountPaid ?? course.price), { bold: true });
   row("Payment reference", pr?.paymentIntentId || "—");
   row("Status", "Succeeded");
 
@@ -224,7 +224,7 @@ const CheckoutConfirmationPage = () => {
                 <div>
                   <p className="text-sm font-medium text-indigo-100">Amount paid</p>
                   <p className="mt-1 text-4xl font-extrabold tracking-tight">
-                    {pr ? formatCurrencyINR(pr.amountPaid) : formatCurrencyINR(course.price)}
+                    {pr ? formatCurrencyUSD(pr.amountPaid) : formatCurrencyUSD(course.price)}
                   </p>
                 </div>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold backdrop-blur">
@@ -233,11 +233,11 @@ const CheckoutConfirmationPage = () => {
               </div>
               {pr?.appliedCoupon && (
                 <p className="mt-3 text-sm text-indigo-100">
-                  Course price {formatCurrencyINR(course.price)} − coupon{" "}
+                  Course price {formatCurrencyUSD(course.price)} − coupon{" "}
                   <span className="font-semibold text-white">
                     {pr.appliedCoupon.code}
                   </span>{" "}
-                  ({formatCurrencyINR(pr.appliedCoupon.discountAmount || 0)} off)
+                  ({formatCurrencyUSD(pr.appliedCoupon.discountAmount || 0)} off)
                 </p>
               )}
             </div>

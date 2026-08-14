@@ -282,7 +282,7 @@ const CourseDetails = () => {
 
           <aside className="h-fit rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-xl">
             <div className="rounded-2xl bg-white p-6 dark:bg-slate-900">
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-white">{formatCurrencyINR(course.price)}</p>
+              <p className="text-3xl font-extrabold text-slate-900 dark:text-white">{formatCurrencyUSD(course.price)}</p>
 
               {enrollStatus === "success" ? (
                 <p className="mt-5 rounded-lg bg-emerald-50 p-3 text-center text-sm font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
@@ -541,7 +541,7 @@ const CourseDetails = () => {
                 disabled={enrollStatus === "loading"}
                 className="rounded-lg bg-white px-6 py-2.5 font-semibold text-indigo-700 shadow-md transition-transform hover:-translate-y-0.5 disabled:opacity-60"
               >
-                {enrollStatus === "loading" ? "Enrolling..." : `Enroll Now — ${formatCurrencyINR(course.price)}`}
+                {enrollStatus === "loading" ? "Enrolling..." : `Enroll Now — ${formatCurrencyUSD(course.price)}`}
               </button>
               <Link
                 to="/contact"

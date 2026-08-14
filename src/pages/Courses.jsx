@@ -17,7 +17,7 @@ const FILTER_GROUPS = [{ title: "Level", options: ["Beginner", "Intermediate", "
 const toCardProps = (course) => ({
   ...course,
   category: course.category?.name || "General",
-  price: formatCurrencyINR(course.price),
+  price: formatCurrencyUSD(course.price),
 });
 
 const Courses = () => {
