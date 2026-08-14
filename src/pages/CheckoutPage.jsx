@@ -17,7 +17,7 @@ import {
 import courseService from "../services/courseService";
 import enrollmentService from "../services/enrollmentService";
 import paymentService from "../services/paymentService";
-import checkoutOrderService from "../services/checkoutOrderService";
+import checkoutOrderService from "../services/CheckoutOrderService";
 import useResourceItem from "../hooks/useResourceItem";
 import ApplyCoupon from "../features/coupons/ApplyCoupon";
 import { formatCurrencyINR } from "../utils/format";
