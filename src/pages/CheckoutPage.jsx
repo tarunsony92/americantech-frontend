@@ -20,7 +20,7 @@ import paymentService from "../services/paymentService";
 import checkoutOrderService from "../services/CheckoutOrderService";
 import useResourceItem from "../hooks/useResourceItem";
 import ApplyCoupon from "../features/coupons/ApplyCoupon";
-import { formatCurrencyINR } from "../utils/format";
+import { formatCurrencyUSD} from "../utils/format";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 

@@ -11,7 +11,7 @@ import {
   HiOutlineCreditCard,
 } from "react-icons/hi";
 import checkoutOrderService from "../../services/CheckoutOrderService";
-import { formatCurrencyINR } from "../../utils/format";
+import { formatCurrencyUSD } from "../../utils/format";
 
 // ---------------- Status badge ----------------
 const STATUS_STYLES = {
