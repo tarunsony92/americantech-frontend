@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -88,15 +87,15 @@ const BillingForm = ({ billing, setBilling }) => {
             value={billing.country}
             onChange={handleChange}
             required
-            className={inputClass}
+            disabled
+            className={`${inputClass} cursor-not-allowed opacity-70`}
           >
             <option value="US">United States (US)</option>
-            <option value="IN">India</option>
           </select>
         </div>
-<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
         <div>
-          <label className={labelClass}>Street address 1 *</label>
+          <label className={labelClass}>Street address *</label>
           <input
             name="address1"
             placeholder="House number and street name"
@@ -105,9 +104,6 @@ const BillingForm = ({ billing, setBilling }) => {
             required
             className={`mb-3 ${inputClass}`}
           />
-          </div>
-          <div>
-            <label className={labelClass}>Street address 2 (optional)</label>
           <input
             name="address2"
             placeholder="Apartment, suite, unit, etc. (optional)"
@@ -115,7 +111,6 @@ const BillingForm = ({ billing, setBilling }) => {
             onChange={handleChange}
             className={inputClass}
           />
-        </div>
         </div>
 
         <div>
@@ -195,47 +190,6 @@ const BillingForm = ({ billing, setBilling }) => {
     </div>
   );
 };
-
-// ---------------- Payment Method Selector ----------------
-const PAYMENT_METHODS = [
-  { id: "card", label: "Credit / Debit Card", enabled: true },
-  { id: "alipay", label: "Alipay", enabled: true },
-  { id: "klarna", label: "Klarna", enabled: true },
-  { id: "afterpay", label: "Afterpay", enabled: true },
-  { id: "affirm", label: "Affirm — Pay over time", enabled: true },
-];
-
-const PaymentMethodList = ({ selected, onSelect }) => (
-  <div className="divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 dark:divide-slate-700 dark:border-slate-700">
-    {PAYMENT_METHODS.map((method) => (
-      <label
-        key={method.id}
-        className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
-          method.enabled
-            ? "cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/60"
-            : "cursor-not-allowed opacity-50"
-        } ${selected === method.id ? "bg-indigo-50 dark:bg-indigo-950/40" : ""}`}
-      >
-        <input
-          type="radio"
-          name="paymentMethod"
-          disabled={!method.enabled}
-          checked={selected === method.id}
-          onChange={() => method.enabled && onSelect(method.id)}
-          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
-        />
-        <span className="font-medium text-slate-700 dark:text-slate-200">
-          {method.label}
-        </span>
-        {!method.enabled && (
-          <span className="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400 dark:bg-slate-800">
-            Coming soon
-          </span>
-        )}
-      </label>
-    ))}
-  </div>
-);
 
 // ---------------- Stripe Card Form (inner, needs Elements context) ----------------
 const StripeCardForm = ({ onSuccess, billing }) => {
@@ -320,8 +274,6 @@ const OrderSummary = ({
   appliedCoupon,
   setAppliedCoupon,
   finalAmount,
-  selectedMethod,
-  setSelectedMethod,
   clientSecret,
   initError,
   handlePaymentSuccess,
@@ -393,7 +345,9 @@ const OrderSummary = ({
       <p className="mb-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
         Payment method
       </p>
-      <PaymentMethodList selected={selectedMethod} onSelect={setSelectedMethod} />
+      <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
+        Choose your preferred option below — it will appear inside the secure payment form.
+      </p>
     </div>
 
     <p className="mt-4 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
@@ -434,12 +388,11 @@ const OrderSummary = ({
 const CheckoutPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
   const { item: course, loading } = useResourceItem(courseService, id);
 
   const [billing, setBilling] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
+    firstName: "",
+    lastName: "",
     company: "",
     country: "US",
     address1: "",
@@ -448,11 +401,10 @@ const CheckoutPage = () => {
     state: "",
     zip: "",
     phone: "",
-    email: user?.email || "",
+    email: "",
     notes: "",
   });
 
-  const [selectedMethod, setSelectedMethod] = useState("card");
   const [clientSecret, setClientSecret] = useState(null);
   const [initError, setInitError] = useState(null);
   const [enrollDone, setEnrollDone] = useState(false);
@@ -552,8 +504,8 @@ const CheckoutPage = () => {
 
       <div className="bg-slate-50 py-10 dark:bg-slate-950">
         <div className="container-page">
-          <div className="mb-8 flex items-center gap-2 text-sm text-black-500 dark:text-slate-400">
-            <HiOutlineLockClosed className="h-5 w-5" />
+          <div className="mb-8 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+            <HiOutlineLockClosed className="h-4 w-4" />
             Secure checkout
           </div>
 
@@ -567,8 +519,6 @@ const CheckoutPage = () => {
               appliedCoupon={appliedCoupon}
               setAppliedCoupon={setAppliedCoupon}
               finalAmount={finalAmount}
-              selectedMethod={selectedMethod}
-              setSelectedMethod={setSelectedMethod}
               clientSecret={clientSecret}
               initError={initError}
               handlePaymentSuccess={handlePaymentSuccess}
