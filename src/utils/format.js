@@ -15,8 +15,11 @@ export const timeAgo = (isoString) => {
   return formatDate(isoString);
 };
 
-export const formatCurrencyINR = (value) => {
+export const formatCurrencyUSD = (value) => {
   const num = Number(value);
   if (Number.isNaN(num)) return value;
-  return `$${num.toLocaleString("en-IN")}`;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(num);
 };
