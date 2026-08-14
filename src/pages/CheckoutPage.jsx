@@ -359,6 +359,12 @@ const StripeCardForm = ({
           // that restriction is enforced by Klarna/Afterpay themselves at
           // payment-confirmation time, not by this UI setting.
           paymentMethodOrder: ["card", "klarna", "afterpay_clearpay", "link"],
+              defaultValues: {
+      billingDetails: {
+        email: billing.email,
+      },
+    },
+
           fields: {
             billingDetails: {
               address: "never",
