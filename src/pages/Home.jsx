@@ -17,7 +17,7 @@ import CourseCard from "../components/CourseCard";
 import CTA from "../components/CTA";
 import courseService from "../services/courseService";
 import useResourceList from "../hooks/useResourceList";
-import { formatCurrencyINR } from "../utils/format";
+import { formatCurrencyUSD } from "../utils/format";
 import heroDeskImg from "../assets/hero-desk.png";
 
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import enrollmentService from "../../services/enrollmentService";
-import { formatCurrencyINR } from "../../utils/format";
+import { formatCurrencyUSD} from "../../utils/format";
 
 const MyCourses = () => {
   const [enrollments, setEnrollments] = useState([]);

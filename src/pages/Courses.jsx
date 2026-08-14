@@ -8,7 +8,7 @@ import Pagination from "../components/Pagination";
 import SkeletonCard from "../components/SkeletonCard";
 import courseService from "../services/courseService";
 import useResourceList from "../hooks/useResourceList";
-import { formatCurrencyINR } from "../utils/format";
+import { formatCurrencyUSD } from "../utils/format";
 
 const FILTER_GROUPS = [{ title: "Level", options: ["Beginner", "Intermediate", "Advanced"] }];
 

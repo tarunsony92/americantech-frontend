@@ -17,7 +17,7 @@ import {
 } from "react-icons/hi";
 import courseService from "../services/courseService";
 import useResourceItem from "../hooks/useResourceItem";
-import { formatCurrencyINR } from "../utils/format";
+import { formatCurrencyUSD } from "../utils/format";
 
 // Must match the key CheckoutPage.jsx writes to before navigating here.
 const PAYMENT_RESULT_KEY = "checkout:lastPaymentResult";

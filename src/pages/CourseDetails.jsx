@@ -19,7 +19,7 @@ import CTA from "../components/CTA";
 import courseService from "../services/courseService";
 import enrollmentService from "../services/enrollmentService";
 import useResourceItem from "../hooks/useResourceItem";
-import { formatCurrencyINR } from "../utils/format";
+import { formatCurrencyUSD } from "../utils/format";
 import { COURSE_CONTENT, getCourseContentKey } from "../data/courseContent";
 
 // ---- Fallback / default content (used only when a course matches NOTHING) ----
