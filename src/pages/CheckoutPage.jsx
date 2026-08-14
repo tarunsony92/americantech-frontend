@@ -20,7 +20,7 @@ import paymentService from "../services/paymentService";
 import checkoutOrderService from "../services/CheckoutOrderService";
 import useResourceItem from "../hooks/useResourceItem";
 import ApplyCoupon from "../features/coupons/ApplyCoupon";
-import { formatCurrencyUSD} from "../utils/format";
+import { formatCurrencyUSD } from "../utils/format";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -314,7 +314,22 @@ const StripeCardForm = ({
         status: "failed",
         failureReason: error.message,
       });
-      setErrorMsg(error.message || "Payment failed. Please try again.");
+
+      // Klarna/Afterpay/etc. reject unsupported regions with messages that
+      // typically mention the method name, "not available", or the country --
+      // give the customer a clear next step instead of a confusing raw error.
+      const raw = (error.message || "").toLowerCase();
+      const looksLikeRegionBlock =
+        raw.includes("not available") ||
+        raw.includes("not supported") ||
+        raw.includes("unavailable in your region") ||
+        raw.includes("country");
+
+      setErrorMsg(
+        looksLikeRegionBlock
+          ? "This payment method isn't available in your region. Please pay with a card instead."
+          : error.message || "Payment failed. Please try again."
+      );
       setSubmitting(false);
       return;
     }
@@ -338,6 +353,12 @@ const StripeCardForm = ({
     <form onSubmit={handlePay} className="mt-4 space-y-4">
       <PaymentElement
         options={{
+          // Force these to always render in the UI, regardless of the
+          // customer's detected country/IP. NOTE: this does not make
+          // Klarna/Afterpay functional outside their supported countries --
+          // that restriction is enforced by Klarna/Afterpay themselves at
+          // payment-confirmation time, not by this UI setting.
+          paymentMethodOrder: ["card", "klarna", "afterpay_clearpay", "link"],
           fields: {
             billingDetails: {
               address: "never",
@@ -576,7 +597,7 @@ const CheckoutPage = () => {
       discountAmount: course ? discountAmount : undefined,
       finalAmount: course ? finalAmount : amountPaid ?? 0,
       amountPaid: amountPaid ?? null,
-      currency: currency || "inr",
+      currency: currency || "usd",
       billing,
       paymentIntentId,
       status,
@@ -705,7 +726,7 @@ const CheckoutPage = () => {
       try {
         const res = await paymentService.createPaymentIntent({
           courseId,
-          amount: Math.round(finalAmount * 100), // paise/cents, post-discount
+          amount: Math.round(finalAmount * 100), // cents, post-discount
           couponCode: appliedCoupon?.code,
         });
 
@@ -748,7 +769,7 @@ const CheckoutPage = () => {
       console.error("Enrollment failed after payment:", err);
     }
     const amountPaid = (paymentIntent.amount ?? finalAmount * 100) / 100;
-    const currency = paymentIntent.currency || "inr";
+    const currency = paymentIntent.currency || "usd";
     await saveOrderToBackend({
       paymentIntentId: paymentIntent.id,
       status: "succeeded",
