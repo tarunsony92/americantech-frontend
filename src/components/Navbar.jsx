@@ -36,17 +36,21 @@ const Navbar = () => {
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
       <nav className="container-page flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex shrink-0 items-center">
-          <img
-            src="/static/images/logo.png"
-            alt="American Futuretech LLC"
-            className="h-10 w-auto object-contain sm:h-16"
-          />
-        </Link>
-
+       <Link
+  to="/"
+  className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400"
+>
+  <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-lg sm:h-15 sm:w-80">
+    <img
+      src="/static/images/logo.png"
+      alt="Logo"
+      className="h-full w-full object-contain"
+    />
+  </span>
+</Link>
         {/* Desktop nav links */}
         <ul className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => (

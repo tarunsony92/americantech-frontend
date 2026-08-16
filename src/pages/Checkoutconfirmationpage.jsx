@@ -29,6 +29,8 @@ const downloadReceiptPdf = ({ course, pr }) => {
   const margin = 48;
   let y = 56;
 
+  const isRegistration = pr?.orderType === "registration";
+
   // Header band
   doc.setFillColor(79, 70, 229); // indigo-600
   doc.rect(0, 0, pageWidth, 90, "F");
@@ -38,7 +40,7 @@ const downloadReceiptPdf = ({ course, pr }) => {
   doc.text("American FutureTech", margin, 42);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
-  doc.text("Payment Receipt", margin, 62);
+  doc.text(isRegistration ? "Registration Payment Receipt" : "Payment Receipt", margin, 62);
 
   y = 130;
   doc.setTextColor(30, 30, 30);
@@ -76,6 +78,7 @@ const downloadReceiptPdf = ({ course, pr }) => {
 
   sectionTitle("Payment Details");
   row("Receipt date", dateStr);
+  row("Payment type", isRegistration ? "Registration Payment" : "Full Course Payment");
   row("Course", course.title);
   row("Course price", formatCurrencyUSD(course.price));
   if (pr?.appliedCoupon) {
@@ -182,6 +185,10 @@ const CheckoutConfirmationPage = () => {
   }
 
   const pr = paymentResult;
+  // "registration" -> only the registration amount was paid.
+  // Anything else (including no orderType at all, e.g. old sessionStorage
+  // payloads saved before this field existed) is treated as a full payment.
+  const isRegistration = pr?.orderType === "registration";
   const b = pr?.billing;
   const fullName = [b?.firstName, b?.lastName].filter(Boolean).join(" ");
   const fullAddress = [b?.address1, b?.address2, b?.city, b?.state, b?.zip]
@@ -195,7 +202,9 @@ const CheckoutConfirmationPage = () => {
   return (
     <>
       <Helmet>
-        <title>Order Confirmed — {course.title} | American FutureTech</title>
+        <title>
+          {isRegistration ? "Registration Confirmed" : "Order Confirmed"} — {course.title} | American FutureTech
+        </title>
       </Helmet>
 
       <div className="min-h-[80vh] bg-gradient-to-b from-emerald-50/60 via-slate-50 to-slate-50 py-12 dark:from-emerald-950/10 dark:via-slate-950 dark:to-slate-950">
@@ -213,8 +222,19 @@ const CheckoutConfirmationPage = () => {
                 Payment Successful!
               </h1>
               <p className="mt-2 max-w-md text-slate-600 dark:text-slate-300">
-                You're enrolled in <strong>{course.title}</strong>. A confirmation
-                has been recorded — check your dashboard for course access.
+                {isRegistration ? (
+                  <>
+                    You've paid the registration amount for{" "}
+                    <strong>{course.title}</strong>. Complete the full payment
+                    anytime from your dashboard to unlock full course access.
+                  </>
+                ) : (
+                  <>
+                    You're enrolled in <strong>{course.title}</strong>. A
+                    confirmation has been recorded — check your dashboard for
+                    course access.
+                  </>
+                )}
               </p>
             </div>
 
@@ -222,14 +242,27 @@ const CheckoutConfirmationPage = () => {
             <div className="mt-8 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 p-6 text-white shadow-lg shadow-indigo-500/20 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-medium text-indigo-100">Amount paid</p>
+                  <p className="text-sm font-medium text-indigo-100">
+                    {isRegistration ? "Registration amount paid" : "Amount paid"}
+                  </p>
                   <p className="mt-1 text-4xl font-extrabold tracking-tight">
                     {pr ? formatCurrencyUSD(pr.amountPaid) : formatCurrencyUSD(course.price)}
                   </p>
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold backdrop-blur">
-                  <HiCheckCircle className="h-4 w-4" /> Succeeded
-                </span>
+                <div className="flex flex-col items-end gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold backdrop-blur">
+                    <HiCheckCircle className="h-4 w-4" /> Succeeded
+                  </span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold ${
+                      isRegistration
+                        ? "bg-amber-400/90 text-amber-950"
+                        : "bg-emerald-400/90 text-emerald-950"
+                    }`}
+                  >
+                    {isRegistration ? "Registration Only" : "Full Payment"}
+                  </span>
+                </div>
               </div>
               {pr?.appliedCoupon && (
                 <p className="mt-3 text-sm text-indigo-100">
@@ -250,6 +283,11 @@ const CheckoutConfirmationPage = () => {
                 </h2>
               </div>
               <div className="grid grid-cols-1 gap-x-6 px-6 py-2 sm:grid-cols-2 sm:px-8">
+                <InfoRow
+                  icon={HiOutlineDocumentText}
+                  label="Payment type"
+                  value={isRegistration ? "Registration Payment" : "Full Course Payment"}
+                />
                 <InfoRow icon={HiOutlineDocumentText} label="Course" value={course.title} />
                 <InfoRow icon={HiOutlineCalendar} label="Date" value={receiptDate} />
                 <InfoRow

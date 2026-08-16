@@ -70,6 +70,14 @@ const getBillingErrors = (billing) => {
   return errors;
 };
 
+// Reads ?type=registration|full from the URL. Anything other than exactly
+// "registration" falls back to "full" so a missing/garbled param never
+// accidentally charges the smaller registration amount.
+const getOrderTypeFromLocation = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("type") === "registration" ? "registration" : "full";
+};
+
 // ---------------- Billing Form ----------------
 const BillingForm = ({ billing, setBilling, errors, fieldRefs, onFieldEdited }) => {
   const handleChange = (e) => {
@@ -261,6 +269,7 @@ const StripeCardForm = ({
   onFailure,
   billing,
   courseId,
+  orderType,
   onValidateBilling,
 }) => {
   const stripe = useStripe();
@@ -286,7 +295,10 @@ const StripeCardForm = ({
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/courses/${courseId}/checkout`,
+        // Preserve ?type=... across the Stripe redirect (Klarna/Afterpay/3DS)
+        // so the redirect-return handler below still knows which amount
+        // this PaymentIntent belongs to.
+        return_url: `${window.location.origin}/courses/${courseId}/checkout?type=${orderType}`,
         payment_method_data: {
           billing_details: {
             name: `${billing.firstName} ${billing.lastName}`.trim(),
@@ -399,6 +411,7 @@ const StripeCardForm = ({
 // ---------------- Order Summary ----------------
 const OrderSummary = ({
   course,
+  orderType,
   subtotal,
   discountAmount,
   appliedCoupon,
@@ -418,6 +431,12 @@ const OrderSummary = ({
       Order summary
     </h2>
 
+    {orderType === "registration" && (
+      <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+        Registration payment only
+      </span>
+    )}
+
     <div className="mt-5 flex items-start justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-700">
       <div className="flex items-center gap-3">
         {course.image && (
@@ -431,11 +450,13 @@ const OrderSummary = ({
           <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
             {course.title}
           </p>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Qty: 1</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            {orderType === "registration" ? "Registration fee" : "Qty: 1"}
+          </p>
         </div>
       </div>
       <span className="whitespace-nowrap text-sm font-semibold text-slate-800 dark:text-slate-100">
-        {formatCurrencyUSD(course.price)}
+        {formatCurrencyUSD(subtotal)}
       </span>
     </div>
 
@@ -516,6 +537,7 @@ const OrderSummary = ({
           onFailure={handlePaymentFailure}
           billing={billing}
           courseId={courseId}
+          orderType={orderType}
           onValidateBilling={onValidateBilling}
         />
       </Elements>
@@ -535,6 +557,15 @@ const CheckoutPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { item: course, loading } = useResourceItem(courseService, id);
+
+  // "full"  -> charge course.price
+  // "registration" -> charge the registration amount
+  //
+  // NOTE: the registration amount currently comes from `course.instructorId`
+  // (per the current data model). That field name is misleading — it should
+  // really be a dedicated field like `course.registrationFee`. Flagging this
+  // so it doesn't get treated as a real instructor reference elsewhere.
+  const [orderType, setOrderType] = useState(getOrderTypeFromLocation);
 
   const [billing, setBilling] = useState({
     firstName: "",
@@ -598,6 +629,7 @@ const CheckoutPage = () => {
     const payload = {
       courseId: course?._id || course?.id || id,
       courseTitle: course?.title,
+      orderType,
       coursePrice: course ? subtotal : undefined,
       couponCode: appliedCoupon?.code,
       discountAmount: course ? discountAmount : undefined,
@@ -644,6 +676,10 @@ const CheckoutPage = () => {
     const redirectClientSecret = params.get("payment_intent_client_secret");
     const redirectStatus = params.get("redirect_status");
 
+    // Keep orderType in sync with whatever ?type= is present on this load
+    // (covers the Stripe redirect-return case, which reloads the page).
+    setOrderType(getOrderTypeFromLocation());
+
     if (!redirectClientSecret) {
       setCheckingRedirectStatus(false);
       return;
@@ -676,6 +712,7 @@ const CheckoutPage = () => {
             currency: paymentIntent.currency,
             billing,
             appliedCoupon,
+            orderType: getOrderTypeFromLocation(),
           });
           return;
         } else if (redirectStatus === "failed") {
@@ -690,22 +727,30 @@ const CheckoutPage = () => {
         console.error("Error checking redirect payment status:", err);
       } finally {
         // Clean the query string so a page refresh doesn't re-trigger this
-        window.history.replaceState({}, "", window.location.pathname);
+        // (preserve ?type= so the amount stays correct after cleanup).
+        window.history.replaceState(
+          {},
+          "",
+          `${window.location.pathname}?type=${getOrderTypeFromLocation()}`
+        );
         setCheckingRedirectStatus(false);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const subtotal = Number(course?.price || 0);
+  // Registration amount currently sourced from course.instructorId — see
+  // the NOTE near the orderType state declaration above.
+  const subtotal = Number(
+    orderType === "registration"
+      ? course?.instructorId || 0
+      : course?.price || 0
+  );
   const discountAmount = appliedCoupon ? Number(appliedCoupon.discountAmount || 0) : 0;
   const finalAmount = Math.max(0, subtotal - discountAmount);
 
-  // Create (or re-create) the PaymentIntent whenever the course loads, or whenever
-  // the applied coupon changes. This is the key fix: previously this effect only
-  // depended on `course`, so applying/removing a coupon updated `finalAmount` on
-  // screen but never told Stripe about the new amount — the old PaymentIntent
-  // (created for the full course price) was still the one actually charged.
+  // Create (or re-create) the PaymentIntent whenever the course loads, the
+  // applied coupon changes, or the order type (full vs registration) changes.
   useEffect(() => {
     if (!course) return;
 
@@ -734,6 +779,7 @@ const CheckoutPage = () => {
           courseId,
           amount: Math.round(finalAmount * 100), // cents, post-discount
           couponCode: appliedCoupon?.code,
+          orderType,
         });
 
         if (cancelled) return;
@@ -763,13 +809,14 @@ const CheckoutPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [course, appliedCoupon, finalAmount]);
+  }, [course, appliedCoupon, finalAmount, orderType]);
 
   const handlePaymentSuccess = async (paymentIntent) => {
     try {
       await enrollmentService.enrollSelf(id, {
         paymentIntentId: paymentIntent.id,
         couponCode: appliedCoupon?.code,
+        orderType,
       });
     } catch (err) {
       console.error("Enrollment failed after payment:", err);
@@ -788,6 +835,7 @@ const CheckoutPage = () => {
       currency,
       billing,
       appliedCoupon,
+      orderType,
     });
   };
 
@@ -814,7 +862,9 @@ const CheckoutPage = () => {
   return (
     <>
       <Helmet>
-        <title>Checkout — {course.title} | American FutureTech</title>
+        <title>
+          {orderType === "registration" ? "Registration" : "Checkout"} — {course.title} | American FutureTech
+        </title>
       </Helmet>
 
       <div className="bg-slate-50 py-10 dark:bg-slate-950">
@@ -835,6 +885,7 @@ const CheckoutPage = () => {
 
             <OrderSummary
               course={course}
+              orderType={orderType}
               subtotal={subtotal}
               discountAmount={discountAmount}
               appliedCoupon={appliedCoupon}

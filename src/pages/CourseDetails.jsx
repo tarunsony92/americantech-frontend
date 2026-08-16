@@ -164,13 +164,8 @@ const CourseDetails = () => {
   const [enrollError, setEnrollError] = useState(null);
   const [openModule, setOpenModule] = useState(0);
 
-  const handleEnroll = () => {
-  // if (!isAuthenticated) {
-  navigate(`/courses/${id}/checkout`);
-    // navigate("/register", { state: { from: { pathname: `/courses/${id}/checkout` } } });
-    return;
-  // }
-  
+  const handleEnroll = (type = "full") => {
+  navigate(`/courses/${id}/checkout?type=${type}`);
 };
 
   if (loading) {
@@ -290,12 +285,12 @@ const CourseDetails = () => {
                 </p>
               ) : (
                 <button
-                  onClick={handleEnroll}
-                  disabled={enrollStatus === "loading"}
-                  className="mt-5 w-full rounded-lg bg-gradient-to-r from-indigo-600 to-fuchsia-600 py-2.5 font-semibold text-white shadow-md transition-opacity hover:opacity-90 disabled:opacity-60"
-                >
-                  {enrollStatus === "loading" ? "Enrolling..." : "Enroll Now"}
-                </button>
+  onClick={() => handleEnroll("full")}
+  disabled={enrollStatus === "loading"}
+  className="mt-5 w-full rounded-lg bg-gradient-to-r from-indigo-600 to-fuchsia-600 py-2.5 font-semibold text-white shadow-md transition-opacity hover:opacity-90 disabled:opacity-60"
+>
+  {enrollStatus === "loading" ? "Enrolling..." : "Enroll Now"}
+</button>
               )}
               {enrollError && <p className="mt-2 text-center text-xs text-red-500">{enrollError}</p>}
 
@@ -537,12 +532,14 @@ const CourseDetails = () => {
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <button
-                onClick={handleEnroll}
-                disabled={enrollStatus === "loading"}
-                className="rounded-lg bg-white px-6 py-2.5 font-semibold text-indigo-700 shadow-md transition-transform hover:-translate-y-0.5 disabled:opacity-60"
-              >
-                {enrollStatus === "loading" ? "Enrolling..." : `Enroll Now — ${formatCurrencyUSD(course.price)}`}
-              </button>
+  onClick={() => handleEnroll("registration")}
+  disabled={enrollStatus === "loading"}
+  className="rounded-lg bg-white px-6 py-2.5 font-semibold text-indigo-700 shadow-md transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+>
+  {enrollStatus === "loading"
+    ? "Enrolling..."
+    : `Enroll Now — ${formatCurrencyUSD(course.instructorId)}`}
+</button>
               <Link
                 to="/contact"
                 className="rounded-lg border-2 border-white/70 px-6 py-2.5 font-semibold text-white hover:bg-white/10"

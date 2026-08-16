@@ -43,17 +43,17 @@ const Footer = () => {
           {/* Logo */}
           <div className="lg:col-span-2">
             <Link
-              to="/"
-              className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400"
-            >
-              <span className="flex h-24 w-48 items-center justify-center overflow-hidden rounded-lg">
-                <img
-                  src="/static/images/logo.png"
-                  alt="Logo"
-                  className="h-full w-full object-contain"
-                />
-              </span>
-            </Link>
+  to="/"
+  className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400"
+>
+  <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-lg sm:h-25 sm:w-80">
+    <img
+      src="/static/images/logo.png"
+      alt="Logo"
+      className="h-full w-full object-contain"
+    />
+  </span>
+</Link>
 
             <p className="mt-4 max-w-sm text-sm text-slate-600 dark:text-slate-400">
               Career-focused technology training and placement programs,
@@ -142,14 +142,16 @@ const Footer = () => {
 
               <li>
                 <a
-                  href="tel:+919217872078"
+                  href="tel:+1 (660) 310-8528
+"
                   className="flex items-center gap-2 text-slate-600 hover:text-primary-600 dark:text-slate-400 dark:hover:text-primary-400"
                 >
                   <Phone
                     size={16}
                     className="shrink-0 text-primary-600 dark:text-primary-400"
                   />
-                  +91 92178 72078
+                  +1 (660) 310-8528
+
                 </a>
               </li>
               <li className="flex items-start gap-2 text-slate-600 dark:text-slate-400">

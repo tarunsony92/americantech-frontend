@@ -74,8 +74,8 @@ const WHY_CHOOSE = [
 ];
 
 const STATS = [
-  { icon: Users, value: 1200, suffix: "+", label: "Students Trained" },
-  { icon: Award, value: 10, suffix: "+", label: "Hiring Partners" },
+  { icon: Users, value: 10200, suffix: "+", label: "Students Trained" },
+  { icon: Award, value: 200, suffix: "+", label: "Hiring Partners" },
   { icon: Zap, value: 3, suffix: "x", label: "Faster Career Growth" },
   { icon: BookOpen, value: 98, suffix: "%", label: "Satisfaction Rate" },
 ];
@@ -87,6 +87,14 @@ const PARTNER_LOGOS = [
   "JPMorganChase",
   "Bank of America",
   "HSBC",
+  "HCL",
+  "ACCENTURE",
+  "WALMART",
+  "UBER",
+  "AMAZON",
+  "NETFLIX",
+  "MORGAN STANLEY",
+  "NVIDIA",
 ];
 
 const CERTIFICATES = [
@@ -353,13 +361,17 @@ const Home = () => {
               Build Skills.
               <br />
               Get Certified with{" "}
-              <span className="relative inline-block text-primary">
-                American FutureTech
-                <Sparkles
-                  size={20}
-                  className="absolute -right-6 -top-2 text-amber-400 animate-sparkle"
-                />
-              </span>
+             <span className="relative inline-block text-primary">
+  American{" "}
+  <span className="text-red-500">
+    FutureTech
+  </span>
+
+  <Sparkles
+    size={20}
+    className="absolute -right-6 -top-2 text-amber-400 animate-sparkle"
+  />
+</span>
             </h1>
 
             <p className="mt-6 text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl">
@@ -391,7 +403,7 @@ const Home = () => {
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <div className="rounded-full border border-slate-200 dark:border-slate-700 px-6 py-3 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5 cursor-default">
                 <p className="text-xl font-extrabold text-slate-900 dark:text-white">
-                  1.2K+
+                  10.2K+
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Total Happy Students
@@ -540,23 +552,23 @@ const Home = () => {
         <span className="h-px flex-1 max-w-[80px] bg-gradient-to-l from-transparent to-slate-700" />
       </div>
 
-      <div className="relative overflow-hidden">
-        <span className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-900 to-transparent z-10" />
-        <span className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-800 to-transparent z-10" />
+     <div className="relative overflow-hidden">
+  <span className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-slate-950 to-transparent" />
+  <span className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-slate-950 to-transparent" />
 
-        <div className="flex w-max animate-marquee gap-6 hover:[animation-play-state:paused]">
-          {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((name, i) => (
-            <div
-              key={`${name}-${i}`}
-              className="group flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-sm px-8 py-5 min-w-[160px] transition-all duration-300 hover:bg-white/10 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 cursor-default"
-            >
-              <span className="text-sm font-semibold tracking-wide text-slate-400 grayscale opacity-70 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100 group-hover:text-white whitespace-nowrap">
-                {name}
-              </span>
-            </div>
-          ))}
-        </div>
+  <div className="flex w-max animate-marquee gap-6 hover:[animation-play-state:paused]">
+    {[...PARTNER_LOGOS, ...PARTNER_LOGOS, ...PARTNER_LOGOS].map((name, i) => (
+      <div
+        key={`${name}-${i}`}
+        className="group flex min-w-[160px] cursor-default items-center justify-center rounded-xl border border-white/10 bg-white px-8 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 font-bold text-slate-900 dark:bg-slate-800 dark:text-white"
+      >
+        <span className="whitespace-nowrap text-sm font-semibold tracking-wide text-black transition-all duration-300 group-hover:text-black">
+          {name}
+        </span>
       </div>
+    ))}
+  </div>
+</div>
     </Reveal>
   </div>
 </section>

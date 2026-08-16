@@ -13,7 +13,7 @@ const FIELDS = [
   { key: "title", label: "Title", required: true },
   { key: "slug", label: "Slug (url-friendly, e.g. full-stack-dev)", required: true },
   { key: "categoryId", label: "Category ID", type: "number", required: true },
-  { key: "instructorId", label: "Instructor ID", type: "number" },
+  { key: "instructorId", label: "Registration Fee", type: "number" },
   { key: "description", label: "Description", type: "textarea" },
   { key: "duration", label: "Duration (e.g. 16 Weeks)" },
   { key: "level", label: "Level", type: "select", options: ["Beginner", "Intermediate", "Advanced"], required: true },

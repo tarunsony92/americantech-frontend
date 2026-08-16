@@ -211,7 +211,8 @@ const sections = [
             href="tel:+919170096668"
             className="flex items-center gap-2 text-primary hover:underline"
           >
-            <Phone size={16} /> +91 92178 72078
+            <Phone size={16} /> +1 (660) 310-8528
+
           </a>
           <a
             href="https://americanfuturetechllc.com/"
