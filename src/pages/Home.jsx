@@ -337,7 +337,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>American No.1 Edtech Company With Job Placement</title>
+        <title>American FutureTech</title>
         <meta
           name="description"
           content="Industry-aligned tech training programs with real placement support."
