@@ -5,40 +5,53 @@ import {
   GraduationCap,
   DollarSign,
   Building2,
-  Sparkles,
   Tag,
-  CheckCircle2,
-  ArrowUpRight,
+  Clock3,
+  Bookmark,
+  Zap,
+  Eye,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+/* =========================================================
+   JOB TYPE CONFIG
+========================================================= */
 
 const typeConfig = {
   "Full-time": {
     emoji: "💼",
     className:
-      "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800",
+      "bg-violet-50 text-violet-700 border-violet-100",
   },
+
   "Part-time": {
     emoji: "🕐",
     className:
-      "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800",
+      "bg-blue-50 text-blue-700 border-blue-100",
   },
+
   Contract: {
     emoji: "📝",
     className:
-      "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:border-orange-800",
+      "bg-orange-50 text-orange-700 border-orange-100",
   },
+
   Internship: {
     emoji: "🎓",
     className:
-      "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:border-purple-800",
+      "bg-purple-50 text-purple-700 border-purple-100",
   },
+
   Remote: {
     emoji: "🌎",
     className:
-      "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-300 dark:border-cyan-800",
+      "bg-cyan-50 text-cyan-700 border-cyan-100",
   },
 };
+
+/* =========================================================
+   EXPERIENCE CONFIG
+========================================================= */
 
 const experienceConfig = {
   Entry: "🌱",
@@ -47,8 +60,14 @@ const experienceConfig = {
   Lead: "👑",
 };
 
+/* =========================================================
+   FORMAT SALARY
+========================================================= */
+
 const formatSalary = (job) => {
-  if (!job.salaryMin && !job.salaryMax) return null;
+  if (!job.salaryMin && !job.salaryMax) {
+    return null;
+  }
 
   const symbolMap = {
     USD: "$",
@@ -58,207 +77,865 @@ const formatSalary = (job) => {
   };
 
   const currency = job.currency || "USD";
-  const symbol = symbolMap[currency] || `${currency} `;
+
+  const symbol =
+    symbolMap[currency] || `${currency} `;
 
   if (job.salaryMin && job.salaryMax) {
-    return `${symbol}${job.salaryMin} - ${symbol}${job.salaryMax}`;
+    return `${symbol}${job.salaryMin}/yr - ${symbol}${job.salaryMax}/yr`;
   }
 
   if (job.salaryMin) {
-    return `From ${symbol}${job.salaryMin}`;
+    return `From ${symbol}${job.salaryMin}/yr`;
   }
 
-  return `Up to ${symbol}${job.salaryMax}`;
+  return `Up to ${symbol}${job.salaryMax}/yr`;
 };
 
-const truncateText = (text, length = 85) => {
-  if (!text) return "";
-  if (text.length <= length) return text;
-  return `${text.substring(0, length)}...`;
+/* =========================================================
+   FORMAT POSTED TIME
+========================================================= */
+
+const formatPostedTime = (createdAt) => {
+  if (!createdAt) {
+    return "Recently posted";
+  }
+
+  const createdDate = new Date(createdAt);
+
+  // Invalid date protection
+  if (Number.isNaN(createdDate.getTime())) {
+    return "Recently posted";
+  }
+
+  const now = new Date();
+
+  const differenceMs =
+    now.getTime() - createdDate.getTime();
+
+  // Future date protection
+  if (differenceMs < 0) {
+    return "Just now";
+  }
+
+  const differenceMinutes = Math.floor(
+    differenceMs / (1000 * 60)
+  );
+
+  const differenceHours = Math.floor(
+    differenceMinutes / 60
+  );
+
+  const differenceDays = Math.floor(
+    differenceHours / 24
+  );
+
+  const differenceWeeks = Math.floor(
+    differenceDays / 7
+  );
+
+  const differenceMonths = Math.floor(
+    differenceDays / 30
+  );
+
+  const differenceYears = Math.floor(
+    differenceDays / 365
+  );
+
+  /* Less than 1 minute */
+
+  if (differenceMinutes < 1) {
+    return "Just now";
+  }
+
+  /* Minutes */
+
+  if (differenceMinutes < 60) {
+    return `${differenceMinutes} ${
+      differenceMinutes === 1 ? "min" : "mins"
+    } ago`;
+  }
+
+  /* Hours */
+
+  if (differenceHours < 24) {
+    return `${differenceHours} ${
+      differenceHours === 1 ? "hour" : "hours"
+    } ago`;
+  }
+
+  /* Days */
+
+  if (differenceDays < 7) {
+    return `${differenceDays} ${
+      differenceDays === 1 ? "day" : "days"
+    } ago`;
+  }
+
+  /* Weeks */
+
+  if (differenceDays < 30) {
+    return `${differenceWeeks} ${
+      differenceWeeks === 1 ? "week" : "weeks"
+    } ago`;
+  }
+
+  /* Months */
+
+  if (differenceDays < 365) {
+    return `${differenceMonths} ${
+      differenceMonths === 1 ? "month" : "months"
+    } ago`;
+  }
+
+  /* Years */
+
+  return `${differenceYears} ${
+    differenceYears === 1 ? "year" : "years"
+  } ago`;
 };
+
+/* =========================================================
+   COURSE JOB CARD
+========================================================= */
 
 const CourseJobCard = ({ job }) => {
-  const type = typeConfig[job.type] || typeConfig["Full-time"];
+  const type =
+    typeConfig[job.type] ||
+    typeConfig["Full-time"];
 
   const experienceEmoji =
-    experienceConfig[job.experienceLevel] || "💼";
+    experienceConfig[job.experienceLevel] ||
+    "💼";
 
   const salary = formatSalary(job);
 
-  const skills = Array.isArray(job.skills) ? job.skills : [];
+  const postedTime = formatPostedTime(
+    job.createdAt
+  );
 
-  const requirements = Array.isArray(job.requirements)
-    ? job.requirements
-    : [];
+  const initials =
+    job.company?.charAt(0)?.toUpperCase() ||
+    "C";
 
   return (
-    <div className="relative h-[480px] overflow-hidden bg-white dark:bg-slate-900 max-h-[220px] ">
+    <article
+      className="
+        group
+        relative
+        w-full
+        overflow-hidden
+        rounded-2xl
+        border border-slate-200
+        bg-white
+        shadow-sm
+        transition-all
+        duration-300
+        hover:-translate-y-0.5
+        hover:border-indigo-200
+        hover:shadow-lg
+        hover:shadow-indigo-100/40
 
-      {/* Decorative circles */}
-      <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-indigo-500/5 blur-2xl" />
+        dark:border-slate-800
+        dark:bg-slate-900
+        dark:hover:border-indigo-800
+      "
+    >
 
-      <div className="relative flex h-full flex-col p-4">
+      {/* =====================================================
+          TOP ACCENT
+      ===================================================== */}
 
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3">
+      <div
+        className="
+          absolute
+          left-0
+          right-0
+          top-0
+          h-0.5
+          bg-gradient-to-r
+          from-violet-500
+          via-indigo-500
+          to-blue-500
+          opacity-0
+          transition-opacity
+          duration-300
+          group-hover:opacity-100
+        "
+      />
 
-          <div className="flex min-w-0 items-center gap-3">
+      <div className="p-5">
 
-            {/* Company Logo */}
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-md dark:border-slate-700 dark:bg-white">
-  {job.imageUrl ? (
-    <img
-      src={job.imageUrl}
-      alt={`${job.company || "Company"} logo`}
-      className="h-full w-full object-contain"
-      loading="lazy"
-      onError={(e) => {
-        e.currentTarget.style.display = "none";
+        {/* ===================================================
+            TOP ROW
+        =================================================== */}
 
-        const fallback = e.currentTarget.parentElement?.querySelector(
-          ".logo-fallback"
-        );
+        <div className="flex items-start gap-5">
 
-        if (fallback) {
-          fallback.classList.remove("hidden");
-        }
-      }}
-    />
-  ) : null}
+          {/* =================================================
+              COMPANY LOGO
+          ================================================= */}
 
-  <span
-    className={`logo-fallback text-base font-black text-indigo-600 ${
-      job.imageUrl ? "hidden" : ""
-    }`}
-  >
-    {job.company?.charAt(0)?.toUpperCase() || "C"}
-  </span>
-</div>
+          <div
+            className="
+              flex
+              h-[70px]
+              w-[70px]
+              shrink-0
+              items-center
+              justify-center
+              overflow-hidden
+              rounded-xl
+              border
+              border-slate-200
+              bg-white
+              p-2
+              shadow-sm
+              dark:border-slate-700
+              dark:bg-white
+            "
+          >
+            {job.imageUrl ? (
+              <img
+                src={job.imageUrl}
+                alt={`${job.company || "Company"} logo`}
+                className="
+                  h-full
+                  w-full
+                  object-contain
+                "
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.style.display =
+                    "none";
 
-            <div className="min-w-0">
-              <h3 className="line-clamp-2 text-[15px] font-extrabold leading-5 text-slate-900 transition-colors group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
-                {job.title}
-              </h3>
+                  const fallback =
+                    e.currentTarget.parentElement?.querySelector(
+                      ".logo-fallback"
+                    );
 
-              <div className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                <Building2 className="h-3.5 w-3.5 shrink-0 text-indigo-500" />
+                  if (fallback) {
+                    fallback.classList.remove(
+                      "hidden"
+                    );
+                  }
+                }}
+              />
+            ) : null}
+
+            <span
+              className={`
+                logo-fallback
+                text-xl
+                font-black
+                text-indigo-600
+                ${job.imageUrl ? "hidden" : ""}
+              `}
+            >
+              {initials}
+            </span>
+          </div>
+
+          {/* =================================================
+              JOB MAIN INFO
+          ================================================= */}
+
+          <div className="min-w-0 flex-1">
+
+            {/* Job Title */}
+
+            <h3
+              className="
+                text-lg
+                font-extrabold
+                leading-tight
+                text-slate-900
+                transition-colors
+                group-hover:text-indigo-600
+
+                dark:text-white
+                dark:group-hover:text-indigo-400
+              "
+              title={job.title}
+            >
+              {job.title}
+            </h3>
+
+            {/* Company + Job Type */}
+
+            <div
+              className="
+                mt-2
+                flex
+                flex-wrap
+                items-center
+                gap-2
+              "
+            >
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                  text-sm
+                  font-semibold
+                  text-slate-600
+                  dark:text-slate-300
+                "
+              >
+                <Building2
+                  className="
+                    h-3.5
+                    w-3.5
+                    text-indigo-500
+                  "
+                />
 
                 <span className="truncate">
                   {job.company}
                 </span>
               </div>
+
+              <span className="text-slate-300">
+                •
+              </span>
+
+              <span
+                className="
+                  text-sm
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                {type.emoji}{" "}
+                {job.type || "Full-time"}
+              </span>
+
+            </div>
+
+            {/* =================================================
+                TAGS
+            ================================================= */}
+
+            <div
+              className="
+                mt-4
+                flex
+                flex-wrap
+                gap-2
+              "
+            >
+
+              {/* Category */}
+
+              {job.category && (
+                <span
+                  className="
+                    inline-flex
+                    items-center
+                    gap-1
+                    rounded-full
+                    border
+                    border-violet-100
+                    bg-violet-50
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-semibold
+                    text-violet-700
+
+                    dark:border-violet-900
+                    dark:bg-violet-950/40
+                    dark:text-violet-300
+                  "
+                >
+                  <Tag className="h-3 w-3" />
+
+                  {job.category}
+                </span>
+              )}
+
+              {/* Experience */}
+
+              <span
+                className="
+                  inline-flex
+                  items-center
+                  gap-1
+                  rounded-full
+                  border
+                  border-blue-100
+                  bg-blue-50
+                  px-3
+                  py-1.5
+                  text-xs
+                  font-semibold
+                  text-blue-700
+
+                  dark:border-blue-900
+                  dark:bg-blue-950/40
+                  dark:text-blue-300
+                "
+              >
+                {experienceEmoji}
+
+                {job.experienceLevel ||
+                  "Entry"}
+              </span>
+
+              {/* Location */}
+
+              <span
+                className="
+                  inline-flex
+                  items-center
+                  gap-1
+                  rounded-full
+                  border
+                  border-indigo-100
+                  bg-indigo-50
+                  px-3
+                  py-1.5
+                  text-xs
+                  font-semibold
+                  text-indigo-700
+
+                  dark:border-indigo-900
+                  dark:bg-indigo-950/40
+                  dark:text-indigo-300
+                "
+                title={job.location || "Remote"}
+              >
+                <MapPin className="h-3 w-3" />
+
+                <span className="max-w-[180px] truncate">
+                  {job.location || "Remote"}
+                </span>
+              </span>
+
             </div>
 
           </div>
 
-          {/* Active */}
-          <span className="flex shrink-0 items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[9px] font-bold text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-            {job.isActive ? "Active" : "Closed"}
-          </span>
+          {/* =================================================
+              RIGHT SIDE - SALARY
+          ================================================= */}
 
-        </div>
-
-        {/* Badges */}
-        <div className="mt-3 flex flex-wrap gap-1.5">
-
-          <span
-            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-bold ${type.className}`}
+          <div
+            className="
+              hidden
+              shrink-0
+              text-right
+              sm:block
+            "
           >
-            {type.emoji}
-            {job.type || "Full-time"}
-          </span>
 
-          <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            {experienceEmoji}
-            {job.experienceLevel || "Entry"}
-          </span>
+            {/* Salary */}
 
-          {job.category && (
-            <span className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-violet-50 px-2 py-1 text-[10px] font-bold text-violet-700 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-300">
-              <Tag className="h-2.5 w-2.5" />
-              {job.category}
-            </span>
+            <div
+              className="
+                inline-flex
+                items-center
+                rounded-lg
+                bg-emerald-100
+                px-3
+                py-2
+                text-sm
+                font-extrabold
+                text-emerald-700
 
-            )}
-        <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-bold text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            <MapPin className="h-2.5 w-2.5" />
-            {job.location || "Remote"}
-          </span>
-
-
-
-
-        </div>
-
-        {/* Location + Salary */}
-        <div className="mt-3 grid grid-cols-1 gap-2 w-full">
-
-          
-
-          <div className="rounded-lg border border-slate-100 bg-slate-50/70 px-2.5 w-full py-2 dark:border-slate-800 dark:bg-slate-800/50">
-            <div className="flex items-center gap-2">
-
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white text-emerald-600 shadow-sm dark:bg-slate-700 dark:text-emerald-400">
-                <DollarSign className="h-3.5 w-3.5" />
-              </div>
-
-              <div className="min-w-0">
-                <p className="text-[8px] font-semibold uppercase tracking-wider text-slate-400">
-                  Salary
-                </p>
-
-                <p className="truncate text-[10px] font-bold text-slate-700 dark:text-slate-200">
-                  {salary || "Competitive"}
-                </p>
-              </div>
-
+                dark:bg-emerald-950/50
+                dark:text-emerald-300
+              "
+            >
+              {salary || "Competitive"}
             </div>
+
+            {/* Hiring Status */}
+
+            <div
+              className={`
+                mt-2
+                flex
+                items-center
+                justify-end
+                gap-1
+                text-xs
+                font-semibold
+                ${
+                  job.isActive
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-red-500 dark:text-red-400"
+                }
+              `}
+            >
+              <span
+                className={`
+                  h-1.5
+                  w-1.5
+                  rounded-full
+                  ${
+                    job.isActive
+                      ? "bg-emerald-500"
+                      : "bg-red-500"
+                  }
+                `}
+              />
+
+              {job.isActive
+                ? "Actively Hiring"
+                : "Position Closed"}
+            </div>
+
           </div>
 
         </div>
 
-        {/* Course */}
-        {job.course && (
-          <div className="mt-2.5 flex items-center gap-2.5 rounded-lg border border-indigo-100 bg-gradient-to-r from-indigo-50 to-violet-50 px-2.5 py-2 dark:border-indigo-900/50 dark:from-indigo-950/30 dark:to-violet-950/30">
+        {/* ===================================================
+            MOBILE SALARY
+        =================================================== */}
 
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-indigo-600 text-white">
-              <GraduationCap className="h-4 w-4" />
+        <div
+          className="
+            mt-4
+            flex
+            items-center
+            justify-between
+            sm:hidden
+          "
+        >
+
+          <div
+            className="
+              rounded-lg
+              bg-emerald-100
+              px-3
+              py-2
+              text-xs
+              font-extrabold
+              text-emerald-700
+            "
+          >
+            {salary || "Competitive"}
+          </div>
+
+          <div
+            className={`
+              flex
+              items-center
+              gap-1
+              text-xs
+              font-semibold
+              ${
+                job.isActive
+                  ? "text-emerald-600"
+                  : "text-red-500"
+              }
+            `}
+          >
+            <span
+              className={`
+                h-1.5
+                w-1.5
+                rounded-full
+                ${
+                  job.isActive
+                    ? "bg-emerald-500"
+                    : "bg-red-500"
+                }
+              `}
+            />
+
+            {job.isActive
+              ? "Actively Hiring"
+              : "Closed"}
+          </div>
+
+        </div>
+
+        {/* ===================================================
+            RECOMMENDED COURSE
+        =================================================== */}
+
+        {job.course && (
+          <div
+            className="
+              mt-4
+              flex
+              items-center
+              gap-2.5
+              rounded-lg
+              border
+              border-indigo-100
+              bg-indigo-50/60
+              px-3
+              py-2
+
+              dark:border-indigo-900
+              dark:bg-indigo-950/30
+            "
+          >
+
+            <div
+              className="
+                flex
+                h-7
+                w-7
+                shrink-0
+                items-center
+                justify-center
+                rounded-md
+                bg-indigo-600
+                text-white
+              "
+            >
+              <GraduationCap
+                className="h-4 w-4"
+              />
             </div>
 
             <div className="min-w-0">
-              <p className="text-[8px] font-bold uppercase tracking-wider text-indigo-500">
+
+              <p
+                className="
+                  text-[8px]
+                  font-bold
+                  uppercase
+                  tracking-wider
+                  text-indigo-500
+                "
+              >
                 Recommended Course
               </p>
 
-             <p
-  className="
+              <p
+                className="
+                  max-w-[300px]
+                  truncate
+                  text-xs
+                  font-bold
+                  text-indigo-800
 
-    max-w-[180px]
-    truncate
-    text-[10px]
-    font-bold
-    bg-color-blue-500
-    text-indigo-700
-    dark:bg-color-blue-900
-    dark:text-indigo-300
-    
-  "
-  title={job.course}
->
-  🎯 {job.course}
-</p>
+                  dark:text-indigo-300
+                "
+                title={job.course}
+              >
+                🎯 {job.course}
+              </p>
+
             </div>
 
           </div>
         )}
 
+        {/* ===================================================
+            BOTTOM ACTION BAR
+        =================================================== */}
 
+        <div
+          className="
+            mt-5
+            flex
+            flex-wrap
+            items-center
+            justify-between
+            gap-3
+            border-t
+            border-slate-100
+            pt-4
 
-        
+            dark:border-slate-800
+          "
+        >
+
+          {/* =================================================
+              LEFT META
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              flex-wrap
+              items-center
+              gap-3
+              text-xs
+              font-medium
+              text-slate-500
+
+              dark:text-slate-400
+            "
+          >
+
+            {/* Posted Time */}
+
+            <span
+              className="
+                flex
+                items-center
+                gap-1.5
+              "
+            >
+              <Clock3
+                className="
+                  h-3.5
+                  w-3.5
+                  text-violet-500
+                "
+              />
+
+              {postedTime}
+            </span>
+
+            <span className="text-slate-300">
+              •
+            </span>
+
+            {/* Job Type */}
+
+            <span
+              className="
+                flex
+                items-center
+                gap-1.5
+              "
+            >
+              <BriefcaseBusiness
+                className="
+                  h-3.5
+                  w-3.5
+                  text-violet-500
+                "
+              />
+
+              {job.type || "Full-time"}
+            </span>
+
+          </div>
+
+          {/* =================================================
+              RIGHT ACTIONS
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              gap-2
+            "
+          >
+
+            {/* =================================================
+                EASY APPLY
+            ================================================= */}
+
+            {job.isActive &&
+            job.applyLink ? (
+              <a
+                href={job.applyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  inline-flex
+                  items-center
+                  gap-1.5
+                  rounded-lg
+                  bg-gradient-to-r
+                  from-violet-600
+                  to-indigo-600
+                  px-4
+                  py-2.5
+                  text-xs
+                  font-bold
+                  text-white
+                  shadow-md
+                  shadow-indigo-500/20
+                  transition-all
+                  hover:-translate-y-0.5
+                  hover:shadow-lg
+                "
+              >
+                <Zap
+                  className="h-3.5 w-3.5"
+                />
+
+                Easy Apply
+              </a>
+            ) : null}
+
+            {/* =================================================
+                QUICK VIEW
+            ================================================= */}
+
+            <Link
+              to={`/jobscourse/${job.id}`}
+              className="
+                inline-flex
+                items-center
+                gap-1.5
+                rounded-lg
+                border
+                border-indigo-200
+                bg-white
+                px-4
+                py-2.5
+                text-xs
+                font-bold
+                text-indigo-600
+                transition-all
+                hover:bg-indigo-50
+
+                dark:border-indigo-800
+                dark:bg-slate-900
+                dark:text-indigo-400
+              "
+            >
+              <Eye
+                className="h-3.5 w-3.5"
+              />
+
+              Quick View
+            </Link>
+
+            {/* =================================================
+                BOOKMARK
+            ================================================= */}
+
+            <button
+              type="button"
+              className="
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
+                rounded-lg
+                border
+                border-slate-200
+                bg-white
+                text-slate-500
+                transition-all
+                hover:border-indigo-200
+                hover:bg-indigo-50
+                hover:text-indigo-600
+
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-slate-400
+              "
+              title="Save job"
+            >
+              <Bookmark
+                className="h-4 w-4"
+              />
+            </button>
+
+          </div>
+
+        </div>
 
       </div>
-    </div>
+    </article>
   );
 };
 

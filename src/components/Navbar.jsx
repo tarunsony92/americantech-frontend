@@ -50,7 +50,7 @@ const Navbar = () => {
 >
   <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-lg sm:h-15 sm:w-80">
     <img
-      src="/static/images/logo.png"
+      src="/static/images/logoamerican.jpeg"
       alt="Logo"
       className="h-full w-full object-contain"
     />

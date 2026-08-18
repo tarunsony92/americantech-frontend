@@ -125,7 +125,7 @@ const AdminCourseJobForm = () => {
     type="url"
     value={form.imageUrl}
     onChange={(e) => updateField("imageUrl", e.target.value)}
-    placeholder="https://example.com/logo.png"
+    placeholder="https://example.com/logoamerican.jpeg"
     className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
   />
 </div>

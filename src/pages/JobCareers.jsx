@@ -89,7 +89,7 @@ const JobCardWrapper = ({ job }) => {
 
       <CourseJobCard job={job} />
 
-      {/* Bottom action */}
+      {/* Bottom action
       <div
         className="
           border-t border-slate-100
@@ -133,7 +133,7 @@ const JobCardWrapper = ({ job }) => {
             <ArrowRight className="h-3.5 w-3.5" />
           </span>
         </Link>
-      </div>
+      </div> */}
     </article>
   );
 };
@@ -863,14 +863,7 @@ const JobCareers = () => {
             )}
 
             {/* Jobs Grid */}
-            <div
-              className="
-                grid grid-cols-1
-                gap-5
-                md:grid-cols-2
-                xl:grid-cols-3
-              "
-            >
+           <div className="grid grid-cols-1 gap-5">
               {loading ? (
                 Array.from({ length: 6 }).map(
                   (_, index) => (
@@ -1010,7 +1003,7 @@ const JobCareers = () => {
           Bottom CTA
       -------------------------------------------------- */}
 
-      <section className="container-page pb-14">
+      {/* <section className="container-page pb-14">
         <div
           className="
             relative overflow-hidden
@@ -1119,7 +1112,7 @@ const JobCareers = () => {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };

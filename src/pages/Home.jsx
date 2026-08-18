@@ -117,7 +117,7 @@ const CERTIFICATES = [
     title: "Cyber Security with AI Professional Certificate",
     date: "Oct 29, 2022",
     tier: "EXPERT",
-    image: "https://loremflickr.com/800/450/cybersecurity,hacking?lock=7",
+    image: "https://images.pexels.com/photos/3949101/pexels-photo-3949101.jpeg",
   },
 ];
 
