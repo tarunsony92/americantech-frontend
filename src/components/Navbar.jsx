@@ -7,14 +7,20 @@ import { toggleDarkMode, toggleMobileMenu, closeMobileMenu } from "../redux/slic
 
 const NAV_LINKS = [
   { label: "Home", to: "/" },
+  { label: "Live Jobs", to: "/jobscourse" },
   {
     label: "Courses",
     to: "/courses",
     children: [
       { label: "All Courses", to: "/courses" },
       { label: "Certifications", to: "/certifications" },
+      
     ],
   },
+  
+  
+  { label: "About Us", to: "/about" },
+  { label: "Contact", to: "/contact" },
   {
     label: "More",
     to: "/terms-and-conditions",
@@ -24,8 +30,7 @@ const NAV_LINKS = [
       { label: "Cookies Policy", to: "/cookie-policy" },
     ],
   },
-  { label: "About Us", to: "/about" },
-  { label: "Contact", to: "/contact" },
+  
 ];
 
 const Navbar = () => {
@@ -123,8 +128,8 @@ const Navbar = () => {
             </Link>
           ) : (
             <>
-              <Link to="/login" className="btn-outline">Login</Link>
-              <Link to="/register" className="btn-primary">Get Started</Link>
+              {/* <Link to="/login" className="btn-outline">Login</Link> */}
+              {/* <Link to="/register" className="btn-primary">Get Started</Link> */}
             </>
           )}
         </div>

@@ -456,7 +456,7 @@ const OrderSummary = ({
         </div>
       </div>
       <span className="whitespace-nowrap text-sm font-semibold text-slate-800 dark:text-slate-100">
-        {formatCurrencyUSD(subtotal)}
+        {formatCurrencyUSD(course.Price)}
       </span>
     </div>
 

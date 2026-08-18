@@ -41,6 +41,8 @@ const AdminLayout = () => {
     { label: "Coupons", to: "/admin/coupons", icon: HiOutlineCog }, // Added Coupons link
     { label: "Contact Queries", to: "/admin/contact-queries", icon: HiOutlineChatAlt2 },
     { label: "Orders", to: "/admin/orders", icon: HiOutlineClipboardList }, // Added Orders link
+    { label: "Course Jobs", to: "/admin/coursejobs", icon: HiOutlineBriefcase }, // Added Course Jobs link
+    
 
     // Logout Sidebar Item
     {

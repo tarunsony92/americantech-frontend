@@ -257,9 +257,9 @@ const CourseDetails = () => {
             <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[
                 { icon: HiOutlineAcademicCap, value: "50%+", label: "Graduates & Freshers Welcome", color: "from-indigo-500 to-blue-500" },
-                { icon: HiOutlineBriefcase, value: "3+", label: "Career Sessions Included", color: "from-fuchsia-500 to-pink-500" },
+                { icon: HiOutlineBriefcase, value: "5+", label: "Career Sessions Included", color: "from-fuchsia-500 to-pink-500" },
                 { icon: HiOutlineGlobeAlt, value: "100%", label: "Online & Flexible Learning", color: "from-emerald-500 to-teal-500" },
-                { icon: HiOutlineShieldCheck, value: `${tools.length}+`, label: "Tools Covered in Program", color: "from-amber-500 to-orange-500" },
+                { icon: HiOutlineShieldCheck, value: "14+", label: "Tools Covered in Program", color: "from-amber-500 to-orange-500" },
               ].map((stat) => (
                 <div
                   key={stat.label}
@@ -303,7 +303,7 @@ const CourseDetails = () => {
               <dl className="mt-6 space-y-3 text-sm">
                 <div className="flex justify-between"><dt className="text-slate-500">Duration</dt><dd className="font-medium">{course.duration}</dd></div>
                 <div className="flex justify-between"><dt className="text-slate-500">Level</dt><dd className="font-medium">{course.level}</dd></div>
-                <div className="flex justify-between"><dt className="text-slate-500">Category</dt><dd className="font-medium">{categoryName}</dd></div>
+                {/* <div className="flex justify-between"><dt className="text-slate-500">Category</dt><dd className="font-medium">{categoryName}</dd></div> */}
               </dl>
             </div>
           </aside>
