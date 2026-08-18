@@ -24,7 +24,7 @@ const EMPTY_FORM = {
 };
 
 const TYPE_OPTIONS = ["Full-time", "Part-time", "Contract", "Internship", "Remote", "Hybrid" , "On-site"];
-const LEVEL_OPTIONS = ["Entry", "Mid", "Senior", "Lead"];
+const LEVEL_OPTIONS = ["Entry-Level", "Mid-Level", "Senior-Level", "Lead-Level"];
 
 const AdminCourseJobForm = () => {
   const { id } = useParams();
