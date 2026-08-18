@@ -37,7 +37,7 @@ const SOCIALS = [
 
 const Footer = () => {
   return (
-    <footer className="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900">
+    <footer className="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-white-900">
       <div className="container-page py-14">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-6">
           {/* Logo */}
