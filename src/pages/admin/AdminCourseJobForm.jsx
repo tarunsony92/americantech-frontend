@@ -8,12 +8,13 @@ import TagListInput from "../../components/admin/TagListInput";
 const EMPTY_FORM = {
   title: "",
   company: "",
-  location: "Remote",
+  course: "",
+  location: "",
   type: "Full-time",
   experienceLevel: "Entry",
   salaryMin: "",
   salaryMax: "",
-  currency: "USD",
+  currency: "$",
   description: "",
   responsibilities: [],
   requirements: [],
@@ -22,7 +23,7 @@ const EMPTY_FORM = {
   isActive: true,
 };
 
-const TYPE_OPTIONS = ["Full-time", "Part-time", "Contract", "Internship", "Remote"];
+const TYPE_OPTIONS = ["Full-time", "Part-time", "Contract", "Internship", "Remote", "Hybrid" , "On-site"];
 const LEVEL_OPTIONS = ["Entry", "Mid", "Senior", "Lead"];
 
 const AdminCourseJobForm = () => {
@@ -45,8 +46,8 @@ const AdminCourseJobForm = () => {
         setForm({
           ...EMPTY_FORM,
           ...job,
-          salaryMin: job.salaryMin ?? "",
-          salaryMax: job.salaryMax ?? "",
+          salaryMin: job.salaryMin != null ? String(job.salaryMin) : "",
+          salaryMax: job.salaryMax != null ? String(job.salaryMax) : "",
           responsibilities: job.responsibilities || [],
           requirements: job.requirements || [],
           skills: job.skills || [],
@@ -66,11 +67,11 @@ const AdminCourseJobForm = () => {
     setSaving(true);
     setError(null);
 
-    const payload = {
-      ...form,
-      salaryMin: form.salaryMin === "" ? null : Number(form.salaryMin),
-      salaryMax: form.salaryMax === "" ? null : Number(form.salaryMax),
-    };
+   const payload = {
+  ...form,
+  salaryMin: form.salaryMin,
+  salaryMax: form.salaryMax,
+};
 
     try {
       if (isEdit) {
@@ -106,6 +107,7 @@ const AdminCourseJobForm = () => {
         {/* Basic info */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
+           
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Job Title *</label>
             <input
               required
@@ -115,6 +117,19 @@ const AdminCourseJobForm = () => {
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
             />
           </div>
+<div>
+  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    Company Logo URL
+  </label>
+  <input
+    type="url"
+    value={form.imageUrl}
+    onChange={(e) => updateField("imageUrl", e.target.value)}
+    placeholder="https://example.com/logo.png"
+    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+  />
+</div>
+          
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Company *</label>
@@ -126,6 +141,19 @@ const AdminCourseJobForm = () => {
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
             />
           </div>
+
+          <div>
+  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    Course
+  </label>
+  <input
+    type="text"
+    placeholder="e.g. B.Tech CSE"
+    value={form.course}
+    onChange={(e) => updateField("course", e.target.value)}
+    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+  />
+</div>
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Location</label>
@@ -171,26 +199,30 @@ const AdminCourseJobForm = () => {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Salary Min</label>
-            <input
-              type="number"
-              min="0"
-              value={form.salaryMin}
-              onChange={(e) => updateField("salaryMin", e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-            />
-          </div>
+  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    Salary Min
+  </label>
+  <input
+    type="text"
+    placeholder="e.g. 25K"
+    value={form.salaryMin}
+    onChange={(e) => updateField("salaryMin", e.target.value)}
+    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+  />
+</div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Salary Max</label>
-            <input
-              type="number"
-              min="0"
-              value={form.salaryMax}
-              onChange={(e) => updateField("salaryMax", e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-            />
-          </div>
+  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+    Salary Max
+  </label>
+  <input
+    type="text"
+    placeholder="e.g. 50K"
+    value={form.salaryMax}
+    onChange={(e) => updateField("salaryMax", e.target.value)}
+    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+  />
+</div>
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Currency</label>
