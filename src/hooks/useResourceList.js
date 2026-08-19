@@ -27,8 +27,16 @@ export const useResourceList = (service, initialParams = {}) => {
       });
       setStatus("success");
     } catch (err) {
-      console.log("DEBUG:", err.message, err.response); 
-      setError(err.response?.data?.message || "Couldn't load this content List. Please try again.");
+      console.log("DEBUG:", err.message, err.response);
+
+      const serverMessage = err.response?.data?.message;
+      const fallbackMessage = "Couldn't load this content List. Please try again.";
+
+      setError(
+        serverMessage
+          ? `${serverMessage}. ${fallbackMessage}`
+          : fallbackMessage
+      );
       setStatus("error");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
