@@ -819,9 +819,9 @@ const Home = () => {
     tracking-[-0.03em]
     text-slate-950
     dark:text-white
-    sm:text-5xl
-    lg:text-6xl
-    xl:text-7xl
+    sm:text-3xl
+    lg:text-4xl
+    xl:text-5xl
   "
 >
   <span className="block">
