@@ -27,6 +27,7 @@ export const useResourceList = (service, initialParams = {}) => {
       });
       setStatus("success");
     } catch (err) {
+      console.log("DEBUG:", err.message, err.response); 
       setError(err.response?.data?.message || "Couldn't load this content List. Please try again.");
       setStatus("error");
     }
