@@ -75,13 +75,13 @@ const WHY_CHOOSE = [
     icon: "📚",
     title: "Live Online Classes",
     desc: "Access live, interactive classes with peers and instructors in a structured cohort format.",
-    image: "/static/images/why4.jpg",
+    image: "/static/images/online class.png",
   },
   {
     icon: "💼",
     title: "Hands-On Projects",
     desc: "Get assignment-based learning with real-world projects to build a strong portfolio.",
-    image: "/static/images/placeassist.png",
+    image: "/static/images/handsonproject.png",
   },
 
 ];

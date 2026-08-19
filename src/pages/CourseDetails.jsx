@@ -209,106 +209,269 @@ const CourseDetails = () => {
       <Helmet><title>{course.title} | American FutureTech</title></Helmet>
       <PageHeader
         title={course.title}
-        subtitle={categoryName}
+        // subtitle={categoryName}
         breadcrumbItems={[{ label: "Courses", to: "/courses" }, { label: course.title }]}
       />
 
       {/* ---------------- HERO ---------------- */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
-        <div className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full bg-gradient-to-br from-fuchsia-400/30 to-indigo-400/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 left-0 h-64 w-64 rounded-full bg-gradient-to-tr from-emerald-400/20 to-cyan-400/20 blur-3xl" />
+      <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50/80 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
+  {/* Background Decorations */}
+  <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-br from-fuchsia-400/20 via-indigo-400/20 to-transparent blur-3xl" />
+  <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-emerald-400/15 via-cyan-400/15 to-transparent blur-3xl" />
 
-        <div className="container-page relative grid grid-cols-1 gap-10 py-12 lg:grid-cols-[1fr_360px]">
-          <div>
-            {course.image && (
-              <div className="overflow-hidden rounded-2xl shadow-xl ring-1 ring-black/5">
-                <img src={course.image} alt={course.title} className="h-72 w-full object-cover" />
-              </div>
-            )}
+  <div className="container-page relative grid grid-cols-1 gap-8 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
+    
+    {/* =========================================================
+        LEFT CONTENT
+    ========================================================= */}
+    <div className="min-w-0">
 
-            <div className="mt-6 flex flex-wrap gap-3 text-sm">
-              <span className="flex items-center gap-1.5 rounded-full bg-indigo-100 px-3 py-1.5 font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
-                <HiOutlineClock className="h-4 w-4" /> {course.duration}
-              </span>
-              <span className="flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1.5 font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                <HiOutlineAcademicCap className="h-4 w-4" /> {course.level}
-              </span>
-              {course.rating && (
-                <span className="flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1.5 font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-                  <HiStar className="h-4 w-4 text-amber-500" /> {course.rating} rating
-                </span>
-              )}
-              {course.instructor && (
-                <span className="flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                  Instructor: {course.instructor.fullName}
-                </span>
-              )}
-            </div>
+      {/* Course Image */}
+      {course.image && (
+        <div className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white shadow-xl ring-1 ring-slate-900/5 dark:border-white/10 dark:bg-slate-900">
+          <img
+            src={course.image}
+            alt={course.title}
+            className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] sm:h-80 lg:h-[380px]"
+          />
 
-            <h2 className="section-title mt-8 bg-gradient-to-r from-indigo-600 to-fuchsia-600 bg-clip-text text-transparent">
-              Overview
-            </h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              {course.description ||
-                `This program takes you from fundamentals to job-ready skills in ${categoryName.toLowerCase()}, combining live instruction, hands-on projects, and mentor feedback across ${(course.duration || "the program").toLowerCase()}.`}
+          {/* Image Overlay */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+
+          {/* Course Title */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
+            <span className="inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-indigo-700 shadow-sm backdrop-blur dark:bg-slate-900/90 dark:text-indigo-300">
+              {categoryName}
+            </span>
+
+            <h1 className="mt-3 max-w-3xl text-2xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
+              {course.title}
+            </h1>
+          </div>
+        </div>
+      )}
+
+      {/* Course Meta */}
+      <div className="mt-5 flex flex-wrap gap-2.5 text-sm">
+        <span className="flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 font-medium text-indigo-700 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
+          <HiOutlineClock className="h-4 w-4" />
+          {course.duration}
+        </span>
+
+        <span className="flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3.5 py-1.5 font-medium text-violet-700 dark:border-violet-800 dark:bg-violet-900/30 dark:text-violet-300">
+          <HiOutlineAcademicCap className="h-4 w-4" />
+          {course.level}
+        </span>
+
+        {course.rating && (
+          <span className="flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+            <HiStar className="h-4 w-4 text-amber-500" />
+            {course.rating} rating
+          </span>
+        )}
+
+        {course.instructor && (
+          <span className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+            Instructor: {course.instructor.fullName}
+          </span>
+        )}
+      </div>
+
+      <br /><br />
+
+     
+
+      {/* Quick Stats */}
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          {
+            icon: HiOutlineAcademicCap,
+            value: "50%+",
+            label: "Graduates & Freshers Welcome",
+            color: "from-indigo-500 to-blue-500",
+          },
+          {
+            icon: HiOutlineBriefcase,
+            value: "5+",
+            label: "Career Sessions Included",
+            color: "from-fuchsia-500 to-pink-500",
+          },
+          {
+            icon: HiOutlineGlobeAlt,
+            value: "100%",
+            label: "Online & Flexible Learning",
+            color: "from-emerald-500 to-teal-500",
+          },
+          {
+            icon: HiOutlineShieldCheck,
+            value: "14+",
+            label: "Tools Covered in Program",
+            color: "from-amber-500 to-orange-500",
+          },
+          {
+            icon: HiOutlineClock,
+            value: course.duration || "Varies",
+            label: "Program Duration",
+            color: "from-cyan-500 to-sky-500",
+          },
+          {
+            icon: HiOutlineDesktopComputer,
+            value: course.level || "Varies",
+            label: "Skill Level",
+            color: "from-violet-500 to-purple-500",
+          },
+          {
+            icon: HiStar,
+            value: "Resume & Interview Prep",
+            label: "Preparation",
+            color: "from-rose-500 to-red-500",
+          },
+          {
+            icon: HiSparkles,
+            value: course.certification
+              ? "Yes"
+              : "Microsoft Certificate",
+            label: "Certification Available",
+            color: "from-indigo-500 to-fuchsia-500",
+          },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="group rounded-2xl border border-slate-200/70 bg-white p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-slate-900"
+          >
+            <span
+              className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-md transition-transform duration-300 group-hover:scale-110`}
+            >
+              <stat.icon className="h-5 w-5" />
+            </span>
+
+            <p className="mt-3 break-words text-lg font-extrabold leading-tight text-slate-900 dark:text-white sm:text-xl">
+              {stat.value}
             </p>
 
-            {/* Quick stats strip */}
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {[
-                { icon: HiOutlineAcademicCap, value: "50%+", label: "Graduates & Freshers Welcome", color: "from-indigo-500 to-blue-500" },
-                { icon: HiOutlineBriefcase, value: "5+", label: "Career Sessions Included", color: "from-fuchsia-500 to-pink-500" },
-                { icon: HiOutlineGlobeAlt, value: "100%", label: "Online & Flexible Learning", color: "from-emerald-500 to-teal-500" },
-                { icon: HiOutlineShieldCheck, value: "14+", label: "Tools Covered in Program", color: "from-amber-500 to-orange-500" },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="flex flex-col items-center gap-1 rounded-2xl bg-white p-4 text-center shadow-md ring-1 ring-black/5 dark:bg-slate-800"
-                >
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-md`}>
-                    <stat.icon className="h-5 w-5" />
-                  </span>
-                  <p className="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">{stat.value}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+              {stat.label}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* =========================================================
+        RIGHT — ENROLLMENT CARD
+    ========================================================= */}
+    <aside className="h-fit lg:sticky lg:top-24">
+      <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-2xl">
+        <div className="rounded-[23px] bg-white p-5 dark:bg-slate-900 sm:p-6">
+
+          {/* Price */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Course Fee
+            </p>
+
+            <p className="mt-1 text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+              {formatCurrencyUSD(course.price)}
+            </p>
           </div>
 
-          <aside className="h-fit rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-xl">
-            <div className="rounded-2xl bg-white p-6 dark:bg-slate-900">
-              <p className="text-3xl font-extrabold text-slate-900 dark:text-white">{formatCurrencyUSD(course.price)}</p>
+          {/* Enroll */}
+          {enrollStatus === "success" ? (
+            <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center dark:border-emerald-900 dark:bg-emerald-950/50">
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-300">
+                ✓
+              </div>
 
-              {enrollStatus === "success" ? (
-                <p className="mt-5 rounded-lg bg-emerald-50 p-3 text-center text-sm font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-                  You're enrolled! Check your dashboard for course access.
-                </p>
-              ) : (
-                <button
-  onClick={() => handleEnroll("full")}
-  disabled={enrollStatus === "loading"}
-  className="mt-5 w-full rounded-lg bg-gradient-to-r from-indigo-600 to-fuchsia-600 py-2.5 font-semibold text-white shadow-md transition-opacity hover:opacity-90 disabled:opacity-60"
->
-  {enrollStatus === "loading" ? "Enrolling..." : "Enroll Now"}
-</button>
-              )}
-              {enrollError && <p className="mt-2 text-center text-xs text-red-500">{enrollError}</p>}
+              <p className="mt-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                You're enrolled!
+              </p>
 
-              <Link
-                to="/contact"
-                className="mt-3 block w-full rounded-lg border-2 border-indigo-200 py-2.5 text-center font-semibold text-indigo-700 hover:bg-indigo-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950"
-              >
-                Talk to an Advisor
-              </Link>
-              <dl className="mt-6 space-y-3 text-sm">
-                <div className="flex justify-between"><dt className="text-slate-500">Duration</dt><dd className="font-medium">{course.duration}</dd></div>
-                <div className="flex justify-between"><dt className="text-slate-500">Level</dt><dd className="font-medium">{course.level}</dd></div>
-                {/* <div className="flex justify-between"><dt className="text-slate-500">Category</dt><dd className="font-medium">{categoryName}</dd></div> */}
-              </dl>
+              <p className="mt-1 text-xs leading-5 text-emerald-600 dark:text-emerald-400">
+                Check your dashboard for course access.
+              </p>
             </div>
-          </aside>
+          ) : (
+            <button
+              onClick={() => handleEnroll("full")}
+              disabled={enrollStatus === "loading"}
+              className="mt-5 w-full rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 py-3 font-bold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {enrollStatus === "loading"
+                ? "Enrolling..."
+                : "Enroll Now"}
+            </button>
+          )}
+
+          {enrollError && (
+            <p className="mt-2 text-center text-xs font-medium text-red-500">
+              {enrollError}
+            </p>
+          )}
+
+          {/* Advisor */}
+          <Link
+            to="/contact"
+            className="mt-3 block w-full rounded-xl border-2 border-indigo-200 py-3 text-center font-semibold text-indigo-700 transition-all duration-300 hover:border-indigo-300 hover:bg-indigo-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950"
+          >
+            Talk to an Advisor
+          </Link>
+
+          {/* Course Details */}
+          <div className="my-5 h-px bg-slate-200 dark:bg-white/10" />
+
+          <dl className="space-y-3.5 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-slate-500 dark:text-slate-400">
+                Duration
+              </dt>
+              <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                {course.duration}
+              </dd>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-slate-500 dark:text-slate-400">
+                Level
+              </dt>
+              <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                {course.level}
+              </dd>
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-slate-500 dark:text-slate-400">
+                Format
+              </dt>
+              <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                Online
+              </dd>
+            </div>
+          </dl>
+
+          {/* Trust */}
+          <div className="mt-5 rounded-xl bg-slate-50 p-3 text-center dark:bg-slate-800/70">
+            <p className="text-xs font-medium text-slate-600 dark:text-slate-300">
+              Secure enrollment • Expert-led learning
+            </p>
+          </div>
         </div>
-      </section>
+      </div>
+       {/* Overview */}
+      <div className="mt-10">
+        <h2 className="section-title bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+          Overview
+        </h2>
+
+        <p className="mt-4 max-w-4xl text-justify text-[15px] leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+  {course.description ||
+    `This program takes you from fundamentals to job-ready skills in ${categoryName.toLowerCase()}, combining live instruction, hands-on projects, and mentor feedback across ${(course.duration || "the program").toLowerCase()}.`}
+</p>
+      </div>
+    </aside>
+
+    
+  </div>
+</section>
 
       {/* ---------------- TOOLS COVERED ---------------- */}
       <section className="bg-gradient-to-b from-slate-50 to-white py-16 dark:from-slate-900/40 dark:to-slate-950">
