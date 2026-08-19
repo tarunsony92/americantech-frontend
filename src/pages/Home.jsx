@@ -51,7 +51,7 @@ const WHY_CHOOSE = [
     icon: "🖥️",
     title: "Microsoft Certificate",
     desc: "Get industry-recognised Microsoft credentials.",
-    image: "https://loremflickr.com/800/600/graduation,diploma,certificate?lock=1",
+    image: "../../public/static/images/microsoftcertificate.jpg",
   },
   {
     icon: "🧑‍🤝‍🧑",
@@ -103,21 +103,21 @@ const CERTIFICATES = [
     title: "Advanced Generative AI Professional Certificate",
     date: "Feb 2, 2024",
     tier: "FUNDAMENTALS",
-    image: "https://loremflickr.com/800/450/artificialintelligence,robot?lock=5",
+    image: "../../public/static/images/generativeai.png",
   },
   {
     provider: "Microsoft",
     title: "Data Science Professional Certificate",
     date: "Jun 23, 2023",
     tier: "FUNDAMENTALS",
-    image: "https://loremflickr.com/800/450/datascience,analytics?lock=6",
+    image: "../../public/static/images/microsoftcertificate.jpg",
   },
   {
     provider: "Microsoft",
     title: "Cyber Security with AI Professional Certificate",
     date: "Oct 29, 2022",
     tier: "EXPERT",
-    image: "https://images.pexels.com/photos/3949101/pexels-photo-3949101.jpeg",
+    image: "../../public/static/images/microsoftsc.jpg",
   },
 ];
 
@@ -326,6 +326,78 @@ const Home = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
+  /* ---------------- Hero mouse-tracking (fog + tilt) ---------------- */
+  const sectionRef = useRef(null);
+  const rafRef = useRef(null);
+  const [fogActive, setFogActive] = useState(false);
+
+  // const targetMouse = useRef({ x: 50, y: 50 });
+  // const currentMouse = useRef({ x: 50, y: 50 });
+
+  const animateFog = () => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const current = currentMouse.current;
+    const target = targetMouse.current;
+    current.x += (target.x - current.x) * 0.075;
+    current.y += (target.y - current.y) * 0.075;
+    el.style.setProperty("--mouse-x", `${current.x}%`);
+    el.style.setProperty("--mouse-y", `${current.y}%`);
+    el.style.setProperty("--rotate-x", `${(current.y - 50) * -0.035}deg`);
+    el.style.setProperty("--rotate-y", `${(current.x - 50) * 0.035}deg`);
+    rafRef.current = requestAnimationFrame(animateFog);
+  };
+
+  const targetMouse = useRef({ x: 50, y: 50 });
+  const currentMouse = useRef({ x: 50, y: 50 });
+  const animationFrame = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    targetMouse.current.x = ((e.clientX - rect.left) / rect.width) * 100;
+    targetMouse.current.y = ((e.clientY - rect.top) / rect.height) * 100;
+    if (animationFrame.current) return;
+    const update = () => {
+      const current = currentMouse.current;
+      const target = targetMouse.current;
+      current.x += (target.x - current.x) * 0.055;
+      current.y += (target.y - current.y) * 0.055;
+      el.style.setProperty("--mouse-x", `${current.x}%`);
+      el.style.setProperty("--mouse-y", `${current.y}%`);
+      el.style.setProperty("--rotate-x", `${(current.y - 50) * -0.025}deg`);
+      el.style.setProperty("--rotate-y", `${(current.x - 50) * 0.025}deg`);
+      animationFrame.current = requestAnimationFrame(update);
+    };
+    animationFrame.current = requestAnimationFrame(update);
+  };
+
+  const handleMouseEnter = () => {
+    setFogActive(true);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(animateFog);
+  };
+
+  const handleMouseLeave = () => {
+    setFogActive(false);
+    targetMouse.current = { x: 50, y: 50 };
+    currentMouse.current = { x: 50, y: 50 };
+    const el = sectionRef.current;
+    if (!el) return;
+    el.style.setProperty("--mouse-x", "50%");
+    el.style.setProperty("--mouse-y", "50%");
+    el.style.setProperty("--rotate-x", "0deg");
+    el.style.setProperty("--rotate-y", "0deg");
+  };
+
+  useEffect(() => {
+    return () => {
+      if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (!email) return;
@@ -333,6 +405,351 @@ const Home = () => {
     setTimeout(() => setSubscribed(false), 3000);
     setEmail("");
   };
+
+
+  function WhyChooseCard({ item, index }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <TiltCard className="h-full">
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="
+          group relative h-[430px] w-full
+          overflow-hidden rounded-3xl
+          border border-slate-200/80
+          bg-white
+          shadow-sm
+          transition-all duration-500
+          hover:-translate-y-2
+          hover:shadow-2xl hover:shadow-primary/10
+          dark:border-slate-700/70
+          dark:bg-slate-900
+        "
+      >
+        {/* ================= IMAGE ================= */}
+        <div
+          className={`
+            absolute inset-0 z-20
+            transition-all duration-700
+            ease-[cubic-bezier(0.22,1,0.36,1)]
+            ${
+              isHovered
+                ? "scale-110 -translate-y-8 opacity-0"
+                : "scale-100 translate-y-0 opacity-100"
+            }
+          `}
+        >
+          <img
+            src={item.image}
+            alt={item.title}
+            loading="lazy"
+            className="
+              h-full w-full
+              object-cover object-center
+              transition-transform duration-700
+              group-hover:scale-105
+            "
+          />
+
+          {/* Overlay */}
+          <div
+            className="
+              absolute inset-0
+              bg-gradient-to-t
+              from-black/70
+              via-black/20
+              to-transparent
+            "
+          />
+
+          {/* Number */}
+          <div
+            className="
+              absolute right-5 top-5
+              flex h-9 w-9
+              items-center justify-center
+              rounded-full
+              border border-white/30
+              bg-black/30
+              text-xs font-bold text-white
+              backdrop-blur-md
+            "
+          >
+            {String(index + 1).padStart(2, "0")}
+          </div>
+
+          {/* Icon */}
+          <div
+            className="
+              absolute bottom-5 left-5
+              flex h-12 w-12
+              items-center justify-center
+              rounded-2xl
+              border border-white/40
+              bg-white/90
+              text-xl
+              shadow-xl
+              backdrop-blur-md
+              transition-all duration-500
+              group-hover:scale-110
+              group-hover:rotate-3
+            "
+          >
+            {item.icon}
+          </div>
+
+          {/* Title on Image */}
+          <div
+            className="
+              absolute bottom-5 left-20 right-5
+              transition-all duration-500
+              group-hover:-translate-y-1
+            "
+          >
+            <div className="mb-2 h-1 w-10 rounded-full bg-primary" />
+
+            <h3
+              className="
+                text-xl font-bold leading-7
+                text-white drop-shadow-lg
+              "
+            >
+              {item.title}
+            </h3>
+
+            <p className="
+              mt-1 text-xs font-medium
+              text-white/80
+            ">
+              Hover to explore
+            </p>
+          </div>
+        </div>
+
+        {/* ================= CONTENT ================= */}
+        <div
+          className={`
+            absolute inset-0 z-10
+            flex flex-col
+            bg-white p-7
+            dark:bg-slate-900
+            transition-all duration-700
+            ease-[cubic-bezier(0.22,1,0.36,1)]
+            ${
+              isHovered
+                ? "translate-y-0 opacity-100"
+                : "translate-y-full opacity-0"
+            }
+          `}
+        >
+          {/* Decorative circles */}
+          <div
+            className="
+              pointer-events-none
+              absolute -right-16 -top-16
+              h-40 w-40
+              rounded-full
+              bg-primary/10
+              blur-2xl
+            "
+          />
+
+          <div
+            className="
+              pointer-events-none
+              absolute -bottom-20 -left-16
+              h-48 w-48
+              rounded-full
+              bg-primary/5
+              blur-3xl
+            "
+          />
+
+          {/* Header */}
+          <div
+            className={`
+              relative
+              transition-all duration-500 delay-150
+              ${
+                isHovered
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
+              }
+            `}
+          >
+            <div className="flex items-center justify-between">
+              <span
+                className="
+                  rounded-full
+                  border border-primary/20
+                  bg-primary/5
+                  px-3 py-1
+                  text-[10px]
+                  font-bold
+                  uppercase
+                  tracking-widest
+                  text-primary
+                "
+              >
+                Why Choose Us
+              </span>
+
+              <span
+                className="
+                  text-xs font-bold
+                  text-slate-300
+                  dark:text-slate-600
+                "
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div className="mb-4 mt-5 h-1 w-12 rounded-full bg-primary" />
+
+            <h3
+              className="
+                text-2xl font-bold
+                leading-8
+                text-slate-900
+                dark:text-white
+              "
+            >
+              {item.title}
+            </h3>
+          </div>
+
+          {/* Description */}
+          <div
+            className={`
+              relative mt-5 flex-1
+              transition-all duration-500 delay-250
+              ${
+                isHovered
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
+              }
+            `}
+          >
+            <p
+              className="
+                text-sm sm:text-base
+                leading-7
+                text-slate-600
+                dark:text-slate-300
+              "
+            >
+              {item.desc}
+            </p>
+
+            {/* Feature */}
+            <div
+              className="
+                mt-7 flex items-center gap-3
+                rounded-2xl
+                border border-slate-200
+                bg-slate-50
+                p-4
+                dark:border-slate-700
+                dark:bg-slate-800/60
+              "
+            >
+              <div
+                className="
+                  flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-xl
+                  bg-primary/10
+                  text-primary
+                "
+              >
+                {item.icon}
+              </div>
+
+              <div>
+                <p className="
+                  text-sm font-semibold
+                  text-slate-900
+                  dark:text-white
+                ">
+                  Built for your growth
+                </p>
+
+                <p className="
+                  mt-0.5 text-xs
+                  text-slate-500
+                  dark:text-slate-400
+                ">
+                  Practical learning with real-world impact
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom */}
+          <div
+            className={`
+              relative mt-auto
+              transition-all duration-500 delay-300
+              ${
+                isHovered
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-6 opacity-0"
+              }
+            `}
+          >
+            <div className="
+              mb-5 h-px w-full
+              bg-slate-200
+              dark:bg-slate-700
+            " />
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+
+                <span className="
+                  text-xs font-semibold
+                  uppercase tracking-wider
+                  text-slate-400
+                ">
+                  Explore
+                </span>
+              </div>
+
+              <span className="
+                rounded-full
+                bg-primary/10
+                px-3 py-1.5
+                text-xs font-semibold
+                text-primary
+              ">
+                Hover to return
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Border Glow */}
+        <div
+          className="
+            pointer-events-none
+            absolute inset-0 z-30
+            rounded-3xl
+            ring-1 ring-inset
+            ring-transparent
+            transition-all duration-500
+            group-hover:ring-primary/20
+          "
+        />
+      </div>
+    </TiltCard>
+  );
+}
+
+
 
   return (
     <>
@@ -346,193 +763,313 @@ const Home = () => {
       </Helmet>
 
       {/* ---------------- HERO ---------------- */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-transparent">
-        {/* animated background blobs */}
-        <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-blob" />
-        <div className="pointer-events-none absolute top-40 -right-24 h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl animate-blob [animation-delay:2s]" />
+<section
+  ref={sectionRef}
+  onMouseMove={handleMouseMove}
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+  className="
+    group/hero
+    relative
+    overflow-hidden
+    bg-gradient-to-b
+    from-primary/5
+    via-transparent
+    to-transparent
+    [--mouse-x:50%]
+    [--mouse-y:50%]
+    [--rotate-x:0deg]
+    [--rotate-y:0deg]
+  "
+>
+  {/* ================= PREMIUM HERO AMBIENT ANIMATION ================= */}
+  <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div aria-hidden="true" className={`hero-orb hero-orb-1 ${fogActive ? "hero-orb-active" : ""}`} style={{ left: "var(--mouse-x)", top: "var(--mouse-y)" }} />
+    <div aria-hidden="true" className={`hero-orb hero-orb-2 ${fogActive ? "hero-orb-active" : ""}`} style={{ left: "calc(var(--mouse-x) + 80px)", top: "calc(var(--mouse-y) - 60px)" }} />
+    <div aria-hidden="true" className={`hero-orb hero-orb-3 ${fogActive ? "hero-orb-active" : ""}`} style={{ left: "calc(var(--mouse-x) - 100px)", top: "calc(var(--mouse-y) + 80px)" }} />
+    <div className="hero-bg-glow hero-bg-glow-1" />
+    <div className="hero-bg-glow hero-bg-glow-2" />
+    <div className="hero-grid" />
+  </div>
 
-        <div className="container-page relative grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-16">
-          <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 dark:bg-emerald-900/30 dark:border-emerald-800 px-4 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300 mb-6 animate-pulse-slow">
-              <ShieldCheck size={14} /> 100% Satisfaction Guarantee
-            </span>
+  {/* ================= CONTENT ================= */}
+  <div className="container-page relative z-20 grid grid-cols-1 items-center gap-16 py-20 lg:grid-cols-2 lg:py-28">
 
-            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-slate-900 dark:text-white">
-              Build Skills.
-              <br />
-              Get Certified with{" "}
-             <span className="relative inline-block text-primary">
-  American{" "}
-  <span className="text-red-500">
-    FutureTech
+    {/* LEFT */}
+    <Reveal>
+      <span
+        className="
+          mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200
+          bg-emerald-50 px-4 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm
+          transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md
+          dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300
+        "
+      >
+        <ShieldCheck size={14} />
+        100% Satisfaction Guarantee
+      </span>
+
+      <h1
+  className="
+    relative
+    max-w-3xl
+    text-4xl
+    font-black
+    leading-[1.05]
+    tracking-[-0.03em]
+    text-slate-950
+    dark:text-white
+    sm:text-5xl
+    lg:text-6xl
+    xl:text-7xl
+  "
+>
+  <span className="block">
+    Build Skills.
   </span>
 
-  <Sparkles
-    size={20}
-    className="absolute -right-6 -top-2 text-amber-400 animate-sparkle"
-  />
-</span>
-            </h1>
+  <span className="block mt-2">
+    Get Certified with
+  </span>
 
-            <p className="mt-6 text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl">
-              <strong>American FutureTech</strong> — The ultimate destination for
-              learners to level up. Expert-led training with real-world
-              projects. Build skills. Get job-ready. Secure your placement.
-            </p>
+  <span className="relative mt-2 inline-block">
+    {/* Soft glow behind brand */}
+    <span
+      aria-hidden="true"
+      className="
+        absolute
+        -inset-3
+        -z-10
+        rounded-2xl
+        bg-gradient-to-r
+        from-primary/20
+        via-violet-500/15
+        to-emerald-400/20
+        blur-2xl
+        opacity-70
+        animate-pulse-slow
+      "
+    />
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                to="/courses"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-primary px-7 py-3 text-sm font-semibold text-black shadow-lg shadow-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
-              >
-                <span className="absolute inset-0 -translate-x-full bg-blue-500 transition-transform duration-500 group-hover:translate-x-0" />
-                <span className="relative">Get Started</span>
-                <ArrowRight
-                  size={16}
-                  className="relative transition-transform duration-300 group-hover:translate-x-1"
-                />
-              </Link>
-              <Link
-                to="/careers"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-600 px-7 py-3 text-sm font-semibold text-slate-800 dark:text-slate-100 transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-0.5 hover:border-primary/50 active:translate-y-0 active:scale-95"
-              >
-                Explore Jobs
-              </Link>
-            </div>
+    <span
+      className="
+        bg-gradient-to-r
+        from-primary
+        via-blue-950
+        to-emerald-500
+        bg-clip-text
+        text-transparent
+        [background-size:200%_auto]
+        animate-gradient-text
+      "
+    >
+      American
+    </span>
 
-            <div className="mt-10 flex flex-wrap items-center gap-6">
-              <div className="rounded-full border border-slate-200 dark:border-slate-700 px-6 py-3 text-center transition-all duration-300 hover:border-primary/40 hover:shadow-md hover:-translate-y-0.5 cursor-default">
-                <p className="text-xl font-extrabold text-slate-900 dark:text-white">
-                  10.2K+
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Total Happy Students
-                </p>
-              </div>
-              <div className="flex items-center gap-1 text-amber-400">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={16}
-                    fill="currentColor"
-                    className="transition-transform duration-300 hover:scale-125"
-                    style={{ transitionDelay: `${i * 40}ms` }}
-                  />
-                ))}
-                <span className="ml-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
-                  4.8 Ratings
-                </span>
-              </div>
-            </div>
-          </Reveal>
+    {" "}
 
-          {/* Hero visual — local photo (desk/laptop scene) */}
-          <Reveal delay={150} className="relative flex justify-center">
-            <div className="relative w-full max-w-md animate-float">
-              <div className="aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
-                <img
-                  src={heroDeskImg}
-                  alt="American FutureTech workspace with laptop and course materials"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-              </div>
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[90%] rounded-2xl bg-white dark:bg-slate-800 px-5 py-4 shadow-xl flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                <div className="flex -space-x-2">
-                  {["AK", "JD", "MR"].map((i) => (
-                    <span
-                      key={i}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary ring-2 ring-white dark:ring-slate-800"
-                    >
-                      {i}
-                    </span>
-                  ))}
-                </div>
-                <div>
-                  <p className="text-lg font-extrabold text-slate-900 dark:text-white">
-                    45+
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Expert Instructor
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
+    <span
+      className="
+        bg-gradient-to-r
+        from-red-500
+        via-rose-500
+        to-orange-500
+        bg-clip-text
+        text-transparent
+      "
+    >
+      FutureTech
+    </span>
+
+    {/* Sparkle */}
+    <Sparkles
+      size={22}
+      strokeWidth={2}
+      className="
+        absolute
+        -right-8
+        -top-3
+        text-amber-400
+        drop-shadow-[0_0_10px_rgba(251,191,36,0.7)]
+        animate-sparkle
+      "
+    />
+
+    {/* Small accent line */}
+    <span
+      className="
+        absolute
+        -bottom-2
+        left-0
+        h-1
+        w-24
+        rounded-full
+        bg-gradient-to-r
+        from-primary
+        to-transparent
+        opacity-80
+      "
+    />
+  </span>
+</h1>
+
+      <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
+        <strong className="text-slate-800 dark:text-white">American FutureTech</strong> — the ultimate
+        destination for learners to level up. Expert-led training with real-world projects.
+        Build skills. Get job-ready. Secure your placement.
+      </p>
+
+      <div className="mt-9 flex flex-wrap items-center gap-4">
+        <Link
+          to="/courses"
+          className="
+            group relative inline-flex items-center gap-2 overflow-hidden rounded-full
+            bg-primary px-8 py-3.5 text-sm font-semibold text-black shadow-lg shadow-primary/30
+            transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/40 active:scale-95
+          "
+        >
+          <span className="absolute inset-0 -translate-x-full bg-blue-500 transition-transform duration-500 group-hover:translate-x-0" />
+          <span className="relative">Get Started</span>
+          <ArrowRight size={16} className="relative transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+
+        <Link
+          to="/jobscourse"
+          className="
+            inline-flex items-center gap-2 rounded-full border border-slate-300 px-8 py-3.5
+            text-sm font-semibold text-slate-800 transition-all duration-300
+            hover:-translate-y-1 hover:border-primary/50 hover:bg-white hover:shadow-lg
+            dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-800
+          "
+        >
+          Explore Jobs
+        </Link>
+      </div>
+
+      {/* Stats row */}
+      <div className="mt-11 flex flex-wrap items-center gap-6">
+        <div
+          className="
+            rounded-2xl border border-slate-200 bg-white/70 px-6 py-3.5 text-center shadow-sm
+            backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg
+            dark:border-slate-700 dark:bg-slate-900/50
+          "
+        >
+          <p className="text-xl font-extrabold text-slate-900 dark:text-white">10.2K+</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Total Happy Students</p>
         </div>
 
-        {/* Marquee strip */}
-        <div className="border-y border-slate-100 bg-[#DEDC7E] py-4 overflow-hidden dark:border-slate-800 dark:bg-[#DEDC7E]">
-          <div className="flex w-max animate-marquee whitespace-nowrap gap-12 text-sm font-semibold text-black dark:text-slate-400 hover:[animation-play-state:paused]">
-            {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map(
-              (item, i) => (
-                <span
-                  key={i}
-                  className="flex items-center gap-3 transition-colors hover:text-primary"
-                >
-                  {item} <span className="text-primary animate-spin-slow">✳</span>
-                </span>
-              )
-            )}
+        <div className="flex items-center gap-1 text-amber-400">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              size={16}
+              fill="currentColor"
+              className="transition-transform duration-300 hover:scale-125"
+              style={{ transitionDelay: `${i * 40}ms` }}
+            />
+          ))}
+          <span className="ml-2 text-sm font-semibold text-slate-700 dark:text-slate-200">4.8 Ratings</span>
+        </div>
+      </div>
+    </Reveal>
+
+    {/* ================= HERO IMAGE ================= */}
+    <Reveal delay={150} className="relative flex justify-center">
+      <div
+        className="relative w-full max-w-md transition-transform duration-300 ease-out"
+        style={{
+          transform: `perspective(1000px) rotateX(var(--rotate-x)) rotateY(var(--rotate-y))`,
+        }}
+      >
+        <div className="absolute -inset-6 rounded-[3rem] bg-gradient-to-r from-primary/25 via-emerald-400/15 to-primary/25 blur-3xl" />
+
+        <div
+          className="
+            relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] border border-white/50
+            shadow-2xl transition-all duration-500 hover:scale-[1.02] dark:border-slate-700
+          "
+        >
+          <img
+            src={heroDeskImg}
+            alt="American FutureTech workspace with laptop and course materials"
+            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+            loading="eager"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/20" />
+        </div>
+
+        {/* Floating instructor card */}
+        <div
+          className="
+            absolute -bottom-6 left-1/2 flex w-[90%] -translate-x-1/2 items-center gap-4
+            rounded-2xl border border-white/50 bg-white/90 px-5 py-4 shadow-xl backdrop-blur-xl
+            transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl
+            dark:border-slate-700 dark:bg-slate-800/90
+          "
+        >
+          <div className="flex -space-x-2">
+            {["AK", "JD", "MR"].map((i) => (
+              <span
+                key={i}
+                className="
+                  flex h-8 w-8 items-center justify-center rounded-full bg-primary/10
+                  text-[10px] font-semibold text-primary ring-2 ring-white dark:ring-slate-800
+                "
+              >
+                {i}
+              </span>
+            ))}
+          </div>
+          <div>
+            <p className="text-lg font-extrabold text-slate-900 dark:text-white">45+</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Expert Instructor</p>
           </div>
         </div>
-      </section>
+      </div>
+    </Reveal>
+  </div>
+
+  {/* ================= MARQUEE ================= */}
+  <div className="relative z-20 overflow-hidden border-y border-slate-100 bg-[#DEDC7E] py-4 dark:border-slate-800">
+    <div className="flex w-max animate-marquee gap-12 whitespace-nowrap text-sm font-semibold text-black hover:[animation-play-state:paused]">
+      {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => (
+        <span key={i} className="flex items-center gap-3 transition-colors hover:text-primary">
+          {item}
+          <span className="animate-spin-slow text-primary">✳</span>
+        </span>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="container-page py-16">
-        <Reveal className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-block rounded-full border border-primary/30 px-4 py-1 text-xs font-semibold text-primary mb-4">
-            + WHY CHOOSE US
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
-            Discover how our programs turn{" "}
-            <span className="text-primary italic">ambition</span> into{" "}
-            <span className="text-primary italic">achievement.</span>
-          </h2>
-          <p className="mt-4 text-slate-600 dark:text-slate-300">
-            Learn from industry experts, work on real projects, and follow a
-            path designed just for you — all in one powerful platform.
-          </p>
-        </Reveal>
+  <Reveal className="mx-auto mb-12 max-w-2xl text-center">
+    <span className="mb-4 inline-block rounded-full border border-primary/30 px-4 py-1 text-xs font-semibold text-primary">
+      + WHY CHOOSE US
+    </span>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-  {WHY_CHOOSE.map((item, i) => (
-    <Reveal key={item.title} delay={i * 80}>
-      <TiltCard className="h-full">
-        <div className="group h-90 flex flex-col rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30 cursor-default">
+    <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+      Discover how our programs turn{" "}
+      <span className="italic text-primary">ambition</span> into{" "}
+      <span className="italic text-primary">achievement.</span>
+    </h2>
 
-          {/* Fixed Image Height */}
-          <div className="relative h-52 w-full overflow-hidden">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            <span className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+    <p className="mt-4 text-slate-600 dark:text-slate-300">
+      Learn from industry experts, work on real projects, and follow a path
+      designed just for you — all in one powerful platform.
+    </p>
+  </Reveal>
 
-            <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-              {item.icon}
-            </div>
-          </div>
-
-          {/* Equal Content Height */}
-          <div className="flex flex-col flex-1 p-6 text-center">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white min-h-[56px]">
-              {item.title}
-            </h3>
-
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-1">
-              {item.desc}
-            </p>
-          </div>
-
-        </div>
-      </TiltCard>
-    </Reveal>
-  ))}
-</div>
-      </section>
+  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    {WHY_CHOOSE.map((item, i) => (
+      <Reveal key={item.title} delay={i * 80}>
+        <WhyChooseCard item={item} index={i} />
+      </Reveal>
+    ))}
+  </div>
+</section>
 
       {/* ---------------- STATS + PARTNERS ---------------- */}
 <section className="bg-gradient-to-b from-slate-900 to-slate-800 py-16 text-white">
@@ -674,7 +1211,7 @@ const Home = () => {
               {cert.date}
             </span>
 
-            <a
+            {/* <a
               href="#"
               className="group/link inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
             >
@@ -683,7 +1220,7 @@ const Home = () => {
                 size={14}
                 className="transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
               />
-            </a>
+            </a> */}
           </div>
         </div>
       </div>
@@ -786,49 +1323,53 @@ const Home = () => {
 
       {/* ---------------- Local animation keyframes ---------------- */}
       <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
-        .animate-marquee { animation: marquee 22s linear infinite; }
+.hero-orb { position:absolute; width:520px; height:520px; transform:translate(-50%,-50%); border-radius:50%; pointer-events:none; opacity:0; filter:blur(90px); will-change:transform,left,top,border-radius,opacity; transition:left 900ms cubic-bezier(0.16,1,0.3,1),top 900ms cubic-bezier(0.16,1,0.3,1),opacity 800ms ease; }
+.hero-orb-1 { background:radial-gradient(circle at 35% 35%,rgba(99,102,241,.55),rgba(79,70,229,.32) 28%,rgba(30,27,75,.24) 52%,transparent 75%); animation:orbMorph1 12s ease-in-out infinite,orbFloat1 15s ease-in-out infinite; }
+.hero-orb-2 { width:380px;height:380px;background:radial-gradient(circle,rgba(168,85,247,.42),rgba(124,58,237,.28) 35%,rgba(76,29,149,.16) 55%,transparent 75%);filter:blur(75px);animation:orbMorph2 9s ease-in-out infinite,orbFloat2 11s ease-in-out infinite; }
+.hero-orb-3 { width:340px;height:340px;background:radial-gradient(circle,rgba(16,185,129,.35),rgba(5,150,105,.22) 35%,rgba(6,78,59,.14) 55%,transparent 75%);filter:blur(80px);animation:orbMorph3 14s ease-in-out infinite,orbFloat3 13s ease-in-out infinite; }
+.hero-orb-active { opacity:1; }
 
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 5s ease-in-out infinite; }
+@keyframes gradient-text {
+  0% {
+    background-position: 0% 50%;
+  }
 
-        @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(20px, -30px) scale(1.1); }
-          66% { transform: translate(-15px, 15px) scale(0.95); }
-        }
-        .animate-blob { animation: blob 10s ease-in-out infinite; }
+  50% {
+    background-position: 100% 50%;
+  }
 
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.6; }
-        }
-        .animate-pulse-slow { animation: pulse-slow 2.5s ease-in-out infinite; }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow { display: inline-block; animation: spin-slow 4s linear infinite; }
-
-        @keyframes sparkle {
-          0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-          50% { opacity: 0.4; transform: scale(0.8) rotate(15deg); }
-        }
-        .animate-sparkle { animation: sparkle 1.8s ease-in-out infinite; }
-
-        @media (prefers-reduced-motion: reduce) {
-          .animate-marquee, .animate-float, .animate-blob,
-          .animate-pulse-slow, .animate-spin-slow, .animate-sparkle {
-            animation: none !important;
-          }
-        }
+.animate-gradient-text {
+  animation: gradient-text 5s ease-in-out infinite;
+}
+@keyframes orbMorph1 { 0%{border-radius:50% 50% 50% 50%/50% 50% 50% 50%;scale:1}20%{border-radius:65% 35% 55% 45%/45% 60% 40% 55%;scale:1.08}40%{border-radius:35% 65% 45% 55%/60% 40% 60% 40%;scale:.94}60%{border-radius:55% 45% 65% 35%/40% 60% 45% 55%;scale:1.12}80%{border-radius:40% 60% 35% 65%/55% 45% 60% 40%;scale:.97}100%{border-radius:50% 50% 50% 50%/50% 50% 50% 50%;scale:1} }
+@keyframes orbMorph2 { 0%{border-radius:50%;scale:1}30%{border-radius:40% 60% 55% 45%/60% 40% 45% 55%;scale:1.15}60%{border-radius:65% 35% 40% 60%/45% 55% 60% 40%;scale:.88}100%{border-radius:50%;scale:1} }
+@keyframes orbMorph3 { 0%{border-radius:50%}35%{border-radius:60% 40% 35% 65%/45% 55% 65% 35%}70%{border-radius:35% 65% 60% 40%/60% 40% 45% 55%}100%{border-radius:50%} }
+@keyframes orbFloat1 { 0%,100%{margin-left:0;margin-top:0;rotate:0deg}25%{margin-left:35px;margin-top:-25px;rotate:5deg}50%{margin-left:-20px;margin-top:30px;rotate:-4deg}75%{margin-left:25px;margin-top:15px;rotate:6deg} }
+@keyframes orbFloat2 { 0%,100%{margin-left:0;margin-top:0}50%{margin-left:-45px;margin-top:35px} }
+@keyframes orbFloat3 { 0%,100%{margin-left:0;margin-top:0}50%{margin-left:40px;margin-top:-30px} }
+.hero-bg-glow { position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px);animation:backgroundFloat 16s ease-in-out infinite; }
+.hero-bg-glow-1 { width:500px;height:500px;left:-180px;top:-180px;background:radial-gradient(circle,rgba(79,70,229,.20),transparent 70%); }
+.hero-bg-glow-2 { width:450px;height:450px;right:-160px;bottom:-120px;background:radial-gradient(circle,rgba(16,185,129,.16),transparent 70%);animation-delay:-6s; }
+@keyframes backgroundFloat { 0%,100%{transform:translate3d(0,0,0) scale(1)}30%{transform:translate3d(40px,-30px,0) scale(1.08)}60%{transform:translate3d(-30px,40px,0) scale(.94)}80%{transform:translate3d(20px,10px,0) scale(1.04)} }
+.hero-grid { position:absolute;inset:0;pointer-events:none;opacity:.035;background-image:linear-gradient(to right,currentColor 1px,transparent 1px),linear-gradient(to bottom,currentColor 1px,transparent 1px);background-size:45px 45px;mask-image:radial-gradient(ellipse at center,black 20%,transparent 75%); }
+@keyframes marquee { 0%{transform:translateX(0)}100%{transform:translateX(-33.333%)} }
+.animate-marquee { animation:marquee 22s linear infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)} }
+.animate-float { animation:float 5s ease-in-out infinite; }
+@keyframes blob { 0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(20px,-30px) scale(1.1)}66%{transform:translate(-15px,15px) scale(.95)} }
+.animate-blob { animation:blob 10s ease-in-out infinite; }
+@keyframes pulse-slow { 0%,100%{opacity:1}50%{opacity:.6} }
+.animate-pulse-slow { animation:pulse-slow 2.5s ease-in-out infinite; }
+@keyframes spin-slow { from{transform:rotate(0)}to{transform:rotate(360deg)} }
+.animate-spin-slow { display:inline-block;animation:spin-slow 4s linear infinite; }
+@keyframes sparkle { 0%,100%{opacity:1;transform:scale(1) rotate(0)}50%{opacity:.4;transform:scale(.8) rotate(15deg)} }
+.animate-sparkle { animation:sparkle 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion:reduce) { .hero-orb,.hero-bg-glow,.animate-marquee,.animate-float,.animate-blob,.animate-pulse-slow,.animate-spin-slow,.animate-sparkle { animation:none !important; } }
       `}</style>
     </>
   );
