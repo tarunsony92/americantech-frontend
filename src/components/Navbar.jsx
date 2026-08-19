@@ -48,7 +48,14 @@ const Navbar = () => {
   to="/"
   className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400"
 >
-  <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-lg sm:h-15 sm:w-80">
+  <span
+    className="
+      flex items-center justify-center overflow-hidden rounded-lg
+      h-10 w-28
+      sm:h-14 sm:w-48
+      lg:h-15 lg:w-64
+    "
+  >
     <img
       src="/static/images/logoamerican.jpeg"
       alt="Logo"
@@ -119,7 +126,7 @@ const Navbar = () => {
           >
             {isDarkMode ? <HiSun className="h-5 w-5" /> : <HiMoon className="h-5 w-5" />}
           </button> */}
-          {isAuthenticated ? (
+          {/* {isAuthenticated ? (
             <Link
               to={user?.role?.name === "Admin" ? "/admin" : "/dashboard"}
               className="btn-primary"
@@ -129,20 +136,20 @@ const Navbar = () => {
           ) : (
             <>
               {/* <Link to="/login" className="btn-outline">Login</Link> */}
-              {/* <Link to="/register" className="btn-primary">Get Started</Link> */}
+              {/* <Link to="/register" className="btn-primary">Get Started</Link> 
             </>
-          )}
+          )} */}
         </div>
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 lg:hidden">
-          <button
+          {/* <button
             onClick={() => dispatch(toggleDarkMode())}
             aria-label="Toggle dark mode"
             className="rounded-full p-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             {isDarkMode ? <HiSun className="h-5 w-5" /> : <HiMoon className="h-5 w-5" />}
-          </button>
+          </button> */}
           <button
             className="p-2 text-slate-700 dark:text-slate-200"
             onClick={() => dispatch(toggleMobileMenu())}
@@ -216,7 +223,7 @@ const Navbar = () => {
               )}
 
               <div className="mt-2 flex gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
-                {isAuthenticated ? (
+                {/* {isAuthenticated ? (
                   <Link
                     to={user?.role?.name === "Admin" ? "/admin" : "/dashboard"}
                     className="btn-primary flex-1"
@@ -226,7 +233,7 @@ const Navbar = () => {
                   </Link>
                 ) : (
                   <>
-                    <Link
+                    {/* <Link
                       to="/login"
                       className="btn-outline flex-1"
                       onClick={() => dispatch(closeMobileMenu())}
@@ -239,9 +246,9 @@ const Navbar = () => {
                       onClick={() => dispatch(closeMobileMenu())}
                     >
                       Get Started
-                    </Link>
+                    </Link> 
                   </>
-                )}
+                )} */}
               </div>
             </div>
           </motion.div>

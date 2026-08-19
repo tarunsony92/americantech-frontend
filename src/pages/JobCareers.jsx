@@ -554,7 +554,7 @@ const JobCareers = () => {
                       dark:text-white
                     "
                   >
-                    {visibleJobs.length} roles found
+                    {totalJobs} roles found
                   </p>
 
                   <p className="text-xs">
