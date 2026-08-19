@@ -102,21 +102,21 @@ const CERTIFICATES = [
     title: "Advanced Generative AI Professional Certificate",
     date: "Feb 2, 2024",
     tier: "FUNDAMENTALS",
-    image: "../../public/static/images/generativeai.png",
+    image: "/static/images/generativeai.png",
   },
   {
     provider: "Microsoft",
     title: "Data Science Professional Certificate",
     date: "Jun 23, 2023",
     tier: "FUNDAMENTALS",
-    image: "../../public/static/images/microsoftcertificate.jpg",
+    image: "/static/images/microsoftcertificate.jpg",
   },
   {
     provider: "Microsoft",
     title: "Cyber Security with AI Professional Certificate",
     date: "Oct 29, 2022",
     tier: "EXPERT",
-    image: "../../public/static/images/microsoftsc.jpg",
+    image: "/static/images/microsoftsc.jpg",
   },
 ];
 
