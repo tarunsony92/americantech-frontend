@@ -29,7 +29,7 @@ export const useResourceItem = (service, id) => {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err.response?.data?.message || "Couldn't load this content. Please try again.");
+          setError(err.response?.data?.message || "Couldn't load this content item. Please try again.");
           setStatus("error");
         }
       });

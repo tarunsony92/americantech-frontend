@@ -27,7 +27,7 @@ export const useResourceList = (service, initialParams = {}) => {
       });
       setStatus("success");
     } catch (err) {
-      setError(err.response?.data?.message || "Couldn't load this content. Please try again.");
+      setError(err.response?.data?.message || "Couldn't load this content List. Please try again.");
       setStatus("error");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
