@@ -51,28 +51,27 @@ const WHY_CHOOSE = [
     icon: "🖥️",
     title: "Microsoft Certificate",
     desc: "Get industry-recognised Microsoft credentials.",
-    image: "../../public/static/images/microsoftcertificate.jpg",
+    image: "/static/images/microsoftcertificate.jpg",
   },
   {
     icon: "🧑‍🤝‍🧑",
     title: "Industry Connections",
     desc: "Access our network of 200+ industry hiring partners and unlock real career opportunities.",
-    image: "https://loremflickr.com/800/600/handshake,business,partnership?lock=2",
+    image: "/static/images/why2.png",
   },
   {
     icon: "✅",
     title: "Career Acceleration",
     desc: "Our mentees see 3x faster career growth compared to traditional learning paths.",
-    image: "https://loremflickr.com/800/600/success,growth,career?lock=3",
+    image: "/static/images/acceleratecareer.png",
   },
   {
     icon: "👥",
     title: "1-on-1 Sessions",
     desc: "Regular private sessions with your dedicated mentor for fully personalised support.",
-    image: "https://loremflickr.com/800/600/mentor,coaching,meeting?lock=4",
+    image: "/static/images/why4.jpg",
   },
 ];
-
 const STATS = [
   { icon: Users, value: 10200, suffix: "+", label: "Students Trained" },
   { icon: Award, value: 200, suffix: "+", label: "Hiring Partners" },
@@ -132,7 +131,7 @@ const PROGRAM_FEATURES = [
     tag: "EXPERT MENTORSHIP",
     title: "1-on-1 Guidance from Industry Professionals",
     desc: "Get personalised mentorship from professionals actively working in your field.",
-    image: "/static/images/why2.png",
+    image: "/static/images/oneonone.png",
   },
   {
     tag: "LIVE CLASSROOMS",
@@ -144,7 +143,7 @@ const PROGRAM_FEATURES = [
     tag: "CAREER SUPPORT",
     title: "Placement Assistance & Resume Help",
     desc: "From portfolio reviews to mock interviews — we support you until you land the job.",
-    image: "/static/images/why4.jpg",  },
+    image: "/static/images/placeassist.png",  },
 ];
 
 const FAQS = [
