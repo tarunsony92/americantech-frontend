@@ -57,7 +57,7 @@ const WHY_CHOOSE = [
     icon: "🧑‍🤝‍🧑",
     title: "Industry Connections",
     desc: "Access our network of 200+ industry hiring partners and unlock real career opportunities.",
-    image: "/static/images/why2.png",
+    image: "/static/images/industry.png",
   },
   {
     icon: "✅",
@@ -67,10 +67,23 @@ const WHY_CHOOSE = [
   },
   {
     icon: "👥",
-    title: "1-on-1 Sessions",
+    title: "One-on-One Sessions",
     desc: "Regular private sessions with your dedicated mentor for fully personalised support.",
     image: "/static/images/why4.jpg",
   },
+  {
+    icon: "📚",
+    title: "Live Online Classes",
+    desc: "Access live, interactive classes with peers and instructors in a structured cohort format.",
+    image: "/static/images/why4.jpg",
+  },
+  {
+    icon: "💼",
+    title: "Hands-On Projects",
+    desc: "Get assignment-based learning with real-world projects to build a strong portfolio.",
+    image: "/static/images/placeassist.png",
+  },
+
 ];
 const STATS = [
   { icon: Users, value: 10200, suffix: "+", label: "Students Trained" },
@@ -405,8 +418,7 @@ const Home = () => {
     setEmail("");
   };
 
-
-  function WhyChooseCard({ item, index }) {
+function WhyChooseCard({ item, index }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -414,340 +426,80 @@ const Home = () => {
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="
-          group relative h-[430px] w-full
-          overflow-hidden rounded-3xl
-          border border-slate-200/80
-          bg-white
-          shadow-sm
-          transition-all duration-500
-          hover:-translate-y-2
-          hover:shadow-2xl hover:shadow-primary/10
-          dark:border-slate-700/70
-          dark:bg-slate-900
-        "
+        className="group h-[280px] w-full"
+        style={{ perspective: "1200px" }}
       >
-        {/* ================= IMAGE ================= */}
         <div
-          className={`
-            absolute inset-0 z-20
-            transition-all duration-700
-            ease-[cubic-bezier(0.22,1,0.36,1)]
-            ${
-              isHovered
-                ? "scale-110 -translate-y-8 opacity-0"
-                : "scale-100 translate-y-0 opacity-100"
-            }
-          `}
+          className="relative h-full w-full transition-transform duration-700 ease-in-out"
+          style={{
+            transform: isHovered ? "rotateY(180deg)" : "rotateY(0deg)",
+            transformStyle: "preserve-3d",
+            WebkitTransformStyle: "preserve-3d",
+          }}
         >
-          <img
-            src={item.image}
-            alt={item.title}
-            loading="lazy"
-            className="
-              h-full w-full
-              object-cover object-center
-              transition-transform duration-700
-              group-hover:scale-105
-            "
-          />
-
-          {/* Overlay */}
+          {/* ================= FRONT ================= */}
           <div
-            className="
-              absolute inset-0
-              bg-gradient-to-t
-              from-black/70
-              via-black/20
-              to-transparent
-            "
-          />
-
-          {/* Number */}
-          <div
-            className="
-              absolute right-5 top-5
-              flex h-9 w-9
-              items-center justify-center
-              rounded-full
-              border border-white/30
-              bg-black/30
-              text-xs font-bold text-white
-              backdrop-blur-md
-            "
+            className="absolute inset-0 overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-lg dark:border-white/10 dark:bg-slate-900"
+            style={{
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+            }}
           >
-            {String(index + 1).padStart(2, "0")}
+            {/* Image */}
+            <div className="absolute inset-4 overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-800">
+              <img
+                src={item.image}
+                alt={item.title}
+                loading="lazy"
+                className="h-full w-full object-contain p-5"
+              />
+            </div>
+
+            {/* Title */}
+            <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-white via-white/95 to-transparent p-6 pt-24 dark:from-slate-900 dark:via-slate-900/95">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                {item.title}
+              </h3>
+            </div>
           </div>
 
-          {/* Icon */}
+          {/* ================= BACK ================= */}
           <div
-            className="
-              absolute bottom-5 left-5
-              flex h-12 w-12
-              items-center justify-center
-              rounded-2xl
-              border border-white/40
-              bg-white/90
-              text-xl
-              shadow-xl
-              backdrop-blur-md
-              transition-all duration-500
-              group-hover:scale-110
-              group-hover:rotate-3
-            "
+className="absolute inset-0 overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-br from-[#0f172a] via-[#1e3a5f] to-primary p-7 text-white shadow-2xl"         style={{
+              transform: "rotateY(180deg)",
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+            }}
           >
-            {item.icon}
-          </div>
+            {/* Decoration */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-white/10" />
 
-          {/* Title on Image */}
-          <div
-            className="
-              absolute bottom-5 left-20 right-5
-              transition-all duration-500
-              group-hover:-translate-y-1
-            "
-          >
-            <div className="mb-2 h-1 w-10 rounded-full bg-primary" />
-
-            <h3
-              className="
-                text-xl font-bold leading-7
-                text-white drop-shadow-lg
-              "
-            >
-              {item.title}
-            </h3>
-
-            <p className="
-              mt-1 text-xs font-medium
-              text-white/80
-            ">
-              Hover to explore
-            </p>
-          </div>
-        </div>
-
-        {/* ================= CONTENT ================= */}
-        <div
-          className={`
-            absolute inset-0 z-10
-            flex flex-col
-            bg-white p-7
-            dark:bg-slate-900
-            transition-all duration-700
-            ease-[cubic-bezier(0.22,1,0.36,1)]
-            ${
-              isHovered
-                ? "translate-y-0 opacity-100"
-                : "translate-y-full opacity-0"
-            }
-          `}
-        >
-          {/* Decorative circles */}
-          <div
-            className="
-              pointer-events-none
-              absolute -right-16 -top-16
-              h-40 w-40
-              rounded-full
-              bg-primary/10
-              blur-2xl
-            "
-          />
-
-          <div
-            className="
-              pointer-events-none
-              absolute -bottom-20 -left-16
-              h-48 w-48
-              rounded-full
-              bg-primary/5
-              blur-3xl
-            "
-          />
-
-          {/* Header */}
-          <div
-            className={`
-              relative
-              transition-all duration-500 delay-150
-              ${
-                isHovered
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-6 opacity-0"
-              }
-            `}
-          >
-            <div className="flex items-center justify-between">
-              <span
-                className="
-                  rounded-full
-                  border border-primary/20
-                  bg-primary/5
-                  px-3 py-1
-                  text-[10px]
-                  font-bold
-                  uppercase
-                  tracking-widest
-                  text-primary
-                "
-              >
-                Why Choose Us
-              </span>
-
-              <span
-                className="
-                  text-xs font-bold
-                  text-slate-300
-                  dark:text-slate-600
-                "
-              >
+            {/* Content */}
+            <div className="relative z-10 flex h-full flex-col justify-center">
+              {/* Number */}
+              <span className="mb-5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15 text-sm font-bold text-white dark:text-white backdrop-blur-sm">
                 {String(index + 1).padStart(2, "0")}
               </span>
-            </div>
 
-            <div className="mb-4 mt-5 h-1 w-12 rounded-full bg-primary" />
+              {/* Title */}
+              <h3 className="text-2xl font-bold leading-tight text-white dark:text-white">
+                {item.title}
+              </h3>
 
-            <h3
-              className="
-                text-2xl font-bold
-                leading-8
-                text-slate-900
-                dark:text-white
-              "
-            >
-              {item.title}
-            </h3>
-          </div>
+              {/* Description */}
+              <p className="mt-5 text-sm leading-7 text-orange-50">
+                {item.desc || "Discover more about this program."}
+              </p>
 
-          {/* Description */}
-          <div
-            className={`
-              relative mt-5 flex-1
-              transition-all duration-500 delay-250
-              ${
-                isHovered
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-6 opacity-0"
-              }
-            `}
-          >
-            <p
-              className="
-                text-sm sm:text-base
-                leading-7
-                text-slate-600
-                dark:text-slate-300
-              "
-            >
-              {item.desc}
-            </p>
-
-            {/* Feature */}
-            <div
-              className="
-                mt-7 flex items-center gap-3
-                rounded-2xl
-                border border-slate-200
-                bg-slate-50
-                p-4
-                dark:border-slate-700
-                dark:bg-slate-800/60
-              "
-            >
-              <div
-                className="
-                  flex h-10 w-10 shrink-0
-                  items-center justify-center
-                  rounded-xl
-                  bg-primary/10
-                  text-primary
-                "
-              >
-                {item.icon}
-              </div>
-
-              <div>
-                <p className="
-                  text-sm font-semibold
-                  text-slate-900
-                  dark:text-white
-                ">
-                  Built for your growth
-                </p>
-
-                <p className="
-                  mt-0.5 text-xs
-                  text-slate-500
-                  dark:text-slate-400
-                ">
-                  Practical learning with real-world impact
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom */}
-          <div
-            className={`
-              relative mt-auto
-              transition-all duration-500 delay-300
-              ${
-                isHovered
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-6 opacity-0"
-              }
-            `}
-          >
-            <div className="
-              mb-5 h-px w-full
-              bg-slate-200
-              dark:bg-slate-700
-            " />
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-
-                <span className="
-                  text-xs font-semibold
-                  uppercase tracking-wider
-                  text-slate-400
-                ">
-                  Explore
-                </span>
-              </div>
-
-              <span className="
-                rounded-full
-                bg-primary/10
-                px-3 py-1.5
-                text-xs font-semibold
-                text-primary
-              ">
-                Hover to return
-              </span>
+              {/* Bottom line */}
+              <div className="mt-7 h-1 w-12 rounded-full bg-white/80" />
             </div>
           </div>
         </div>
-
-        {/* Border Glow */}
-        <div
-          className="
-            pointer-events-none
-            absolute inset-0 z-30
-            rounded-3xl
-            ring-1 ring-inset
-            ring-transparent
-            transition-all duration-500
-            group-hover:ring-primary/20
-          "
-        />
       </div>
     </TiltCard>
   );
 }
-
 
 
   return (
@@ -1043,28 +795,40 @@ const Home = () => {
 </section>
 
       {/* ---------------- WHY CHOOSE US ---------------- */}
-      <section className="container-page py-16">
-  <Reveal className="mx-auto mb-12 max-w-2xl text-center">
-    <span className="mb-4 inline-block rounded-full border border-primary/30 px-4 py-1 text-xs font-semibold text-primary">
+     <section className="container-page relative overflow-hidden py-20 sm:py-24">
+  {/* Background Glow */}
+  <div className="pointer-events-none absolute left-1/2 top-10 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+
+  {/* Section Header */}
+  <Reveal className="mx-auto mb-14 max-w-3xl text-center">
+    <span className="mb-5 inline-flex items-center rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-wide text-primary">
       + WHY CHOOSE US
     </span>
 
-    <h2 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl">
+    <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-4xl lg:text-[42px]">
       Discover how our programs turn{" "}
       <span className="italic text-primary">ambition</span> into{" "}
       <span className="italic text-primary">achievement.</span>
     </h2>
 
-    <p className="mt-4 text-slate-600 dark:text-slate-300">
-      Learn from industry experts, work on real projects, and follow a path
-      designed just for you — all in one powerful platform.
+    <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+      Learn from industry experts, work on real-world projects, and follow a
+      career path designed around your goals — all in one powerful platform.
     </p>
   </Reveal>
 
-  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+  {/* Cards */}
+  <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
     {WHY_CHOOSE.map((item, i) => (
-      <Reveal key={item.title} delay={i * 80}>
-        <WhyChooseCard item={item} index={i} />
+      <Reveal
+        key={item.title}
+        delay={i * 100}
+        className="h-full"
+      >
+        <WhyChooseCard
+          item={item}
+          index={i}
+        />
       </Reveal>
     ))}
   </div>
