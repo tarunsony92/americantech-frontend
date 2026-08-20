@@ -153,19 +153,19 @@ const About = () => (
             <span className="text-primary">Best Quality</span> Online Courses.
           </h1>
 
-          <p className="mt-5 text-slate-600 dark:text-slate-300 leading-relaxed">
-            <strong>American FutureTech LLC</strong> is a US-registered Limited
-            Liability Company based in Wyoming, dedicated to providing
-            high-quality technology training and professional development
-            programs. Our mission is to equip individuals and organizations
-            with practical skills for today's digital economy.
-          </p>
+          <p className="mt-5 text-justify leading-relaxed text-slate-600 dark:text-slate-300">
+  <strong>American FutureTech LLC</strong> is a US-registered Limited
+  Liability Company based in Wyoming, dedicated to providing
+  high-quality technology training and professional development
+  programs. Our mission is to equip individuals and organizations
+  with practical skills for today's digital economy.
+</p>
 
-          <p className="mt-4 text-slate-600 dark:text-slate-300 leading-relaxed">
-            Our vision is to create a global network of skilled professionals
-            capable of solving real-world technology challenges. We specialize
-            in courses designed for both beginners and seasoned professionals.
-          </p>
+<p className="mt-4 text-justify leading-relaxed text-slate-600 dark:text-slate-300">
+  Our vision is to create a global network of skilled professionals
+  capable of solving real-world technology challenges. We specialize
+  in courses designed for both beginners and seasoned professionals.
+</p>
 
           <ul className="mt-6 space-y-3">
             {FEATURES.map((feature) => (
@@ -260,34 +260,34 @@ const About = () => (
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {WHY_CHOOSE.map((item) => (
-          <div
-            key={item.title}
-            className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-          >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="h-48 w-full object-cover"
-            />
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {WHY_CHOOSE.map((item) => (
+    <div
+      key={item.title}
+      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-900"
+    >
+      <img
+        src={item.image}
+        alt={item.title}
+        className="h-48 w-full object-cover"
+      />
 
-            <div className="p-8 text-center">
-              {/* <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">
-                {item.icon}
-              </div> */}
+      <div className="p-8 text-center">
+        {/* <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">
+          {item.icon}
+        </div> */}
 
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-                {item.title}
-              </h3>
+        <h3 className="mb-3 text-lg font-semibold text-slate-900 dark:text-white">
+          {item.title}
+        </h3>
 
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                {item.desc}
-              </p>
-            </div>
-          </div>
-        ))}
+        <p className="text-justify text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          {item.desc}
+        </p>
       </div>
+    </div>
+  ))}
+</div>
     </section>
 
 {/* Testimonials */}
@@ -320,7 +320,7 @@ const About = () => (
 
               <StarRating count={t.rating} />
 
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+              <p className="text-sm text-slate-600 dark:text-slate-300 text-justify leading-relaxed mb-6">
                 {t.quote}
               </p>
 

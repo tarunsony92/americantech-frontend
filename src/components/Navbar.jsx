@@ -5,6 +5,8 @@ import {
   HiMenu,
   HiX,
   HiChevronDown,
+  HiSun,
+  HiMoon,
 } from "react-icons/hi";
 import {
   AnimatePresence,
@@ -277,31 +279,29 @@ const Navbar = () => {
 
             {/* Logo glow */}
 
-            <span
-              className="
-                pointer-events-none
-                absolute
-                inset-0
-                rounded-2xl
-                bg-primary/20
-                opacity-0
-                blur-xl
-                transition-all
-                duration-500
+           <span
+  className="
+    pointer-events-none
+    absolute
+    inset-0
+    rounded-2xl
+    bg-primary/20
+    opacity-0
+    blur-xl
+    transition-all
+    duration-500
+    group-hover:scale-110
+    group-hover:opacity-100
+  "
+/>
 
-                group-hover:opacity-100
-                group-hover:scale-110
-              "
-            />
-
-           <motion.span
+<motion.span
   initial={{
     opacity: 0,
     x: -15,
     y: 8,
     scale: 0.95,
   }}
-
   animate={{
     opacity: 1,
     x: 0,
@@ -309,54 +309,46 @@ const Navbar = () => {
     scale: [1, 1.015, 1, 1.01, 1],
     rotate: [0, 0.6, 0, -0.6, 0],
   }}
-
   transition={{
     opacity: {
       duration: 0.6,
       ease: [0.16, 1, 0.3, 1],
     },
-
     x: {
       duration: 0.6,
       ease: [0.16, 1, 0.3, 1],
     },
-
     y: {
       duration: 5,
       repeat: Infinity,
       ease: "easeInOut",
     },
-
     scale: {
       duration: 5,
       repeat: Infinity,
       ease: "easeInOut",
     },
-
     rotate: {
       duration: 6,
       repeat: Infinity,
       ease: "easeInOut",
     },
   }}
-
   whileHover={{
     scale: 1.06,
     rotate: 1.5,
     y: -3,
   }}
-
   whileTap={{
     scale: 0.96,
   }}
-
   className="
     relative
     flex
     items-center
     justify-center
     overflow-hidden
-    rounded-xl
+    rounded-2xl
 
     h-10
     w-28
@@ -368,7 +360,6 @@ const Navbar = () => {
     lg:w-52
 
     will-change-transform
-
     transition-all
     duration-300
   "
@@ -379,11 +370,10 @@ const Navbar = () => {
     className="
       h-full
       w-full
+      rounded-2xl
       object-contain
-
       transition-transform
       duration-500
-
       group-hover:scale-[1.03]
     "
   />
@@ -858,6 +848,54 @@ const Navbar = () => {
             "
           >
 
+            {/* ===============================
+                DARK / LIGHT MODE TOGGLE
+            =============================== */}
+
+            <motion.button
+              type="button"
+              onClick={() => dispatch(toggleDarkMode())}
+              whileHover={{ scale: 1.06, rotate: 2 }}
+              whileTap={{ scale: 0.92 }}
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDarkMode ? "Light Mode" : "Dark Mode"}
+              className="
+                relative flex h-11 w-11 shrink-0
+                items-center justify-center
+                overflow-hidden rounded-xl
+                border border-slate-200
+                bg-slate-50 text-slate-700 shadow-sm
+                transition-all duration-300
+                hover:border-primary/40 hover:bg-primary/10 hover:text-primary
+                dark:border-slate-700 dark:bg-slate-900 dark:text-yellow-300
+                dark:hover:bg-slate-800
+              "
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isDarkMode ? (
+                  <motion.span
+                    key="sun"
+                    initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <HiSun className="h-5 w-5" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="moon"
+                    initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <HiMoon className="h-5 w-5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+
             {/* Optional auth area */}
 
             {isAuthenticated && (
@@ -938,9 +976,58 @@ const Navbar = () => {
             className="
               flex
               items-center
+              gap-2
               lg:hidden
             "
           >
+
+            {/* ===============================
+                MOBILE DARK / LIGHT MODE
+            =============================== */}
+
+            <motion.button
+              type="button"
+              onClick={() => dispatch(toggleDarkMode())}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.88 }}
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDarkMode ? "Light Mode" : "Dark Mode"}
+              className="
+                relative flex h-11 w-11 shrink-0
+                items-center justify-center
+                overflow-hidden rounded-xl
+                border border-slate-200
+                bg-slate-50 text-slate-700 shadow-sm
+                transition-all duration-300
+                hover:border-primary/40 hover:bg-primary/10 hover:text-primary
+                dark:border-slate-700 dark:bg-slate-900 dark:text-yellow-300
+                dark:hover:bg-slate-800
+              "
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isDarkMode ? (
+                  <motion.span
+                    key="mobile-sun"
+                    initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <HiSun className="h-5 w-5" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="mobile-moon"
+                    initial={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                    transition={{ duration: 0.22 }}
+                  >
+                    <HiMoon className="h-5 w-5" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
 
             <motion.button
               whileTap={{

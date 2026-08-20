@@ -240,9 +240,9 @@ const CourseDetails = () => {
 
           {/* Course Title */}
           <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-            <span className="inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-indigo-700 shadow-sm backdrop-blur dark:bg-slate-900/90 dark:text-indigo-300">
+            {/* <span className="inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-indigo-700 shadow-sm backdrop-blur dark:bg-slate-900/90 dark:text-indigo-300">
               {categoryName}
-            </span>
+            </span> */}
 
             <h1 className="mt-3 max-w-3xl text-2xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
               {course.title}
@@ -691,8 +691,10 @@ const CourseDetails = () => {
           <div className="text-center text-white lg:text-left">
             <h2 className="text-2xl font-extrabold sm:text-3xl">Register Now</h2>
             <p className="mt-3 text-white/90">
-              Seats are limited — enroll today and start building job-ready skills in {categoryName.toLowerCase()}.
+              Seats are limited — Register Today and Connect with Our Mentor.
             </p>
+            
+            
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
               <button
   onClick={() => handleEnroll("registration")}
@@ -701,15 +703,21 @@ const CourseDetails = () => {
 >
   {enrollStatus === "loading"
     ? "Enrolling..."
-    : `Enroll Now — ${formatCurrencyUSD(course.instructorId)}`}
+    : `Register Now — ${formatCurrencyUSD(course.instructorId)}`}
 </button>
+
+
               <Link
                 to="/contact"
                 className="rounded-lg border-2 border-white/70 px-6 py-2.5 font-semibold text-white hover:bg-white/10"
               >
                 Talk to an Advisor
               </Link>
+              
             </div>
+            <p className="mt-3 text-sm text-white/80">
+              <strong>Note:</strong> After registration, you will receive a confirmation email with further instructions.
+            </p>
           </div>
         </div>
       </section>

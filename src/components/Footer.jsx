@@ -46,13 +46,13 @@ const Footer = () => {
   to="/"
   className="flex items-center gap-2 text-xl font-bold text-primary-700 dark:text-primary-400"
 >
-  <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-lg sm:h-25 sm:w-80">
-    <img
-      src="/static/images/logoamerican.jpeg"
-      alt="Logo"
-      className="h-full w-full object-contain"
-    />
-  </span>
+  <span className="flex h-32 w-64 items-center justify-center overflow-hidden rounded-2xl sm:h-25 sm:w-80">
+  <img
+    src="/static/images/logoamerican.jpeg"
+    alt="Logo"
+    className="h-full w-full object-contain"
+  />
+</span>
 </Link>
 
             <p className="mt-4 max-w-sm text-sm text-slate-600 dark:text-slate-400">

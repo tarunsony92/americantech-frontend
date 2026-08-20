@@ -664,7 +664,7 @@ className="absolute inset-0 overflow-hidden rounded-3xl border border-white/20 b
   </span>
 </h1>
 
-      <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
+      <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-600 text-justify dark:text-slate-300 sm:text-lg">
         <strong className="text-slate-800 dark:text-white">American FutureTech</strong> — the ultimate
         destination for learners to level up. Expert-led training with real-world projects.
         Build skills. Get job-ready. Secure your placement.
@@ -1036,7 +1036,7 @@ className="absolute inset-0 overflow-hidden rounded-3xl border border-white/20 b
         <Reveal className="text-center mb-16">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
             <span className="text-amber-500">Ready</span> To Start Your{" "}
-            <span className="text-red-500">Trial</span> Today
+            <span className="text-red-500">Orientation</span> Today
           </h2>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <Link
@@ -1049,12 +1049,12 @@ className="absolute inset-0 overflow-hidden rounded-3xl border border-white/20 b
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
             </Link>
-            <Link
+            {/* <Link
               to="/contact"
               className="inline-flex items-center gap-2 rounded-full border border-slate-300 dark:border-slate-600 px-6 py-2.5 text-sm font-semibold text-slate-800 dark:text-slate-100 transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-0.5 hover:border-primary/50 active:scale-95"
             >
               Contact For Free <ArrowRight size={16} />
-            </Link>
+            </Link> */}
           </div>
         </Reveal>
 
