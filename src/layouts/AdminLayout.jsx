@@ -35,16 +35,16 @@ const AdminLayout = () => {
     { label: "Course Modules", to: "/admin/course-modules", icon: HiOutlineBookOpen },
     { label: "Lessons", to: "/admin/lessons", icon: HiOutlineBookOpen },
     { label: "Lesson Notes", to: "/admin/lesson-notes", icon: HiOutlineBookOpen },
-    { label: "Blogs", to: "/admin/blogs", icon: HiOutlineNewspaper },
-    { label: "Jobs", to: "/admin/jobs", icon: HiOutlineBriefcase },
-    { label: "Testimonials", to: "/admin/testimonials", icon: HiOutlineChatAlt2 },
+    // { label: "Blogs", to: "/admin/blogs", icon: HiOutlineNewspaper },
+    // { label: "Jobs", to: "/admin/jobs", icon: HiOutlineBriefcase },
+    // { label: "Testimonials", to: "/admin/testimonials", icon: HiOutlineChatAlt2 },
     // { label: "Media Library", to: "/admin/media", icon: HiOutlinePhotograph },
     { label: "Audit Logs", to: "/admin/audit-logs", icon: HiOutlineClipboardList },
-    { label: "Settings", to: "/admin/settings", icon: HiOutlineCog },
+    { label: "Live Jobs", to: "/admin/coursejobs", icon: HiOutlineBriefcase }, // Added Course Jobs link
     { label: "Coupons", to: "/admin/coupons", icon: HiOutlineCog }, // Added Coupons link
     { label: "Contact Queries", to: "/admin/contact-queries", icon: HiOutlineChatAlt2 },
     { label: "Orders", to: "/admin/orders", icon: HiOutlineClipboardList }, // Added Orders link
-    { label: "Course Jobs", to: "/admin/coursejobs", icon: HiOutlineBriefcase }, // Added Course Jobs link
+    { label: "Settings", to: "/admin/settings", icon: HiOutlineCog },
     
 
     // Logout Sidebar Item

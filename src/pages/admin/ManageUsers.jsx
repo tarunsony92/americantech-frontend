@@ -21,6 +21,7 @@ const ManageUsers = () => {
       })
       .catch(() => setRoleOptions([]));
   }, []);
+
   useEffect(() => {
     axiosInstance
       .get("/courses")
@@ -31,10 +32,27 @@ const ManageUsers = () => {
       .catch(() => setCourseOptions([]));
   }, []);
 
+  // Map course id -> title, used to render assigned course names in the table
+  // without needing a lookup on every row render.
+  const courseTitleById = courseOptions.reduce((acc, c) => {
+    acc[c.value] = c.label;
+    return acc;
+  }, {});
+
   const columns = [
     { key: "fullName", label: "Name" },
     { key: "email", label: "Email" },
     { key: "role", label: "Role" },
+    {
+      key: "courses",
+      label: "Assigned Courses",
+      render: (row) => {
+        const ids = row.courseIds || row.courses?.map((c) => c.id) || [];
+        if (ids.length === 0) return "-";
+        const names = ids.map((id) => courseTitleById[id] || `#${id}`);
+        return names.join(", ");
+      },
+    },
     { key: "isActive", label: "Active" },
   ];
 
@@ -44,7 +62,12 @@ const ManageUsers = () => {
     { key: "phone", label: "Phone" },
     { key: "password", label: "Password (only used when creating a new user)", type: "password" },
     { key: "roleId", label: "Role", type: "select", options: roleOptions, required: true },
-    { key: "courseId", label: "Course", type: "select", options: courseOptions },
+    {
+      key: "courseIds",
+      label: "Courses",
+      type: "checkbox-group",
+      options: courseOptions,
+    },
     { key: "isActive", label: "Active", type: "checkbox" },
   ];
 
