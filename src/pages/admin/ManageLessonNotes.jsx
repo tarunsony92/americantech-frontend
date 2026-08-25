@@ -3,15 +3,9 @@ import { Helmet } from "react-helmet-async";
 import lessonService from "../../services/lessonService";
 import courseModuleService from "../../services/courseModuleService";
 import courseService from "../../services/courseService";
-import ResourceManager from "../../components/admin/ResourceManager";
+import LessonNotesManager from "../../components/admin/LessonNotesManager";
 
-const COLUMNS = [
-  { key: "title", label: "Title" },
-  { key: "videoUrl", label: "Video URL" },
-  { key: "order", label: "Order" },
-];
-
-const ManageLessons = () => {
+const ManageLessonNotes = () => {
   const [courses, setCourses] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -19,6 +13,10 @@ const ManageLessons = () => {
   const [modules, setModules] = useState([]);
   const [loadingModules, setLoadingModules] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
+
+  const [lessons, setLessons] = useState([]);
+  const [loadingLessons, setLoadingLessons] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState(null);
 
   useEffect(() => {
     courseService
@@ -44,23 +42,50 @@ const ManageLessons = () => {
       .finally(() => setLoadingModules(false));
   }, [selectedCourse]);
 
-  const fields = [
-    { key: "title", label: "Title", required: true },
-    { key: "videoUrl", label: "Video URL (link)" },
-    { key: "content", label: "Notes / Content", type: "textarea" },
-    { key: "order", label: "Order", type: "number", required: true },
-  ];
+  useEffect(() => {
+    if (!selectedModule) return;
+    setLoadingLessons(true);
+    lessonService
+      .list({ page: 1, limit: 1000, moduleId: selectedModule.id })
+      .then(({ data }) => {
+        const items = data.data?.items || data.items || [];
+        setLessons(items);
+      })
+      .catch(() => setLessons([]))
+      .finally(() => setLoadingLessons(false));
+  }, [selectedModule]);
+
+  // ===== Step 4: Notes of selected lesson =====
+  if (selectedLesson) {
+    return (
+      <>
+        <Helmet>
+          <title>{selectedLesson.title} - Notes | Admin</title>
+        </Helmet>
+
+        <button
+          onClick={() => setSelectedLesson(null)}
+          className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-primary transition-colors"
+        >
+          ← Back to Lessons
+        </button>
+
+        <h2 className="mb-1 text-lg font-bold text-slate-800">
+          {selectedLesson.title}
+        </h2>
+        <p className="mb-6 text-xs text-slate-500">
+          {selectedCourse.title} / {selectedModule.title}
+        </p>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+          <LessonNotesManager lessonId={selectedLesson.id} />
+        </div>
+      </>
+    );
+  }
 
   // ===== Step 3: Lessons of selected module =====
   if (selectedModule) {
-    const scopedLessonService = {
-      ...lessonService,
-      list: (params = {}) =>
-        lessonService.list({ ...params, moduleId: selectedModule.id }),
-      create: (payload) =>
-        lessonService.create({ ...payload, moduleId: selectedModule.id }),
-    };
-
     return (
       <>
         <Helmet>
@@ -78,12 +103,30 @@ const ManageLessons = () => {
           Lessons — {selectedCourse.title} / {selectedModule.title}
         </h2>
 
-        <ResourceManager
-          title="Lessons"
-          service={scopedLessonService}
-          columns={COLUMNS}
-          fields={fields}
-        />
+        {loadingLessons ? (
+          <p className="text-sm text-slate-500">Loading lessons...</p>
+        ) : lessons.length === 0 ? (
+          <p className="text-sm text-slate-500">
+            No lessons found for this module.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {lessons.map((lesson) => (
+              <button
+                key={lesson.id}
+                onClick={() => setSelectedLesson(lesson)}
+                className="text-left rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-200"
+              >
+                <h3 className="font-semibold text-slate-800 line-clamp-2">
+                  {lesson.title}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Order: {lesson.order}
+                </p>
+              </button>
+            ))}
+          </div>
+        )}
       </>
     );
   }
@@ -110,7 +153,9 @@ const ManageLessons = () => {
         {loadingModules ? (
           <p className="text-sm text-slate-500">Loading modules...</p>
         ) : modules.length === 0 ? (
-          <p className="text-sm text-slate-500">No modules found for this course.</p>
+          <p className="text-sm text-slate-500">
+            No modules found for this course.
+          </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {modules.map((module) => (
@@ -137,7 +182,7 @@ const ManageLessons = () => {
   return (
     <>
       <Helmet>
-        <title>Manage Lessons | Admin</title>
+        <title>Manage Lesson Notes | Admin</title>
       </Helmet>
 
       <h2 className="mb-4 text-lg font-bold text-slate-800">
@@ -170,4 +215,4 @@ const ManageLessons = () => {
   );
 };
 
-export default ManageLessons;
+export default ManageLessonNotes;

@@ -34,10 +34,11 @@ const AdminLayout = () => {
     { label: "Courses", to: "/admin/courses", icon: HiOutlineBookOpen },
     { label: "Course Modules", to: "/admin/course-modules", icon: HiOutlineBookOpen },
     { label: "Lessons", to: "/admin/lessons", icon: HiOutlineBookOpen },
+    { label: "Lesson Notes", to: "/admin/lesson-notes", icon: HiOutlineBookOpen },
     { label: "Blogs", to: "/admin/blogs", icon: HiOutlineNewspaper },
     { label: "Jobs", to: "/admin/jobs", icon: HiOutlineBriefcase },
     { label: "Testimonials", to: "/admin/testimonials", icon: HiOutlineChatAlt2 },
-    { label: "Media Library", to: "/admin/media", icon: HiOutlinePhotograph },
+    // { label: "Media Library", to: "/admin/media", icon: HiOutlinePhotograph },
     { label: "Audit Logs", to: "/admin/audit-logs", icon: HiOutlineClipboardList },
     { label: "Settings", to: "/admin/settings", icon: HiOutlineCog },
     { label: "Coupons", to: "/admin/coupons", icon: HiOutlineCog }, // Added Coupons link

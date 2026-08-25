@@ -4,25 +4,21 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
   HiChevronDown,
   HiChevronRight,
+  HiDownload,
+  HiDocumentText,
 } from "react-icons/hi";
 import courseService from "../services/courseService";
+import lessonNoteService from "../services/lessonNoteService";
+import { buildFileUrl } from "../utils/fileUrl";
 
 /**
- * Convert different YouTube URL formats into a YouTube embed URL,
- * with params that minimize YouTube branding as much as YouTube allows:
- * - modestbranding: smaller YouTube logo
- * - rel=0: don't show related videos from other channels at the end
- * - iv_load_policy=3: hide video annotations
- * - controls=1: keep native controls (needed, since YT blocks custom overlays)
- *
- * Note: YouTube's own ToS does not allow fully hiding their branding —
- * this is the closest a plain iframe embed can get.
+ * Convert different YouTube URL formats into a YouTube embed URL.
  *
  * Supported:
- * https://www.youtube.com/watch?v=VIDEO_ID
- * https://youtu.be/VIDEO_ID
- * https://www.youtube.com/embed/VIDEO_ID
- * https://www.youtube.com/shorts/VIDEO_ID
+ * - https://www.youtube.com/watch?v=VIDEO_ID
+ * - https://youtu.be/VIDEO_ID
+ * - https://www.youtube.com/embed/VIDEO_ID
+ * - https://www.youtube.com/shorts/VIDEO_ID
  */
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
@@ -89,15 +85,14 @@ const getYouTubeEmbedUrl = (url) => {
 
     return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
   } catch (error) {
-    // Not a valid absolute URL (e.g. relative path to an uploaded file) —
-    // expected for self-hosted videos, not an error.
+    // Not a valid absolute URL.
+    // This can happen for self-hosted/relative video URLs.
     return null;
   }
 };
 
 /**
- * Guess the video MIME type from a file extension so the <source>
- * tag doesn't always assume mp4 (which breaks webm/ogg/mov files).
+ * Guess video MIME type from file extension.
  */
 const getVideoMimeType = (url) => {
   if (!url) return "video/mp4";
@@ -129,6 +124,9 @@ const CourseLearn = () => {
 
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
+
+  const [lessonNotes, setLessonNotes] = useState([]);
+  const [notesLoading, setNotesLoading] = useState(false);
 
   /*
    * Load course content
@@ -174,8 +172,7 @@ const CourseLearn = () => {
           for (const module of modules) {
             const lesson = module.lessons?.find(
               (item) =>
-                String(item.id) ===
-                String(selectedLessonId)
+                String(item.id) === String(selectedLessonId)
             );
 
             if (lesson) {
@@ -187,9 +184,8 @@ const CourseLearn = () => {
         }
 
         /*
-         * If no lesson was selected (either no ?lesson param,
-         * or the given lesson id no longer exists), fall back
-         * to the first lesson of the first module.
+         * If no lesson was selected:
+         * fallback to first lesson of first module.
          */
         if (!selectedLesson) {
           selectedModule = modules[0] || null;
@@ -207,8 +203,8 @@ const CourseLearn = () => {
         console.error("Course content error:", err);
 
         setError(
-          err.response?.data?.message ||
-            err.message ||
+          err?.response?.data?.message ||
+            err?.message ||
             "Couldn't load course content."
         );
 
@@ -219,6 +215,45 @@ const CourseLearn = () => {
       isMounted = false;
     };
   }, [id, selectedLessonId]);
+
+  /*
+   * Load notes/resources for active lesson.
+   */
+  useEffect(() => {
+    if (!activeLesson?.id) {
+      setLessonNotes([]);
+      setNotesLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+
+    setNotesLoading(true);
+
+    lessonNoteService
+      .list(activeLesson.id)
+      .then(({ data }) => {
+        if (!isMounted) return;
+
+        setLessonNotes(data?.data || []);
+      })
+      .catch((err) => {
+        console.error("Lesson notes error:", err);
+
+        if (isMounted) {
+          setLessonNotes([]);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setNotesLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeLesson?.id]);
 
   /*
    * Open / close module
@@ -280,10 +315,6 @@ const CourseLearn = () => {
     activeLesson?.videoUrl
   );
 
-  // TEMP DEBUG — remove once video issue is confirmed fixed
-  console.log("activeLesson.videoUrl:", activeLesson?.videoUrl);
-  console.log("computed youtubeEmbedUrl:", youtubeEmbedUrl);
-
   return (
     <>
       <Helmet>
@@ -313,19 +344,14 @@ const CourseLearn = () => {
           {/* =========================
               VIDEO
           ========================== */}
+
           {youtubeEmbedUrl ? (
-            /*
-             * YouTube video — branding minimized as much as
-             * YouTube's embed API allows (no related videos,
-             * smaller logo, no annotations).
-             */
             <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
               <iframe
                 key={youtubeEmbedUrl}
                 src={youtubeEmbedUrl}
                 title={
-                  activeLesson?.title ||
-                  "Course video"
+                  activeLesson?.title || "Course video"
                 }
                 className="h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -333,9 +359,6 @@ const CourseLearn = () => {
               />
             </div>
           ) : activeLesson?.videoUrl ? (
-            /*
-             * Self-hosted video file — fully custom player.
-             */
             <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
               <video
                 key={activeLesson.id}
@@ -350,14 +373,11 @@ const CourseLearn = () => {
                     activeLesson.videoUrl
                   )}
                 />
-                Your browser does not support
-                the video tag.
+
+                Your browser does not support the video tag.
               </video>
             </div>
           ) : (
-            /*
-             * No video
-             */
             <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
               <p className="text-slate-500">
                 No video available for this lesson.
@@ -368,6 +388,7 @@ const CourseLearn = () => {
           {/* =========================
               ACTIVE LESSON CONTENT
           ========================== */}
+
           {activeLesson && (
             <div className="card mt-4 p-5">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -378,6 +399,50 @@ const CourseLearn = () => {
                 <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-600 dark:text-slate-300">
                   {activeLesson.content}
                 </p>
+              )}
+
+              {/* =========================
+                  LESSON NOTES / DOWNLOADS
+              ========================== */}
+
+              {notesLoading ? (
+                <p className="mt-4 text-xs text-slate-400">
+                  Loading notes...
+                </p>
+              ) : lessonNotes.length > 0 ? (
+                <div className="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
+                  <h3 className="mb-2 text-sm font-semibold text-slate-800 dark:text-slate-100">
+                    Notes & Resources
+                  </h3>
+
+                  <div className="space-y-2">
+                    {lessonNotes.map((note) => (
+                      <a
+                        key={note.id}
+                        href={buildFileUrl(note.fileUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                      >
+                        <span className="flex min-w-0 items-center gap-2">
+                          <HiDocumentText className="h-4 w-4 flex-shrink-0 text-primary-600" />
+
+                          <span className="truncate text-slate-700 dark:text-slate-200">
+                            {note.originalName}
+                          </span>
+                        </span>
+
+                        <HiDownload className="ml-2 h-4 w-4 flex-shrink-0 text-slate-400" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
+                  <p className="text-xs text-slate-400">
+                    No notes or resources available for this lesson.
+                  </p>
+                </div>
               )}
             </div>
           )}
@@ -395,6 +460,7 @@ const CourseLearn = () => {
         {/* =====================================================
             MODULES + LESSONS
         ====================================================== */}
+
         <div className="card overflow-hidden p-0">
           {/* Sidebar Header */}
           <div className="border-b border-slate-200 p-4 dark:border-slate-800">
@@ -421,19 +487,17 @@ const CourseLearn = () => {
                 const isOpen =
                   openModuleId === module.id;
 
-                const lessons =
-                  module.lessons || [];
+                const lessons = module.lessons || [];
 
                 return (
                   <div key={module.id}>
                     {/* =========================
                         MODULE HEADER
                     ========================== */}
+
                     <button
                       type="button"
-                      onClick={() =>
-                        toggleModule(module)
-                      }
+                      onClick={() => toggleModule(module)}
                       className="flex w-full items-center justify-between px-4 py-4 text-left transition hover:bg-slate-50 dark:hover:bg-slate-800"
                     >
                       <div className="min-w-0">
@@ -463,6 +527,7 @@ const CourseLearn = () => {
                     {/* =========================
                         LESSON LIST
                     ========================== */}
+
                     {isOpen && (
                       <div className="bg-slate-50 px-2 pb-2 dark:bg-slate-900/50">
                         {lessons.length === 0 ? (
@@ -471,10 +536,7 @@ const CourseLearn = () => {
                           </p>
                         ) : (
                           lessons.map(
-                            (
-                              lesson,
-                              lessonIndex
-                            ) => {
+                            (lesson, lessonIndex) => {
                               const isActive =
                                 activeLesson?.id ===
                                 lesson.id;
@@ -511,12 +573,8 @@ const CourseLearn = () => {
                                   {/* Lesson title */}
                                   <span className="min-w-0 flex-1">
                                     <span className="block truncate">
-                                      {lessonIndex +
-                                        1}
-                                      .{" "}
-                                      {
-                                        lesson.title
-                                      }
+                                      {lessonIndex + 1}.{" "}
+                                      {lesson.title}
                                     </span>
 
                                     {lesson.duration && (
@@ -527,9 +585,7 @@ const CourseLearn = () => {
                                             : "text-slate-500"
                                         }`}
                                       >
-                                        {
-                                          lesson.duration
-                                        }
+                                        {lesson.duration}
                                       </span>
                                     )}
                                   </span>

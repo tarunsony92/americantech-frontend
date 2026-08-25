@@ -6,33 +6,100 @@ import ResourceManager from "../../components/admin/ResourceManager";
 
 const COLUMNS = [
   { key: "title", label: "Title" },
-  { key: "courseId", label: "Course ID" },
   { key: "order", label: "Order" },
 ];
 
 const ManageCourseModules = () => {
-  const [courseOptions, setCourseOptions] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     courseService
       .list({ page: 1, limit: 1000 })
       .then(({ data }) => {
         const items = data.data?.items || data.items || [];
-        setCourseOptions(items.map((c) => ({ value: c.id, label: c.title })));
+        setCourses(items);
       })
-      .catch(() => setCourseOptions([]));
+      .catch(() => setCourses([]))
+      .finally(() => setLoading(false));
   }, []);
 
   const fields = [
-    { key: "courseId", label: "Course", type: "select", options: courseOptions, required: true },
     { key: "title", label: "Title", required: true },
     { key: "order", label: "Order", type: "number", required: true },
   ];
 
+  if (selectedCourse) {
+    // Wrap the service so every list/create call is scoped to this course,
+    // regardless of what ResourceManager passes through.
+    const scopedModuleService = {
+      ...courseModuleService,
+      list: (params = {}) =>
+        courseModuleService.list({ ...params, courseId: selectedCourse.id }),
+      create: (payload) =>
+        courseModuleService.create({ ...payload, courseId: selectedCourse.id }),
+    };
+
+    return (
+      <>
+        <Helmet>
+          <title>{selectedCourse.title} - Modules | Admin</title>
+        </Helmet>
+
+        <button
+          onClick={() => setSelectedCourse(null)}
+          className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-primary transition-colors"
+        >
+          ← Back to Courses
+        </button>
+
+        <h2 className="mb-4 text-lg font-bold text-slate-800">
+          Modules — {selectedCourse.title}
+        </h2>
+
+        <ResourceManager
+          title="Course Modules"
+          service={scopedModuleService}
+          columns={COLUMNS}
+          fields={fields}
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <Helmet><title>Manage Course Modules | Admin</title></Helmet>
-      <ResourceManager title="Course Modules" service={courseModuleService} columns={COLUMNS} fields={fields} />
+      <Helmet>
+        <title>Manage Course Modules | Admin</title>
+      </Helmet>
+
+      <h2 className="mb-4 text-lg font-bold text-slate-800">
+        Select a Course
+      </h2>
+
+      {loading ? (
+        <p className="text-sm text-slate-500">Loading courses...</p>
+      ) : courses.length === 0 ? (
+        <p className="text-sm text-slate-500">No courses found.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {courses.map((course) => (
+            <button
+              key={course.id}
+              onClick={() => setSelectedCourse(course)}
+              className="text-left rounded-2xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-200"
+            >
+              <h3 className="font-semibold text-slate-800 line-clamp-2">
+                {course.title}
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">
+                Course ID: {course.id}
+              </p>
+            </button>
+          ))}
+        </div>
+      )}
     </>
   );
 };
