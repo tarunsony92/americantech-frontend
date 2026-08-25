@@ -455,7 +455,7 @@ const DashboardLayout = () => {
 
                   <div className="flex h-10 w-[130px] items-center overflow-hidden rounded-lg bg-white">
                     <img
-                      src="/logotitle.jpeg"
+                      src="/static/images/logoamerican.jpeg"
                       alt="American FutureTech"
                       className="h-full w-full object-contain"
                     />
