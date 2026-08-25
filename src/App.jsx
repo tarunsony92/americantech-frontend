@@ -47,6 +47,10 @@ const MyCourses = lazy(() => import("./pages/dashboard/MyCourses"));
 const MyCertificates = lazy(() => import("./pages/dashboard/MyCertificates"));
 const MyApplications = lazy(() => import("./pages/dashboard/MyApplications"));
 const Profile = lazy(() => import("./pages/dashboard/Profile"));
+const CourseLearn = lazy(() => import("./pages/CourseLearn"));
+const CourseModules = lazy(() => import("./pages/CourseModules"));
+const CourseLessons = lazy(() => import("./pages/CourseLearn"));
+
 
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
@@ -72,6 +76,8 @@ const CouponList = lazy(() => import("./features/coupons/CouponList"));
 const ManageOrders = lazy(() => import("./pages/admin/Manageorders"));
 const CourseJobs = lazy(() => import("./pages/admin/AdminCourseJobs"));
 const CourseJobForm = lazy(() => import("./pages/admin/AdminCourseJobForm"));
+const ManageCourseModules = lazy(() => import("./pages/admin/ManageCourseModules"));
+const ManageLessons = lazy(() => import("./pages/admin/ManageLessons"));
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -136,6 +142,9 @@ function App() {
                   <Route path="/dashboard/certificates" element={<MyCertificates />} />
                   <Route path="/dashboard/applications" element={<MyApplications />} />
                   <Route path="/dashboard/profile" element={<Profile />} />
+                  <Route path="/dashboard/courses/:id/learn" element={<CourseLearn />} />
+                  <Route path="/dashboard/courses/:id/modules" element={<CourseModules />} />
+                  <Route path="/dashboard/courses/:courseId/modules/:moduleId/lessons/:lessonId" element={<CourseLessons />} />
                 </Route>
               </Route>
 
@@ -166,6 +175,9 @@ function App() {
                   <Route path="/admin/coursejobs" element={<CourseJobs />} />
                   <Route path="/admin/coursejobs/new" element={<CourseJobForm />} />
                   <Route path="/admin/coursejobs/:id/edit" element={<CourseJobForm />} />
+                  <Route path="/admin/courses" element={<ManageCourses />} />
+                  <Route path="/admin/course-modules" element={<ManageCourseModules />} />
+                  <Route path="/admin/lessons" element={<ManageLessons />} />
 
                 </Route>
               </Route>

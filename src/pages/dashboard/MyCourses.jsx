@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import enrollmentService from "../../services/enrollmentService";
-import { formatCurrencyUSD} from "../../utils/format";
+import { formatCurrencyUSD } from "../../utils/format";
 
 const MyCourses = () => {
   const [enrollments, setEnrollments] = useState([]);
@@ -17,41 +17,106 @@ const MyCourses = () => {
         setStatus("success");
       })
       .catch((err) => {
-        setError(err.response?.data?.message || "Couldn't load your courses.");
+        setError(
+          err.response?.data?.message ||
+            "Couldn't load your courses."
+        );
         setStatus("error");
       });
   }, []);
 
   return (
     <>
-      <Helmet><title>My Courses | American FutureTech</title></Helmet>
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Courses</h1>
+      <Helmet>
+        <title>My Courses | American FutureTech</title>
+      </Helmet>
 
-      {status === "loading" && <p className="mt-6 text-slate-500">Loading your courses...</p>}
-      {error && <p className="mt-6 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950 dark:text-red-300">{error}</p>}
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+        My Courses
+      </h1>
+
+      {status === "loading" && (
+        <p className="mt-6 text-slate-500">
+          Loading your courses...
+        </p>
+      )}
+
+      {status === "error" && error && (
+        <p className="mt-6 rounded-lg bg-red-50 p-3 text-sm text-red-600 dark:bg-red-950 dark:text-red-300">
+          {error}
+        </p>
+      )}
 
       {status === "success" && enrollments.length === 0 && (
-        <div className="mt-6 card p-8 text-center">
-          <p className="text-slate-600 dark:text-slate-300">You haven't enrolled in any courses yet.</p>
-          <Link to="/courses" className="btn-primary mt-4 inline-flex">Browse Courses</Link>
+        <div className="card mt-6 p-8 text-center">
+          <p className="text-slate-600 dark:text-slate-300">
+            You haven't enrolled in any courses yet.
+          </p>
+
+          <Link
+            to="/courses"
+            className="btn-primary mt-4 inline-flex"
+          >
+            Browse Courses
+          </Link>
         </div>
       )}
 
-      <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {enrollments.map((enrollment) => (
-          <div key={enrollment.id} className="card p-5">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{enrollment.course?.title}</h3>
-            <p className="mt-1 text-sm text-slate-500">{enrollment.course?.duration} · {enrollment.course?.level}</p>
-            <div className="mt-4 flex items-center justify-between">
-              <span className="text-sm text-slate-500">Progress: {enrollment.progress || 0}%</span>
-              <span className="text-sm font-semibold text-primary-600">{formatCurrencyUSD(enrollment.course?.price)}</span>
-            </div>
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-              <div className="h-full bg-primary-600" style={{ width: `${enrollment.progress || 0}%` }} />
-            </div>
-          </div>
-        ))}
-      </div>
+      {status === "success" && enrollments.length > 0 && (
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {enrollments.map((enrollment) => {
+            const course = enrollment.course;
+
+            return (
+              <div
+                key={enrollment.id}
+                className="card p-5"
+              >
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                  {course?.title || "Untitled Course"}
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  {course?.duration || "N/A"}{" "}
+                  ·{" "}
+                  {course?.level || "N/A"}
+                </p>
+
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-sm text-slate-500">
+                    Progress: {enrollment.progress || 0}%
+                  </span>
+
+                  <span className="text-sm font-semibold text-primary-600">
+                    {formatCurrencyUSD(course?.price || 0)}
+                  </span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                  <div
+                    className="h-full bg-primary-600 transition-all"
+                    style={{
+                      width: `${Math.min(
+                        Math.max(enrollment.progress || 0, 0),
+                        100
+                      )}%`,
+                    }}
+                  />
+                </div>
+
+                {/* Open Modules */}
+                <Link
+                  to={`/dashboard/courses/${course?.id}/modules`}
+                  className="btn-primary mt-4 inline-flex w-full justify-center"
+                >
+                  Continue Learning
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };

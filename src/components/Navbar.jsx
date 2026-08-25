@@ -848,6 +848,68 @@ const Navbar = () => {
             "
           >
 
+
+         
+
+            {/* ===============================
+                LMS LOGIN (DESKTOP)
+            =============================== */}
+
+             {!isAuthenticated && (
+            <motion.div
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <Link
+                to="/login"
+                className="
+                  relative
+                  inline-flex
+                  items-center
+                  overflow-hidden
+                  rounded-full
+
+                  bg-primary
+                  px-5
+                  py-2.5
+
+                  text-sm
+                  font-bold
+                  text-black
+
+                  shadow-lg
+                  shadow-primary/20
+
+                  transition-all
+                  duration-300
+
+                  hover:shadow-xl
+                  hover:shadow-primary/30
+                "
+              >
+                <span
+                  className="
+                    absolute
+                    inset-0
+                    -translate-x-full
+                    bg-white/25
+                    skew-x-[-20deg]
+
+                    transition-transform
+                    duration-700
+
+                    hover:translate-x-[130%]
+                  "
+                />
+                <span className="relative">
+                  LMS Login
+                </span>
+              </Link>
+            </motion.div>
+              )}
+
+        
+
             {/* ===============================
                 DARK / LIGHT MODE TOGGLE
             =============================== */}
@@ -898,23 +960,10 @@ const Navbar = () => {
 
             {/* Optional auth area */}
 
-            {isAuthenticated && (
-              <motion.div
-                whileHover={{
-                  y: -2,
-                }}
-
-                whileTap={{
-                  scale: 0.97,
-                }}
-              >
-                <Link
-                  to={
-                    user?.role?.name ===
-                    "Admin"
-                      ? "/admin"
-                      : "/dashboard"
-                  }
+            {isAuthenticated && user?.role !== "admin" && (
+  <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+    <Link
+      to="/dashboard"
 
                   className="
                     relative
@@ -1526,11 +1575,15 @@ const Navbar = () => {
                           </span>
 
                         </Link>
+                        
 
                       </motion.div>
                     );
                   }
                 )}
+
+
+                
 
 
                 {/* ===============================
@@ -1563,14 +1616,45 @@ const Navbar = () => {
                   "
                 >
 
-                  {isAuthenticated && (
-                    <Link
-                      to={
-                        user?.role?.name ===
-                        "Admin"
-                          ? "/admin"
-                          : "/dashboard"
+                   <Link
+                      to="/login"
+
+                      onClick={() =>
+                        dispatch(
+                          closeMobileMenu()
+                        )
                       }
+
+                      className="
+                        flex
+                        items-center
+                        justify-center
+
+                        rounded-xl
+                        bg-primary
+                        px-4
+                        py-3
+
+                        text-sm
+                        font-bold
+                        text-black
+
+                        shadow-lg
+                        shadow-primary/20
+
+                        transition-all
+                        duration-300
+
+                        hover:-translate-y-0.5
+                        hover:shadow-xl
+                      "
+                    >
+                      LMS Login
+                    </Link>
+
+                  {isAuthenticated && user?.role !== "admin" && (
+  <Link
+    to="/dashboard"
 
                       onClick={() =>
                         dispatch(
@@ -1613,6 +1697,9 @@ const Navbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
+        <div>
+          
+        </div>
 
       </header>
 

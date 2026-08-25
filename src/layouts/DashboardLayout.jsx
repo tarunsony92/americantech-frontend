@@ -64,7 +64,7 @@ const DashboardLayout = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="container-page grid flex-1 grid-cols-1 gap-6 py-8 lg:grid-cols-[240px_1fr]">
         <Sidebar items={SIDEBAR_ITEMS} />
         <main>

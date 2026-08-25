@@ -10,6 +10,7 @@ const ManageUsers = () => {
   // Roles are fetched so the form can show real role names instead of asking the admin to
   // remember magic numbers ("1 = admin, 2 = instructor, 3 = student").
   const [roleOptions, setRoleOptions] = useState([]);
+  const [courseOptions, setCourseOptions] = useState([]);
 
   useEffect(() => {
     axiosInstance
@@ -19,6 +20,15 @@ const ManageUsers = () => {
         setRoleOptions(roles.map((r) => ({ value: r.id, label: r.name })));
       })
       .catch(() => setRoleOptions([]));
+  }, []);
+  useEffect(() => {
+    axiosInstance
+      .get("/courses")
+      .then(({ data }) => {
+        const courses = data.data?.items || [];
+        setCourseOptions(courses.map((c) => ({ value: c.id, label: c.title })));
+      })
+      .catch(() => setCourseOptions([]));
   }, []);
 
   const columns = [
@@ -34,6 +44,7 @@ const ManageUsers = () => {
     { key: "phone", label: "Phone" },
     { key: "password", label: "Password (only used when creating a new user)", type: "password" },
     { key: "roleId", label: "Role", type: "select", options: roleOptions, required: true },
+    { key: "courseId", label: "Course", type: "select", options: courseOptions },
     { key: "isActive", label: "Active", type: "checkbox" },
   ];
 

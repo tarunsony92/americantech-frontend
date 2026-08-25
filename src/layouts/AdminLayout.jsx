@@ -32,6 +32,8 @@ const AdminLayout = () => {
     { label: "Dashboard", to: "/admin", icon: HiOutlineViewGrid, end: true },
     { label: "Users", to: "/admin/users", icon: HiOutlineUsers },
     { label: "Courses", to: "/admin/courses", icon: HiOutlineBookOpen },
+    { label: "Course Modules", to: "/admin/course-modules", icon: HiOutlineBookOpen },
+    { label: "Lessons", to: "/admin/lessons", icon: HiOutlineBookOpen },
     { label: "Blogs", to: "/admin/blogs", icon: HiOutlineNewspaper },
     { label: "Jobs", to: "/admin/jobs", icon: HiOutlineBriefcase },
     { label: "Testimonials", to: "/admin/testimonials", icon: HiOutlineChatAlt2 },
