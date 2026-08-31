@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { HiX } from "react-icons/hi";
 
 /**
- * fields: [{ key, label, type?: "text"|"number"|"textarea"|"checkbox"|"select", options?: string[] }]
+ * fields: [{ key, label, type?: "text"|"number"|"textarea"|"checkbox"|"select", options?: string[], onChange?: (value, allValues) => void }]
  * initialValues: existing row when editing, or null when creating.
+ *
+ * If a field defines onChange, it fires both when the user changes that field AND once on
+ * mount using the initial value — so dependent fields (e.g. a Batch dropdown that depends on
+ * the selected Course) populate correctly in edit mode too, not just on fresh selection.
  */
 const ResourceFormModal = ({ title, fields, initialValues, onClose, onSubmit }) => {
   const [values, setValues] = useState({});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const didInitRef = useRef(false);
 
   useEffect(() => {
     const defaults = {};
@@ -16,9 +21,30 @@ const ResourceFormModal = ({ title, fields, initialValues, onClose, onSubmit }) 
       defaults[f.key] = initialValues ? initialValues[f.key] ?? "" : f.type === "checkbox" ? false : "";
     });
     setValues(defaults);
+    didInitRef.current = false;
   }, [fields, initialValues]);
 
-  const handleChange = (key, value) => setValues((prev) => ({ ...prev, [key]: value }));
+  // Fire each field's onChange once with its starting value, so dependent dropdowns
+  // (e.g. Batch depending on Course) load correctly when editing an existing row.
+  useEffect(() => {
+    if (didInitRef.current) return;
+    if (Object.keys(values).length === 0) return;
+    fields.forEach((f) => {
+      if (f.onChange && values[f.key] !== "" && values[f.key] != null) {
+        f.onChange(values[f.key], values);
+      }
+    });
+    didInitRef.current = true;
+  }, [values, fields]);
+
+  const handleChange = (key, value) => {
+    setValues((prev) => {
+      const next = { ...prev, [key]: value };
+      const field = fields.find((f) => f.key === key);
+      if (field?.onChange) field.onChange(value, next);
+      return next;
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,7 +93,7 @@ const ResourceFormModal = ({ title, fields, initialValues, onClose, onSubmit }) 
                   className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-800"
                 >
                   <option value="">Select...</option>
-                  {f.options.map((opt) => {
+                  {(f.options || []).map((opt) => {
                     const value = typeof opt === "object" ? opt.value : opt;
                     const label = typeof opt === "object" ? opt.label : opt;
                     return <option key={value} value={value}>{label}</option>;

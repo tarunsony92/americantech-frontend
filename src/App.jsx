@@ -79,6 +79,8 @@ const CourseJobForm = lazy(() => import("./pages/admin/AdminCourseJobForm"));
 const ManageCourseModules = lazy(() => import("./pages/admin/ManageCourseModules"));
 const ManageLessons = lazy(() => import("./pages/admin/ManageLessons"));
 const ManageLessonNotes = lazy(() => import("./pages/admin/ManageLessonNotes"));
+const BatchManagement = lazy(() => import("./pages/admin/ManageBatches"));
+const UserDetailPage = lazy(() => import("./pages/admin/UserDetail"));
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -180,6 +182,9 @@ function App() {
                   <Route path="/admin/course-modules" element={<ManageCourseModules />} />
                   <Route path="/admin/lessons" element={<ManageLessons />} />
                   <Route path="/admin/lesson-notes" element={<ManageLessonNotes />} />
+                  <Route path="/admin/batches" element={<BatchManagement />} />
+                  <Route path="/admin/users/:id" element={<UserDetailPage />} />
+                  
 
                 </Route>
               </Route>

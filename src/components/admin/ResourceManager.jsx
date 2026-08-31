@@ -6,7 +6,8 @@ import ResourceFormModal from "./ResourceFormModal";
 
 /**
  * Reusable admin list view for any resource exposed via createResourceService.
- * columns: [{ key, label }] — rendered straight from each row.
+ * columns: [{ key, label, render? }] — render(row) takes priority when provided,
+ *   otherwise falls back to row[key] (or row[key].name for object values).
  * fields: [{ key, label, type?, options?, required? }] — drives the Add/Edit modal.
  *   Pass `fields` to get working Add New / Edit buttons out of the box; omit it and the
  *   page is read-only (list + delete only).
@@ -57,6 +58,13 @@ const ResourceManager = ({ title, service, columns, fields, hideAddButton }) => 
     fetchRows();
   };
 
+  const renderCell = (row, col) => {
+    if (col.render) return col.render(row);
+    const value = row[col.key];
+    if (typeof value === "object" && value) return value.name;
+    return String(value ?? "");
+  };
+
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -92,7 +100,7 @@ const ResourceManager = ({ title, service, columns, fields, hideAddButton }) => 
             ) : (
               rows.map((row) => (
                 <tr key={row.id} className="border-t border-slate-200 dark:border-slate-800">
-                  {columns.map((c) => <td key={c.key} className="px-4 py-3">{typeof row[c.key] === "object" && row[c.key] ? row[c.key].name : String(row[c.key] ?? "")}</td>)}
+                  {columns.map((c) => <td key={c.key} className="px-4 py-3">{renderCell(row, c)}</td>)}
                   <td className="px-4 py-3 text-right">
                     {fields && (
                       <button onClick={() => setModalState({ mode: "edit", row })} className="mr-2 rounded p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
