@@ -50,6 +50,9 @@ const Profile = lazy(() => import("./pages/dashboard/Profile"));
 const CourseLearn = lazy(() => import("./pages/CourseLearn"));
 const CourseModules = lazy(() => import("./pages/CourseModules"));
 const CourseLessons = lazy(() => import("./pages/CourseLearn"));
+const MyQuizzes = lazy(() => import("./pages/dashboard/MyQuizzes"));
+const TakeQuiz = lazy(() => import("./pages/dashboard/TakeQuiz"));
+const QuizResult = lazy(() => import("./pages/dashboard/QuizResult"));
 
 
 // Admin pages
@@ -81,6 +84,12 @@ const ManageLessons = lazy(() => import("./pages/admin/ManageLessons"));
 const ManageLessonNotes = lazy(() => import("./pages/admin/ManageLessonNotes"));
 const BatchManagement = lazy(() => import("./pages/admin/ManageBatches"));
 const UserDetailPage = lazy(() => import("./pages/admin/UserDetail"));
+const ManageQuizzes = lazy(() => import("./pages/admin/ManageQuizzes"));
+const QuizEditor = lazy(() => import("./pages/admin/QuizEditor"));
+const QuizAttempts = lazy(() => import("./pages/admin/QuizAttempts"));
+const ManageQuizBatches = lazy(() => import("./pages/admin/ManageQuizBatches"));
+const StudentQuizzes = lazy(() => import("./pages/dashboard/StudentQuizzes"));
+
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -123,6 +132,9 @@ function App() {
                 <Route path="/jobscourse/:id" element={<CourseJobDetails />} />
                 <Route path="/jobscourse/:id/apply" element={<ApplyJob />} />
 
+                 
+
+
               </Route>
 
               {/* Auth — user portal */}
@@ -142,12 +154,22 @@ function App() {
                 <Route element={<DashboardLayout />}>
                   <Route path="/dashboard" element={<Overview />} />
                   <Route path="/dashboard/courses" element={<MyCourses />} />
+                  <Route path="/dashboard/quizzes" element={<MyQuizzes />} /> 
                   <Route path="/dashboard/certificates" element={<MyCertificates />} />
                   <Route path="/dashboard/applications" element={<MyApplications />} />
                   <Route path="/dashboard/profile" element={<Profile />} />
                   <Route path="/dashboard/courses/:id/learn" element={<CourseLearn />} />
                   <Route path="/dashboard/courses/:id/modules" element={<CourseModules />} />
                   <Route path="/dashboard/courses/:courseId/modules/:moduleId/lessons/:lessonId" element={<CourseLessons />} />
+                     <Route
+      path="/dashboard/batches/:batchId/quizzes"
+      element={<StudentQuizzes />}
+    />
+    <Route path="/dashboard/quizzes/:quizId/attempt" element={<TakeQuiz />} />
+    <Route
+      path="/dashboard/quizzes/:quizId/result/:attemptId"
+      element={<QuizResult />}
+    />
                 </Route>
               </Route>
 
@@ -184,8 +206,25 @@ function App() {
                   <Route path="/admin/lesson-notes" element={<ManageLessonNotes />} />
                   <Route path="/admin/batches" element={<BatchManagement />} />
                   <Route path="/admin/users/:id" element={<UserDetailPage />} />
-                  
+                 <Route
+  path="/admin/quizzes"
+  element={<ManageQuizBatches />}
+/>
 
+<Route
+  path="/admin/quizzes/:batchId"
+  element={<ManageQuizzes />}
+/>
+
+<Route
+  path="/admin/quizzes/:quizId/edit"
+  element={<QuizEditor />}
+/>
+
+<Route
+  path="/admin/quizzes/:quizId/attempts"
+  element={<QuizAttempts />}
+/>
                 </Route>
               </Route>
 

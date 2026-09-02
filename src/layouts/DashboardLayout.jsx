@@ -22,6 +22,7 @@ import {
   HiOutlineChevronRight,
   HiOutlineQuestionMarkCircle,
   HiOutlineSupport,
+  HiOutlineClipboardList,
 } from "react-icons/hi";
 
 import {
@@ -121,6 +122,11 @@ const DashboardLayout = () => {
       label: "Certificates",
       to: "/dashboard/certificates",
       icon: HiOutlineBadgeCheck,
+    },
+    {
+    label: "Quizzes",                       // NEW
+    to: "/dashboard/quizzes",
+    icon: HiOutlineClipboardList,
     },
     {
       label: "Profile",

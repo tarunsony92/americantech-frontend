@@ -14,7 +14,7 @@ const EMPTY_FORM = {
   experienceLevel: "Entry",
   salaryMin: "",
   salaryMax: "",
-  currency: "$",
+  currency: "",
   description: "",
   responsibilities: [],
   requirements: [],
