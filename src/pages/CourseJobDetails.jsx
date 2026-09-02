@@ -22,6 +22,7 @@ import {
   Star,
   ExternalLink,
   UserRound,
+  TrendingUp,
 } from "lucide-react";
 
 import courseJobService from "../services/courseJobService";
@@ -324,6 +325,18 @@ const CourseJobDetails = () => {
 
   const skills = Array.isArray(job.skills) ? job.skills : [];
 
+  // ---- New fields ----
+  const preferredQualifications = Array.isArray(job.preferredQualifications)
+    ? job.preferredQualifications
+    : [];
+
+  const technicalSkills = Array.isArray(job.technicalSkills)
+    ? job.technicalSkills
+    : [];
+
+  const softSkills = Array.isArray(job.softSkills) ? job.softSkills : [];
+  // ---------------------
+
   const initials = (job.company || "C")
     .slice(0, 2)
     .toUpperCase();
@@ -412,32 +425,27 @@ const CourseJobDetails = () => {
               <div className="flex items-start gap-4">
 
                 {/* Company Logo */}
-                {/* <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-fuchsia-500 text-xl font-black text-white shadow-2xl shadow-indigo-900/40">
-                  {initials}
-                </div> */}
-
-
-               <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-2xl shadow-indigo-900/20 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
-  {job.imageUrl ? (
-    <img
-      src={job.imageUrl}
-      alt={`${job.company} logo`}
-      className="h-full w-full object-contain"
-      onError={(e) => {
-        e.currentTarget.style.display = "none";
-        e.currentTarget.parentElement.innerHTML = `
-          <span class="text-xl font-black text-indigo-600">
-            ${initials}
-          </span>
-        `;
-      }}
-    />
-  ) : (
-    <span className="text-xl font-black text-indigo-600">
-      {initials}
-    </span>
-  )}
-</div>
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 shadow-2xl shadow-indigo-900/20 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
+                  {job.imageUrl ? (
+                    <img
+                      src={job.imageUrl}
+                      alt={`${job.company} logo`}
+                      className="h-full w-full object-contain"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                        e.currentTarget.parentElement.innerHTML = `
+                          <span class="text-xl font-black text-indigo-600">
+                            ${initials}
+                          </span>
+                        `;
+                      }}
+                    />
+                  ) : (
+                    <span className="text-xl font-black text-indigo-600">
+                      {initials}
+                    </span>
+                  )}
+                </div>
 
                 <div className="min-w-0">
 
@@ -705,6 +713,105 @@ const CourseJobDetails = () => {
               </section>
             )}
 
+            {/* Preferred Qualifications */}
+            {preferredQualifications.length > 0 && (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
+                <SectionHeader
+                  icon={Star}
+                  title="Preferred Qualifications"
+                  subtitle={`${preferredQualifications.length} preferred qualifications`}
+                  iconClass="text-amber-500"
+                />
+
+                <div className="space-y-3">
+
+                  {preferredQualifications.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex items-start gap-3"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
+
+                      <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+
+                </div>
+              </section>
+            )}
+
+            {/* Technical Skills */}
+            {technicalSkills.length > 0 && (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
+                <SectionHeader
+                  icon={Zap}
+                  title="Technical Skills"
+                  subtitle={`${technicalSkills.length} technical skills`}
+                  iconClass="text-indigo-600"
+                />
+
+                <div className="flex flex-wrap gap-2">
+
+                  {technicalSkills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="rounded-lg border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-700 transition hover:-translate-y-0.5 hover:shadow-sm dark:border-indigo-900 dark:bg-indigo-950 dark:text-indigo-300"
+                    >
+                      #{skill}
+                    </span>
+                  ))}
+
+                </div>
+              </section>
+            )}
+
+            {/* Soft Skills */}
+            {softSkills.length > 0 && (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
+                <SectionHeader
+                  icon={Users}
+                  title="Soft Skills"
+                  subtitle={`${softSkills.length} soft skills`}
+                  iconClass="text-fuchsia-600"
+                />
+
+                <div className="flex flex-wrap gap-2">
+
+                  {softSkills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="rounded-lg border border-fuchsia-100 bg-fuchsia-50 px-3 py-1.5 text-xs font-bold text-fuchsia-700 transition hover:-translate-y-0.5 hover:shadow-sm dark:border-fuchsia-900 dark:bg-fuchsia-950 dark:text-fuchsia-300"
+                    >
+                      #{skill}
+                    </span>
+                  ))}
+
+                </div>
+              </section>
+            )}
+
+            {/* Career Growth (paragraph only) */}
+            {job.careerGrowth && (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
+                <SectionHeader
+                  icon={TrendingUp}
+                  title="Career Growth"
+                  subtitle="What growth looks like in this role"
+                  iconClass="text-violet-600"
+                />
+
+                <p className="whitespace-pre-line text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  {job.careerGrowth}
+                </p>
+              </section>
+            )}
+
           </main>
 
           {/* ==================================================
@@ -853,25 +960,6 @@ const CourseJobDetails = () => {
                     </div>
                   )}
 
-                  {/* Posted By */}
-                  {/* {job.postedBy && (
-                    <div className="flex items-start gap-3">
-
-                      <UserRound className="mt-0.5 h-4 w-4 shrink-0 text-indigo-500" />
-
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                          Posted By
-                        </p>
-
-                        <p className="mt-0.5 text-sm font-bold text-slate-800 dark:text-slate-200">
-                          Recruiter #{job.postedBy}
-                        </p>
-                      </div>
-
-                    </div>
-                  )} */}
-
                   {/* Status */}
                   <div className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 dark:border-slate-800 dark:bg-slate-800/50">
 
@@ -932,35 +1020,6 @@ const CourseJobDetails = () => {
 
               </div>
             </div>
-
-            {/* Bottom CTA */}
-            {/* <div className="mt-4 rounded-2xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-5 text-white shadow-lg">
-
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-
-                <h3 className="text-sm font-black">
-                  Interested in this role?
-                </h3>
-              </div>
-
-              <p className="mt-2 text-xs leading-5 text-indigo-100">
-                Review the requirements and skills before applying.
-              </p>
-
-              {applyLink && (
-                <a
-                  href={applyLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-xs font-black text-indigo-700 transition hover:bg-indigo-50"
-                >
-                  Apply for this position
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </a>
-              )}
-
-            </div> */}
 
           </aside>
         </div>

@@ -1,4 +1,3 @@
-// pages/admin/AdminCourseJobForm.jsx
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -19,12 +18,24 @@ const EMPTY_FORM = {
   responsibilities: [],
   requirements: [],
   skills: [],
+  preferredQualifications: [],
+  technicalSkills: [],
+  softSkills: [],
+  careerGrowth: "",
   applyLink: "",
+  imageUrl: "",
   isActive: true,
 };
 
-const TYPE_OPTIONS = ["Full-time", "Part-time", "Contract", "Internship", "Remote", "Hybrid" , "On-site"];
-const LEVEL_OPTIONS = ["Entry-Level", "Mid-Level", "Senior-Level", "Lead-Level"];
+const TYPE_OPTIONS = ["Full-time", "Part-time", "Contract", "Internship", "Remote", "Hybrid", "On-site"];
+
+// value = DB me jo save hoga (enum se match), label = UI me jo dikhega
+const LEVEL_OPTIONS = [
+  { value: "Entry", label: "Entry-Level" },
+  { value: "Mid", label: "Mid-Level" },
+  { value: "Senior", label: "Senior-Level" },
+  { value: "Lead", label: "Lead-Level" },
+];
 
 const AdminCourseJobForm = () => {
   const { id } = useParams();
@@ -51,6 +62,10 @@ const AdminCourseJobForm = () => {
           responsibilities: job.responsibilities || [],
           requirements: job.requirements || [],
           skills: job.skills || [],
+          preferredQualifications: job.preferredQualifications || [],
+          technicalSkills: job.technicalSkills || [],
+          softSkills: job.softSkills || [],
+          careerGrowth: job.careerGrowth || "",
         });
       })
       .catch(() => active && setError("Failed to load job."))
@@ -67,11 +82,11 @@ const AdminCourseJobForm = () => {
     setSaving(true);
     setError(null);
 
-   const payload = {
-  ...form,
-  salaryMin: form.salaryMin,
-  salaryMax: form.salaryMax,
-};
+    const payload = {
+      ...form,
+      salaryMin: form.salaryMin,
+      salaryMax: form.salaryMax,
+    };
 
     try {
       if (isEdit) {
@@ -107,7 +122,6 @@ const AdminCourseJobForm = () => {
         {/* Basic info */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
-           
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Job Title *</label>
             <input
               required
@@ -117,19 +131,19 @@ const AdminCourseJobForm = () => {
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
             />
           </div>
-<div>
-  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-    Company Logo URL
-  </label>
-  <input
-    type="url"
-    value={form.imageUrl}
-    onChange={(e) => updateField("imageUrl", e.target.value)}
-    placeholder="https://example.com/logoamerican.jpeg"
-    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-  />
-</div>
-          
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Company Logo URL
+            </label>
+            <input
+              type="url"
+              value={form.imageUrl}
+              onChange={(e) => updateField("imageUrl", e.target.value)}
+              placeholder="https://example.com/logo.jpeg"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+            />
+          </div>
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Company *</label>
@@ -143,17 +157,17 @@ const AdminCourseJobForm = () => {
           </div>
 
           <div>
-  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-    Course
-  </label>
-  <input
-    type="text"
-    placeholder="e.g. B.Tech CSE"
-    value={form.course}
-    onChange={(e) => updateField("course", e.target.value)}
-    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-  />
-</div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Course
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. B.Tech CSE"
+              value={form.course}
+              onChange={(e) => updateField("course", e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+            />
+          </div>
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Location</label>
@@ -194,35 +208,35 @@ const AdminCourseJobForm = () => {
               onChange={(e) => updateField("experienceLevel", e.target.value)}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
             >
-              {LEVEL_OPTIONS.map((l) => <option key={l} value={l}>{l}</option>)}
+              {LEVEL_OPTIONS.map((l) => <option key={l.value} value={l.value}>{l.label}</option>)}
             </select>
           </div>
 
           <div>
-  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-    Salary Min
-  </label>
-  <input
-    type="text"
-    placeholder="e.g. 25K"
-    value={form.salaryMin}
-    onChange={(e) => updateField("salaryMin", e.target.value)}
-    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-  />
-</div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Salary Min
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. 25K"
+              value={form.salaryMin}
+              onChange={(e) => updateField("salaryMin", e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+            />
+          </div>
 
           <div>
-  <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-    Salary Max
-  </label>
-  <input
-    type="text"
-    placeholder="e.g. 50K"
-    value={form.salaryMax}
-    onChange={(e) => updateField("salaryMax", e.target.value)}
-    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-  />
-</div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Salary Max
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. 50K"
+              value={form.salaryMax}
+              onChange={(e) => updateField("salaryMax", e.target.value)}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+            />
+          </div>
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">Currency</label>
@@ -279,6 +293,40 @@ const AdminCourseJobForm = () => {
           onChange={(v) => updateField("skills", v)}
           placeholder="Type a skill and press Enter"
         />
+
+        {/* ---- New fields ---- */}
+        <TagListInput
+          label="Preferred Qualifications"
+          values={form.preferredQualifications}
+          onChange={(v) => updateField("preferredQualifications", v)}
+          placeholder="Type a qualification and press Enter"
+        />
+        <TagListInput
+          label="Technical Skills"
+          values={form.technicalSkills}
+          onChange={(v) => updateField("technicalSkills", v)}
+          placeholder="Type a technical skill and press Enter"
+        />
+        <TagListInput
+          label="Soft Skills"
+          values={form.softSkills}
+          onChange={(v) => updateField("softSkills", v)}
+          placeholder="Type a soft skill and press Enter"
+        />
+
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            Career Growth
+          </label>
+          <textarea
+            rows={4}
+            value={form.careerGrowth}
+            onChange={(e) => updateField("careerGrowth", e.target.value)}
+            placeholder="Describe career growth opportunities in this role..."
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+          />
+        </div>
+        {/* --------------------- */}
 
         {/* Actions */}
         <div className="flex justify-end gap-3 border-t border-slate-100 pt-6 dark:border-slate-700">
