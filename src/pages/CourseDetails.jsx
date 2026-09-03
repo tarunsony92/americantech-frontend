@@ -27,6 +27,38 @@ import useResourceItem from "../hooks/useResourceItem";
 import { formatCurrencyUSD } from "../utils/format";
 import { COURSE_CONTENT, getCourseContentKey } from "../data/courseContent";
 
+/* =========================================================
+   COURSE-WISE CERTIFICATES
+   ---------------------------------------------------------
+   Key = course ID (as string)
+   Add an entry here for each course, with its own image URLs.
+========================================================= */
+const COURSE_CERTIFICATES = {
+  "1": {
+    completionImage: "/static/images/cseh.jpeg",
+    microsoftImage: "/static/images/microsoft.jpg",
+  },
+  "2": {
+    completionImage: "/static/images/csai.jpeg",
+    microsoftImage: "/static/images/microsoftsc.jpg",
+  },
+  "3": {
+    completionImage: "/static/images/dsai.jpeg",
+    microsoftImage: "/static/images/microsoftcertificate.jpg",
+  },
+  // Naya course add karna ho to yahan uski ID daal kar images set karein:
+  // "4": {
+  //   completionImage: "/static/images/certificates/course-4-completion.jpeg",
+  //   microsoftImage: "/static/images/certificates/course-4-microsoft.jpeg",
+  // },
+};
+
+// Agar kisi course ki ID COURSE_CERTIFICATES me nahi hai, to yeh default images use hongi
+const DEFAULT_CERTIFICATE_IMAGES = {
+  completionImage: "/static/images/dsai.jpeg",
+  microsoftImage: "/static/images/microsoftcertificate.jpg",
+};
+
 // ---- Fallback / default content (used only when a course matches NOTHING) ----
 
 const DEFAULT_TOOLS = [
@@ -170,8 +202,8 @@ const CourseDetails = () => {
   const [openModule, setOpenModule] = useState(0);
 
   const handleEnroll = (type = "full") => {
-  navigate(`/courses/${id}/checkout?type=${type}`);
-};
+    navigate(`/courses/${id}/checkout?type=${type}`);
+  };
 
   if (loading) {
     return <div className="container-page py-24 text-center text-slate-500">Loading course...</div>;
@@ -207,6 +239,10 @@ const CourseDetails = () => {
     color: DEFAULT_CAREER_ROLE_COLORS[i % DEFAULT_CAREER_ROLE_COLORS.length].color,
   }));
 
+  // ---- Certificate images for this specific course ----
+  const certificateImages =
+    COURSE_CERTIFICATES[String(course.id)] || DEFAULT_CERTIFICATE_IMAGES;
+
   const moduleColors = ["from-indigo-500 to-blue-500", "from-violet-500 to-fuchsia-500", "from-emerald-500 to-teal-500", "from-amber-500 to-orange-500", "from-rose-500 to-pink-500", "from-cyan-500 to-sky-500", "from-purple-500 to-indigo-500"];
 
   return (
@@ -220,296 +256,290 @@ const CourseDetails = () => {
 
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50/80 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950">
-  {/* Background Decorations */}
-  <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-br from-fuchsia-400/20 via-indigo-400/20 to-transparent blur-3xl" />
-  <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-emerald-400/15 via-cyan-400/15 to-transparent blur-3xl" />
+        {/* Background Decorations */}
+        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-gradient-to-br from-fuchsia-400/20 via-indigo-400/20 to-transparent blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-gradient-to-tr from-emerald-400/15 via-cyan-400/15 to-transparent blur-3xl" />
 
-  <div className="container-page relative grid grid-cols-1 gap-8 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
-    
-    {/* =========================================================
-        LEFT CONTENT
-    ========================================================= */}
-    <div className="min-w-0">
+        <div className="container-page relative grid grid-cols-1 gap-8 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10">
 
-      {/* Course Image */}
-      {course.image && (
-        <div className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white shadow-xl ring-1 ring-slate-900/5 dark:border-white/10 dark:bg-slate-900">
-          <img
-            src={course.image}
-            alt={course.title}
-            className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] sm:h-80 lg:h-[380px]"
-          />
+          {/* =========================================================
+              LEFT CONTENT
+          ========================================================= */}
+          <div className="min-w-0">
 
-          {/* Image Overlay */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+            {/* Course Image */}
+            {course.image && (
+              <div className="group relative overflow-hidden rounded-3xl border border-white/70 bg-white shadow-xl ring-1 ring-slate-900/5 dark:border-white/10 dark:bg-slate-900">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] sm:h-80 lg:h-[380px]"
+                />
 
-          {/* Course Title */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
-            {/* <span className="inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-indigo-700 shadow-sm backdrop-blur dark:bg-slate-900/90 dark:text-indigo-300">
-              {categoryName}
-            </span> */}
+                {/* Image Overlay */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
 
-            <h1 className="mt-3 max-w-3xl text-2xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
-              {course.title}
-            </h1>
-          </div>
-        </div>
-      )}
-
-      {/* Course Meta */}
-      <div className="mt-5 flex flex-wrap gap-2.5 text-sm">
-        <span className="flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 font-medium text-indigo-700 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
-          <HiOutlineClock className="h-4 w-4" />
-          {course.duration}
-        </span>
-
-        <span className="flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3.5 py-1.5 font-medium text-violet-700 dark:border-violet-800 dark:bg-violet-900/30 dark:text-violet-300">
-          <HiOutlineAcademicCap className="h-4 w-4" />
-          {course.level}
-        </span>
-
-        {course.rating && (
-          <span className="flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-            <HiStar className="h-4 w-4 text-amber-500" />
-            {course.rating} rating
-          </span>
-        )}
-
-        {course.instructor && (
-          <span className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
-            Instructor: {course.instructor.fullName}
-          </span>
-        )}
-      </div>
-
-      <br /><br />
-
-     
-
-      {/* Quick Stats */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          {
-            icon: HiOutlineAcademicCap,
-            value: "50%+",
-            label: "Graduates & Freshers Welcome",
-            color: "from-indigo-500 to-blue-500",
-          },
-          {
-            icon: HiOutlineBriefcase,
-            value: "5+",
-            label: "Career Sessions Included",
-            color: "from-fuchsia-500 to-pink-500",
-          },
-          {
-            icon: HiOutlineGlobeAlt,
-            value: "100%",
-            label: "Online & Flexible Learning",
-            color: "from-emerald-500 to-teal-500",
-          },
-          {
-            icon: HiOutlineShieldCheck,
-            value: "14+",
-            label: "Tools Covered in Program",
-            color: "from-amber-500 to-orange-500",
-          },
-          {
-            icon: HiOutlineClock,
-            value: course.duration || "Varies",
-            label: "Program Duration",
-            color: "from-cyan-500 to-sky-500",
-          },
-          {
-            icon: HiOutlineDesktopComputer,
-            value: course.level || "Varies",
-            label: "Skill Level",
-            color: "from-violet-500 to-purple-500",
-          },
-          {
-            icon: HiStar,
-            value: "Resume & Interview Prep",
-            label: "Preparation",
-            color: "from-rose-500 to-red-500",
-          },
-          {
-            icon: HiSparkles,
-            value: course.certification
-              ? "Yes"
-              : "Microsoft Certificate",
-            label: "Certification Available",
-            color: "from-indigo-500 to-fuchsia-500",
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="group rounded-2xl border border-slate-200/70 bg-white p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-slate-900"
-          >
-            <span
-              className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-md transition-transform duration-300 group-hover:scale-110`}
-            >
-              <stat.icon className="h-5 w-5" />
-            </span>
-
-            <p className="mt-3 break-words text-lg font-extrabold leading-tight text-slate-900 dark:text-white sm:text-xl">
-              {stat.value}
-            </p>
-
-            <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* =========================================================
-        RIGHT — ENROLLMENT CARD
-    ========================================================= */}
-    <aside className="h-fit lg:sticky lg:top-24">
-      <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-2xl">
-        <div className="rounded-[23px] bg-white p-5 dark:bg-slate-900 sm:p-6">
-
-          {/* Price */}
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Course Fee
-            </p>
-
-            <p className="mt-1 text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-              {formatCurrencyUSD(course.price)}
-            </p>
-          </div>
-
-          {/* Enroll */}
-          {enrollStatus === "success" ? (
-            <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center dark:border-emerald-900 dark:bg-emerald-950/50">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-300">
-                ✓
+                {/* Course Title */}
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7">
+                  <h1 className="mt-3 max-w-3xl text-2xl font-extrabold leading-tight text-white drop-shadow-lg sm:text-3xl lg:text-4xl">
+                    {course.title}
+                  </h1>
+                </div>
               </div>
+            )}
 
-              <p className="mt-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                You're enrolled!
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-emerald-600 dark:text-emerald-400">
-                Check your dashboard for course access.
-              </p>
-            </div>
-          ) : (
-            <button
-              onClick={() => handleEnroll("full")}
-              disabled={enrollStatus === "loading"}
-              className="mt-5 w-full rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 py-3 font-bold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {enrollStatus === "loading"
-                ? "Enrolling..."
-                : "Enroll Now"}
-            </button>
-          )}
-
-          {enrollError && (
-            <p className="mt-2 text-center text-xs font-medium text-red-500">
-              {enrollError}
-            </p>
-          )}
-
-          {/* Advisor */}
-          <Link
-            to="/contact"
-            className="mt-3 block w-full rounded-xl border-2 border-indigo-200 py-3 text-center font-semibold text-indigo-700 transition-all duration-300 hover:border-indigo-300 hover:bg-indigo-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950"
-          >
-            Talk to an Advisor
-          </Link>
-
-          {/* Course Details */}
-          <div className="my-5 h-px bg-slate-200 dark:bg-white/10" />
-
-          <dl className="space-y-3.5 text-sm">
-            <div className="flex items-center justify-between gap-4">
-              <dt className="text-slate-500 dark:text-slate-400">
-                Duration
-              </dt>
-              <dd className="text-right font-semibold text-slate-900 dark:text-white">
+            {/* Course Meta */}
+            <div className="mt-5 flex flex-wrap gap-2.5 text-sm">
+              <span className="flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 font-medium text-indigo-700 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
+                <HiOutlineClock className="h-4 w-4" />
                 {course.duration}
-              </dd>
-            </div>
+              </span>
 
-            <div className="flex items-center justify-between gap-4">
-              <dt className="text-slate-500 dark:text-slate-400">
-                Level
-              </dt>
-              <dd className="text-right font-semibold text-slate-900 dark:text-white">
+              <span className="flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-3.5 py-1.5 font-medium text-violet-700 dark:border-violet-800 dark:bg-violet-900/30 dark:text-violet-300">
+                <HiOutlineAcademicCap className="h-4 w-4" />
                 {course.level}
-              </dd>
+              </span>
+
+              {course.rating && (
+                <span className="flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3.5 py-1.5 font-medium text-amber-700 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                  <HiStar className="h-4 w-4 text-amber-500" />
+                  {course.rating} rating
+                </span>
+              )}
+
+              {course.instructor && (
+                <span className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                  Instructor: {course.instructor.fullName}
+                </span>
+              )}
             </div>
 
-            <div className="flex items-center justify-between gap-4">
-              <dt className="text-slate-500 dark:text-slate-400">
-                Format
-              </dt>
-              <dd className="text-right font-semibold text-slate-900 dark:text-white">
-                Online
-              </dd>
-            </div>
-          </dl>
+            <br /><br />
 
-          {/* Trust */}
-          <div className="mt-5 rounded-xl bg-slate-50 p-3 text-center dark:bg-slate-800/70">
-            <p className="text-xs font-medium text-slate-600 dark:text-slate-300">
-              Secure enrollment • Expert-led learning
-            </p>
+            {/* Quick Stats */}
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {[
+                {
+                  icon: HiOutlineAcademicCap,
+                  value: "50%+",
+                  label: "Graduates & Freshers Welcome",
+                  color: "from-indigo-500 to-blue-500",
+                },
+                {
+                  icon: HiOutlineBriefcase,
+                  value: "5+",
+                  label: "Career Sessions Included",
+                  color: "from-fuchsia-500 to-pink-500",
+                },
+                {
+                  icon: HiOutlineGlobeAlt,
+                  value: "100%",
+                  label: "Online & Flexible Learning",
+                  color: "from-emerald-500 to-teal-500",
+                },
+                {
+                  icon: HiOutlineShieldCheck,
+                  value: "14+",
+                  label: "Tools Covered in Program",
+                  color: "from-amber-500 to-orange-500",
+                },
+                {
+                  icon: HiOutlineClock,
+                  value: course.duration || "Varies",
+                  label: "Program Duration",
+                  color: "from-cyan-500 to-sky-500",
+                },
+                {
+                  icon: HiOutlineDesktopComputer,
+                  value: course.level || "Varies",
+                  label: "Skill Level",
+                  color: "from-violet-500 to-purple-500",
+                },
+                {
+                  icon: HiStar,
+                  value: "Resume & Interview Prep",
+                  label: "Preparation",
+                  color: "from-rose-500 to-red-500",
+                },
+                {
+                  icon: HiSparkles,
+                  value: course.certification
+                    ? "Yes"
+                    : "Microsoft Certificate",
+                  label: "Certification Available",
+                  color: "from-indigo-500 to-fuchsia-500",
+                },
+              ].map((stat) => (
+                <div
+                  key={stat.label}
+                  className="group rounded-2xl border border-slate-200/70 bg-white p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-slate-900"
+                >
+                  <span
+                    className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color} text-white shadow-md transition-transform duration-300 group-hover:scale-110`}
+                  >
+                    <stat.icon className="h-5 w-5" />
+                  </span>
+
+                  <p className="mt-3 break-words text-lg font-extrabold leading-tight text-slate-900 dark:text-white sm:text-xl">
+                    {stat.value}
+                  </p>
+
+                  <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* =========================================================
+              RIGHT — ENROLLMENT CARD
+          ========================================================= */}
+          <aside className="h-fit lg:sticky lg:top-24">
+            <div className="rounded-3xl bg-gradient-to-br from-indigo-600 via-violet-600 to-fuchsia-600 p-[1px] shadow-2xl">
+              <div className="rounded-[23px] bg-white p-5 dark:bg-slate-900 sm:p-6">
+
+                {/* Price */}
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    Course Fee
+                  </p>
+
+                  <p className="mt-1 text-4xl font-black tracking-tight text-slate-900 dark:text-white">
+                    {formatCurrencyUSD(course.price)}
+                  </p>
+                </div>
+
+                {/* Enroll */}
+                {enrollStatus === "success" ? (
+                  <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center dark:border-emerald-900 dark:bg-emerald-950/50">
+                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-300">
+                      ✓
+                    </div>
+
+                    <p className="mt-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                      You're enrolled!
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-emerald-600 dark:text-emerald-400">
+                      Check your dashboard for course access.
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleEnroll("full")}
+                    disabled={enrollStatus === "loading"}
+                    className="mt-5 w-full rounded-xl bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 py-3 font-bold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {enrollStatus === "loading"
+                      ? "Enrolling..."
+                      : "Enroll Now"}
+                  </button>
+                )}
+
+                {enrollError && (
+                  <p className="mt-2 text-center text-xs font-medium text-red-500">
+                    {enrollError}
+                  </p>
+                )}
+
+                {/* Advisor */}
+                <Link
+                  to="/contact"
+                  className="mt-3 block w-full rounded-xl border-2 border-indigo-200 py-3 text-center font-semibold text-indigo-700 transition-all duration-300 hover:border-indigo-300 hover:bg-indigo-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950"
+                >
+                  Talk to an Advisor
+                </Link>
+
+                {/* Course Details */}
+                <div className="my-5 h-px bg-slate-200 dark:bg-white/10" />
+
+                <dl className="space-y-3.5 text-sm">
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-slate-500 dark:text-slate-400">
+                      Duration
+                    </dt>
+                    <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                      {course.duration}
+                    </dd>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-slate-500 dark:text-slate-400">
+                      Level
+                    </dt>
+                    <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                      {course.level}
+                    </dd>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-4">
+                    <dt className="text-slate-500 dark:text-slate-400">
+                      Format
+                    </dt>
+                    <dd className="text-right font-semibold text-slate-900 dark:text-white">
+                      Online
+                    </dd>
+                  </div>
+                </dl>
+
+                {/* Trust */}
+                <div className="mt-5 rounded-xl bg-slate-50 p-3 text-center dark:bg-slate-800/70">
+                  <p className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                    Secure enrollment • Expert-led learning
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Overview */}
+            <div className="mt-10">
+              <h2 className="section-title bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                Overview
+              </h2>
+
+              <p className="mt-4 max-w-4xl text-justify text-[15px] leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
+                {course.description ||
+                  `This program takes you from fundamentals to job-ready skills in ${categoryName.toLowerCase()}, combining live instruction, hands-on projects, and mentor feedback across ${(course.duration || "the program").toLowerCase()}.`}
+              </p>
+            </div>
+          </aside>
+
         </div>
-      </div>
-       {/* Overview */}
-      <div className="mt-10">
-        <h2 className="section-title bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
-          Overview
-        </h2>
-
-        <p className="mt-4 max-w-4xl text-justify text-[15px] leading-7 text-slate-600 dark:text-slate-300 sm:text-base">
-  {course.description ||
-    `This program takes you from fundamentals to job-ready skills in ${categoryName.toLowerCase()}, combining live instruction, hands-on projects, and mentor feedback across ${(course.duration || "the program").toLowerCase()}.`}
-</p>
-      </div>
-    </aside>
-
-    
-  </div>
-</section>
+      </section>
 
       {/* ---------------- TOOLS COVERED ---------------- */}
       <section className="bg-gradient-to-b from-slate-50 to-white py-16 dark:from-slate-900/40 dark:to-slate-950">
-  <div className="container-page">
-    <SectionHeading
-      center
-      eyebrow="Hands-On Toolkit"
-      title={`${course.title} Tools Covered`}
-      subtitle="Master industry-leading tools used by professionals worldwide."
-    />
+        <div className="container-page">
+          <SectionHeading
+            center
+            eyebrow="Hands-On Toolkit"
+            title={`${course.title} Tools Covered`}
+            subtitle="Master industry-leading tools used by professionals worldwide."
+          />
 
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-      {tools.map((tool, idx) => (
-        <div
-          key={tool}
-          className="group flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-800 dark:ring-slate-700"
-        >
-          <span
-            className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${
-              TOOL_COLORS[idx % TOOL_COLORS.length]
-            } text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
-          >
-            <HiOutlineShieldCheck className="h-6 w-6" />
-          </span>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {tools.map((tool, idx) => (
+              <div
+                key={tool}
+                className="group flex flex-col items-center justify-center rounded-2xl bg-white p-6 text-center shadow-md ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-800 dark:ring-slate-700"
+              >
+                <span
+                  className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${
+                    TOOL_COLORS[idx % TOOL_COLORS.length]
+                  } text-white shadow-lg transition-transform duration-300 group-hover:scale-110`}
+                >
+                  <HiOutlineShieldCheck className="h-6 w-6" />
+                </span>
 
-          <h3 className="text-sm font-semibold leading-6 text-slate-800 dark:text-slate-100">
-            {tool}
-          </h3>
+                <h3 className="text-sm font-semibold leading-6 text-slate-800 dark:text-slate-100">
+                  {tool}
+                </h3>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* ---------------- WHY CHOOSE US ---------------- */}
       <section className="container-page py-16">
@@ -676,341 +706,340 @@ const CourseDetails = () => {
       </section>
 
       {/* ---------------- CERTIFICATION / REGISTER CTA ---------------- */}
-     <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-700 to-fuchsia-700 py-16 sm:py-20 lg:py-24">
-  {/* ===================== BACKGROUND EFFECTS ===================== */}
-  <div className="pointer-events-none absolute inset-0">
-    <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-    <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl" />
-    <div className="absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-400/10 blur-3xl" />
-  </div>
-
-  {/* Subtle grid */}
-  <div
-    className="pointer-events-none absolute inset-0 opacity-[0.06]"
-    style={{
-      backgroundImage:
-        "linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px)",
-      backgroundSize: "40px 40px",
-    }}
-  />
-
-  <div className="container-page relative">
-    <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-
-      {/* =========================================================
-          LEFT — CERTIFICATES
-      ========================================================== */}
-      <div className="relative">
-
-        {/* Heading */}
-        <div className="mb-8 max-w-xl">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm backdrop-blur-md">
-            <HiOutlineSparkles className="h-3.5 w-3.5" />
-            Earn Recognized Certificates
-          </div>
-
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Learn. Complete.{" "}
-            <span className="text-white/80">Get Certified.</span>
-          </h2>
-
-          <p className="mt-3 max-w-lg text-sm leading-6 text-white/75 sm:text-base">
-            Successfully complete the program and showcase your achievement
-            with certificates from recognized organizations.
-          </p>
+      <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-700 to-fuchsia-700 py-16 sm:py-20 lg:py-24">
+        {/* ===================== BACKGROUND EFFECTS ===================== */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-fuchsia-400/20 blur-3xl" />
+          <div className="absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-400/10 blur-3xl" />
         </div>
 
-        {/* Certificate cards */}
-        <div className="relative grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {/* Subtle grid */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.8) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
 
-          {/* =====================================================
-              CERTIFICATE 1 — AMERICAN FUTURETECH
-          ====================================================== */}
-          <div className="group relative">
+        <div className="container-page relative">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
 
-            {/* Floating label */}
-            <div className="absolute -top-3 left-5 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-indigo-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Course Completion
-            </div>
+            {/* =========================================================
+                LEFT — CERTIFICATES
+            ========================================================== */}
+            <div className="relative">
 
-            <div className="relative overflow-hidden rounded-2xl border border-white/30 bg-white shadow-2xl transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_rgba(0,0,0,0.25)] dark:bg-slate-900">
+              {/* Heading */}
+              <div className="mb-8 max-w-xl">
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm backdrop-blur-md">
+                  <HiOutlineSparkles className="h-3.5 w-3.5" />
+                  Earn Recognized Certificates
+                </div>
 
-              {/* Certificate image */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                <img
-                  src="/static/images/dsai.jpeg"
-                  alt="American FutureTech Certificate of Completion"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
+                <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                  Learn. Complete.{" "}
+                  <span className="text-white/80">Get Certified.</span>
+                </h2>
 
-                {/* Image overlay */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
+                <p className="mt-3 max-w-lg text-sm leading-6 text-white/75 sm:text-base">
+                  Successfully complete the program and showcase your achievement
+                  with certificates from recognized organizations.
+                </p>
+              </div>
 
-                {/* Issuer badge */}
-                <div className="absolute bottom-3 left-3 rounded-lg border border-white/30 bg-black/45 px-3 py-2 text-white shadow-lg backdrop-blur-md">
-                  <p className="text-[9px] font-medium uppercase tracking-wider text-white/70">
-                    Issued by
-                  </p>
-                  <p className="text-xs font-bold">
-                    American FutureTech
-                  </p>
+              {/* Certificate cards */}
+              <div className="relative grid grid-cols-1 gap-6 sm:grid-cols-2">
+
+                {/* =====================================================
+                    CERTIFICATE 1 — AMERICAN FUTURETECH
+                ====================================================== */}
+                <div className="group relative">
+
+                  {/* Floating label */}
+                  <div className="absolute -top-3 left-5 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-indigo-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    Course Completion
+                  </div>
+
+                  <div className="relative overflow-hidden rounded-2xl border border-white/30 bg-white shadow-2xl transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_rgba(0,0,0,0.25)] dark:bg-slate-900">
+
+                    {/* Certificate image */}
+                    <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                      <img
+                        src={certificateImages.completionImage}
+                        alt="American FutureTech Certificate of Completion"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+
+                      {/* Image overlay */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
+
+                      {/* Issuer badge */}
+                      <div className="absolute bottom-3 left-3 rounded-lg border border-white/30 bg-black/45 px-3 py-2 text-white shadow-lg backdrop-blur-md">
+                        <p className="text-[9px] font-medium uppercase tracking-wider text-white/70">
+                          Issued by
+                        </p>
+                        <p className="text-xs font-bold">
+                          American FutureTech
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Card content */}
+                    <div className="p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                            Certificate of Completion
+                          </h3>
+
+                          <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                            Awarded to learners who successfully complete{" "}
+                            <strong>{course.title}</strong>.
+                          </p>
+                        </div>
+
+                        {/* Verified icon */}
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="h-4 w-4"
+                          >
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+                        <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                          Successfully Completed
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* =====================================================
+                    CERTIFICATE 2 — MICROSOFT
+                ====================================================== */}
+                <div className="group relative ">
+
+                  {/* Floating label */}
+                  <div className="absolute -top-3 left-5 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-700 shadow-lg">
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                    Microsoft Certificate
+                  </div>
+
+                  <div className="relative overflow-hidden rounded-2xl border border-white/30 bg-white shadow-2xl transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_rgba(0,0,0,0.25)] dark:bg-slate-900">
+
+                    {/* Certificate image */}
+                    <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+                      <img
+                        src={certificateImages.microsoftImage}
+                        alt="Microsoft Certificate of Excellence"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      />
+
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
+
+                      {/* Microsoft badge */}
+                      <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-lg border border-white/30 bg-black/45 px-3 py-2 text-white shadow-lg backdrop-blur-md">
+                        <div className="grid grid-cols-2 gap-[2px]">
+                          <span className="h-2 w-2 bg-red-500" />
+                          <span className="h-2 w-2 bg-green-500" />
+                          <span className="h-2 w-2 bg-blue-500" />
+                          <span className="h-2 w-2 bg-yellow-500" />
+                        </div>
+
+                        <div>
+                          <p className="text-[9px] font-medium uppercase tracking-wider text-white/70">
+                            Issued by
+                          </p>
+                          <p className="text-xs font-bold">
+                            Microsoft
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card content */}
+                    <div className="p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                            Microsoft Certificate
+                          </h3>
+
+                          <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                            Earn an additional certificate from{" "}
+                            <strong>Microsoft</strong> upon meeting the program's
+                            required criteria.
+                          </p>
+                        </div>
+
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="h-4 w-4"
+                          >
+                            <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+                        <span className="h-2 w-2 rounded-full bg-blue-600" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                          Microsoft Issued
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Card content */}
-              <div className="p-5 sm:p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-                      Certificate of Completion
-                    </h3>
+              {/* Bottom trust line */}
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/70 sm:justify-start">
+                <span className="flex items-center gap-1.5">
+                  <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
+                  Completion Recognition
+                </span>
 
-                    <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
-                      Awarded to learners who successfully complete{" "}
-                      <strong>{course.title}</strong>.
-                    </p>
-                  </div>
+                <span className="hidden h-1 w-1 rounded-full bg-white/30 sm:block" />
 
-                  {/* Verified icon */}
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-4 w-4"
-                    >
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  </div>
-                </div>
+                <span className="flex items-center gap-1.5">
+                  <HiOutlineCheckCircle className="h-4 w-4 text-blue-300" />
+                  Microsoft Certification
+                </span>
+              </div>
+            </div>
 
-                <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                    Successfully Completed
+
+            {/* =========================================================
+                RIGHT — REGISTRATION CTA
+            ========================================================== */}
+            <div className="relative">
+
+              {/* CTA card */}
+              <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-7 shadow-2xl backdrop-blur-xl sm:p-9">
+
+                {/* Decorative shine */}
+                <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+
+                {/* Status */}
+                <div className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                   </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          {/* =====================================================
-              CERTIFICATE 2 — MICROSOFT
-          ====================================================== */}
-          <div className="group relative sm:mt-8">
-
-            {/* Floating label */}
-            <div className="absolute -top-3 left-5 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-slate-700 shadow-lg">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-              Microsoft Certificate
-            </div>
-
-            <div className="relative overflow-hidden rounded-2xl border border-white/30 bg-white shadow-2xl transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_25px_60px_rgba(0,0,0,0.25)] dark:bg-slate-900">
-
-              {/* Certificate image */}
-              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
-                <img
-                  src="/static/images/microsoftcertificate.jpg"
-                  alt="Microsoft Certificate of Excellence"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
-
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10" />
-
-                {/* Microsoft badge */}
-                <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-lg border border-white/30 bg-black/45 px-3 py-2 text-white shadow-lg backdrop-blur-md">
-                  <div className="grid grid-cols-2 gap-[2px]">
-                    <span className="h-2 w-2 bg-red-500" />
-                    <span className="h-2 w-2 bg-green-500" />
-                    <span className="h-2 w-2 bg-blue-500" />
-                    <span className="h-2 w-2 bg-yellow-500" />
-                  </div>
-
-                  <div>
-                    <p className="text-[9px] font-medium uppercase tracking-wider text-white/70">
-                      Issued by
-                    </p>
-                    <p className="text-xs font-bold">
-                      Microsoft
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card content */}
-              <div className="p-5 sm:p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
-                      Microsoft Certificate
-                    </h3>
-
-                    <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
-                      Earn an additional certificate from{" "}
-                      <strong>Microsoft</strong> upon meeting the program's
-                      required criteria.
-                    </p>
-                  </div>
-
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="h-4 w-4"
-                    >
-                      <path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3z" />
-                    </svg>
-                  </div>
+                  Limited Seats Available
                 </div>
 
-                <div className="mt-5 flex items-center gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <span className="h-2 w-2 rounded-full bg-blue-600" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                    Microsoft Issued
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom trust line */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/70 sm:justify-start">
-          <span className="flex items-center gap-1.5">
-            <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
-            Completion Recognition
-          </span>
-
-          <span className="hidden h-1 w-1 rounded-full bg-white/30 sm:block" />
-
-          <span className="flex items-center gap-1.5">
-            <HiOutlineCheckCircle className="h-4 w-4 text-blue-300" />
-            Microsoft Certification
-          </span>
-        </div>
-      </div>
-
-
-      {/* =========================================================
-          RIGHT — REGISTRATION CTA
-      ========================================================== */}
-      <div className="relative">
-
-        {/* CTA card */}
-        <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-7 shadow-2xl backdrop-blur-xl sm:p-9">
-
-          {/* Decorative shine */}
-          <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
-
-          {/* Status */}
-          <div className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            Limited Seats Available
-          </div>
-
-          <h2 className="relative mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
-            Register Now
-          </h2>
-
-          <p className="relative mt-4 text-sm leading-6 text-white/80 sm:text-base">
-            Secure your place in the program, learn from experienced mentors,
-            and earn certificates that showcase your achievement.
-          </p>
-
-          {/* Benefits */}
-          <div className="relative mt-6 space-y-3">
-            <div className="flex items-center gap-3 text-sm text-white/90">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
-                <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
-              </span>
-              Complete the course successfully
-            </div>
-
-            <div className="flex items-center gap-3 text-sm text-white/90">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
-                <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
-              </span>
-              Receive your completion certificate
-            </div>
-
-            <div className="flex items-center gap-3 text-sm text-white/90">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
-                <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
-              </span>
-              Eligible learners receive Microsoft certification
-            </div>
-          </div>
-
-          {/* CTA buttons */}
-          <div className="relative mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
-
-            <button
-              onClick={() => handleEnroll("registration")}
-              disabled={enrollStatus === "loading"}
-              className="group inline-flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-extrabold text-indigo-700 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {enrollStatus === "loading" ? (
-                <>
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-700" />
-                  Enrolling...
-                </>
-              ) : (
-                <>
+                <h2 className="relative mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
                   Register Now
-                  <span className="rounded-md bg-indigo-50 px-2 py-0.5 text-xs">
-                    {formatCurrencyUSD(course.instructorId)}
-                  </span>
-                  <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </>
-              )}
-            </button>
+                </h2>
 
-            <Link
-              to="/contact"
-              className="inline-flex min-h-[48px] flex-1 items-center justify-center rounded-xl border border-white/40 bg-white/5 px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/15"
-            >
-              Talk to an Advisor
-            </Link>
-          </div>
+                <p className="relative mt-4 text-sm leading-6 text-white/80 sm:text-base">
+                  Secure your place in the program, learn from experienced mentors,
+                  and earn certificates that showcase your achievement.
+                </p>
 
-          {/* Confirmation note */}
-          <div className="relative mt-6 flex gap-3 rounded-xl border border-white/10 bg-black/10 p-3.5">
-            <HiOutlineMail className="mt-0.5 h-5 w-5 shrink-0 text-white/80" />
+                {/* Benefits */}
+                <div className="relative mt-6 space-y-3">
+                  <div className="flex items-center gap-3 text-sm text-white/90">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
+                      <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
+                    </span>
+                    Complete the course successfully
+                  </div>
 
-            <p className="text-xs leading-5 text-white/70">
-              <strong className="text-white">After registration:</strong>{" "}
-              you'll receive a confirmation email with the next steps and
-              program instructions.
-            </p>
-          </div>
+                  <div className="flex items-center gap-3 text-sm text-white/90">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
+                      <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
+                    </span>
+                    Receive your completion certificate
+                  </div>
 
-          {/* Secure registration */}
-          <div className="relative mt-5 flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-white/50">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-3.5 w-3.5"
-            >
-              <rect x="5" y="11" width="14" height="10" rx="2" />
-              <path d="M8 11V8a4 4 0 018 0v3" />
-            </svg>
-            Secure Registration
+                  <div className="flex items-center gap-3 text-sm text-white/90">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">
+                      <HiOutlineCheckCircle className="h-4 w-4 text-emerald-300" />
+                    </span>
+                    Eligible learners receive Microsoft certification
+                  </div>
+                </div>
+
+                {/* CTA buttons */}
+                <div className="relative mt-8 flex w-full flex-row gap-3">
+                  <button
+                    onClick={() => handleEnroll("registration")}
+                    disabled={enrollStatus === "loading"}
+                    className="group inline-flex min-h-[52px] w-1/2 flex-1 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-extrabold text-indigo-700 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {enrollStatus === "loading" ? (
+                      <>
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-700" />
+                        Enrolling...
+                      </>
+                    ) : (
+                      <>
+                        Register Now
+                        <span className="rounded-md bg-indigo-50 px-2.5 py-1 text-xs">
+                          {formatCurrencyUSD(course.instructorId)}
+                        </span>
+                        <HiOutlineArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="relative mt-3 flex w-full flex-row gap-3">
+                  <Link
+                    to="/contact"
+                    className="inline-flex min-h-[52px] w-1/2 flex-1 items-center justify-center rounded-xl border border-white/40 bg-white/5 px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-1 hover:bg-white/15"
+                  >
+                    Talk to an Advisor
+                  </Link>
+                </div>
+
+                {/* Confirmation note */}
+                <div className="relative mt-6 flex gap-3 rounded-xl border border-white/10 bg-black/10 p-3.5">
+                  <HiOutlineMail className="mt-0.5 h-5 w-5 shrink-0 text-white/80" />
+
+                  <p className="text-xs leading-5 text-white/70">
+                    <strong className="text-white">After registration:</strong>{" "}
+                    you'll receive a confirmation email with the next steps and
+                    program instructions.
+                  </p>
+                </div>
+
+                {/* Secure registration */}
+                <div className="relative mt-5 flex items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-white/50">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-3.5 w-3.5"
+                  >
+                    <rect x="5" y="11" width="14" height="10" rx="2" />
+                    <path d="M8 11V8a4 4 0 018 0v3" />
+                  </svg>
+                  Secure Registration
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       <CTA />
     </>
