@@ -35,16 +35,16 @@ import { COURSE_CONTENT, getCourseContentKey } from "../data/courseContent";
 ========================================================= */
 const COURSE_CERTIFICATES = {
   "1": {
-    completionImage: "/static/images/cseh.jpeg",
-    microsoftImage: "/static/images/microsoft.jpg",
+    completionImage: "/static/images/dsai.jpeg",
+    microsoftImage: "/static/images/microsoftcertificate.jpg",
   },
   "2": {
     completionImage: "/static/images/csai.jpeg",
     microsoftImage: "/static/images/microsoftsc.jpg",
   },
   "3": {
-    completionImage: "/static/images/dsai.jpeg",
-    microsoftImage: "/static/images/microsoftcertificate.jpg",
+    completionImage: "/static/images/cseh.jpeg",
+    microsoftImage: "/static/images/microsoftsc.jpg",
   },
   // Naya course add karna ho to yahan uski ID daal kar images set karein:
   // "4": {
