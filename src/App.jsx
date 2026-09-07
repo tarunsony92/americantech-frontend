@@ -53,12 +53,13 @@ const CourseLessons = lazy(() => import("./pages/CourseLearn"));
 const MyQuizzes = lazy(() => import("./pages/dashboard/MyQuizzes"));
 const TakeQuiz = lazy(() => import("./pages/dashboard/TakeQuiz"));
 const QuizResult = lazy(() => import("./pages/dashboard/QuizResult"));
-
+const StudentQuizzes = lazy(() => import("./pages/dashboard/StudentQuizzes"));
 
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const ManageUsers = lazy(() => import("./pages/admin/ManageUsers"));
 const ManageCourses = lazy(() => import("./pages/admin/ManageCourses"));
+const CourseFormPage = lazy(() => import("./pages/admin/CourseFormPage"));
 const ManageBlogs = lazy(() => import("./pages/admin/ManageBlogs"));
 const ManageJobs = lazy(() => import("./pages/admin/ManageJobs"));
 const ManageApplications = lazy(() => import("./pages/admin/ManageApplications"));
@@ -88,8 +89,6 @@ const ManageQuizzes = lazy(() => import("./pages/admin/ManageQuizzes"));
 const QuizEditor = lazy(() => import("./pages/admin/QuizEditor"));
 const QuizAttempts = lazy(() => import("./pages/admin/QuizAttempts"));
 const ManageQuizBatches = lazy(() => import("./pages/admin/ManageQuizBatches"));
-const StudentQuizzes = lazy(() => import("./pages/dashboard/StudentQuizzes"));
-
 
 const PageFallback = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -131,10 +130,6 @@ function App() {
                 <Route path="/jobscourse" element={<JobCareers />} />
                 <Route path="/jobscourse/:id" element={<CourseJobDetails />} />
                 <Route path="/jobscourse/:id/apply" element={<ApplyJob />} />
-
-                 
-
-
               </Route>
 
               {/* Auth — user portal */}
@@ -154,22 +149,16 @@ function App() {
                 <Route element={<DashboardLayout />}>
                   <Route path="/dashboard" element={<Overview />} />
                   <Route path="/dashboard/courses" element={<MyCourses />} />
-                  <Route path="/dashboard/quizzes" element={<MyQuizzes />} /> 
+                  <Route path="/dashboard/quizzes" element={<MyQuizzes />} />
                   <Route path="/dashboard/certificates" element={<MyCertificates />} />
                   <Route path="/dashboard/applications" element={<MyApplications />} />
                   <Route path="/dashboard/profile" element={<Profile />} />
                   <Route path="/dashboard/courses/:id/learn" element={<CourseLearn />} />
                   <Route path="/dashboard/courses/:id/modules" element={<CourseModules />} />
                   <Route path="/dashboard/courses/:courseId/modules/:moduleId/lessons/:lessonId" element={<CourseLessons />} />
-                     <Route
-      path="/dashboard/batches/:batchId/quizzes"
-      element={<StudentQuizzes />}
-    />
-    <Route path="/dashboard/quizzes/:quizId/attempt" element={<TakeQuiz />} />
-    <Route
-      path="/dashboard/quizzes/:quizId/result/:attemptId"
-      element={<QuizResult />}
-    />
+                  <Route path="/dashboard/batches/:batchId/quizzes" element={<StudentQuizzes />} />
+                  <Route path="/dashboard/quizzes/:quizId/attempt" element={<TakeQuiz />} />
+                  <Route path="/dashboard/quizzes/:quizId/result/:attemptId" element={<QuizResult />} />
                 </Route>
               </Route>
 
@@ -181,6 +170,8 @@ function App() {
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/admin/users" element={<ManageUsers />} />
                   <Route path="/admin/courses" element={<ManageCourses />} />
+                  <Route path="/admin/courses/new" element={<CourseFormPage />} />
+                  <Route path="/admin/courses/:id/edit" element={<CourseFormPage />} />
                   <Route path="/admin/blogs" element={<ManageBlogs />} />
                   <Route path="/admin/jobs" element={<ManageJobs />} />
                   <Route path="/admin/applications" element={<ManageApplications />} />
@@ -200,31 +191,15 @@ function App() {
                   <Route path="/admin/coursejobs" element={<CourseJobs />} />
                   <Route path="/admin/coursejobs/new" element={<CourseJobForm />} />
                   <Route path="/admin/coursejobs/:id/edit" element={<CourseJobForm />} />
-                  <Route path="/admin/courses" element={<ManageCourses />} />
                   <Route path="/admin/course-modules" element={<ManageCourseModules />} />
                   <Route path="/admin/lessons" element={<ManageLessons />} />
                   <Route path="/admin/lesson-notes" element={<ManageLessonNotes />} />
                   <Route path="/admin/batches" element={<BatchManagement />} />
                   <Route path="/admin/users/:id" element={<UserDetailPage />} />
-                 <Route
-  path="/admin/quizzes"
-  element={<ManageQuizBatches />}
-/>
-
-<Route
-  path="/admin/quizzes/:batchId"
-  element={<ManageQuizzes />}
-/>
-
-<Route
-  path="/admin/quizzes/:quizId/edit"
-  element={<QuizEditor />}
-/>
-
-<Route
-  path="/admin/quizzes/:quizId/attempts"
-  element={<QuizAttempts />}
-/>
+                  <Route path="/admin/quizzes" element={<ManageQuizBatches />} />
+                  <Route path="/admin/quizzes/:batchId" element={<ManageQuizzes />} />
+                  <Route path="/admin/quizzes/:quizId/edit" element={<QuizEditor />} />
+                  <Route path="/admin/quizzes/:quizId/attempts" element={<QuizAttempts />} />
                 </Route>
               </Route>
 

@@ -34,16 +34,7 @@ const NAV_LINKS = [
   {
     label: "Courses",
     to: "/courses",
-    children: [
-      {
-        label: "All Courses",
-        to: "/courses",
-      },
-      {
-        label: "Certifications",
-        to: "/certifications",
-      },
-    ],
+    
   },
 
   {
