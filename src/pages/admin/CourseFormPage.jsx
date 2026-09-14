@@ -27,9 +27,18 @@ const EMPTY_FORM = {
 
 const LEVEL_OPTIONS = ["Beginner", "Intermediate", "Advanced"];
 
-// ---- Small repeater for {title, desc} items (used for Curriculum) ----
+// Normalizes a module's desc into an array of point strings, whether it was
+// previously stored as a plain string (legacy data) or already an array.
+const normalizeDescPoints = (desc) => {
+  if (Array.isArray(desc)) return desc;
+  if (typeof desc === "string" && desc.trim()) return [desc.trim()];
+  return [];
+};
+
+// ---- Small repeater for {title, desc: string[]} items (used for Curriculum) ----
+// `desc` is stored/sent as a JSON array of bullet points instead of plain text.
 const CurriculumRepeater = ({ values, onChange }) => {
-  const addItem = () => onChange([...values, { title: "", desc: "" }]);
+  const addItem = () => onChange([...values, { title: "", desc: [] }]);
   const updateItem = (idx, field, val) => {
     const next = [...values];
     next[idx] = { ...next[idx], [field]: val };
@@ -37,40 +46,103 @@ const CurriculumRepeater = ({ values, onChange }) => {
   };
   const removeItem = (idx) => onChange(values.filter((_, i) => i !== idx));
 
+  // Draft text for the "add a point" input, keyed by module index
+  const [pointDraft, setPointDraft] = useState({});
+
+  const addPoint = (idx) => {
+    const text = (pointDraft[idx] || "").trim();
+    if (!text) return;
+    const points = normalizeDescPoints(values[idx].desc);
+    updateItem(idx, "desc", [...points, text]);
+    setPointDraft((d) => ({ ...d, [idx]: "" }));
+  };
+
+  const removePoint = (idx, pointIdx) => {
+    const points = normalizeDescPoints(values[idx].desc);
+    updateItem(idx, "desc", points.filter((_, i) => i !== pointIdx));
+  };
+
+  const handlePointKeyDown = (idx, e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addPoint(idx);
+    }
+  };
+
   return (
     <div>
       <label className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
         Curriculum (Modules)
       </label>
       <div className="space-y-3">
-        {values.map((item, idx) => (
-          <div key={idx} className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">Module {idx + 1}</span>
-              <button
-                type="button"
-                onClick={() => removeItem(idx)}
-                className="text-xs font-semibold text-red-500 hover:text-red-700"
-              >
-                Remove
-              </button>
+        {values.map((item, idx) => {
+          const points = normalizeDescPoints(item.desc);
+          return (
+            <div key={idx} className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
+              <div className="mb-2 flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500">Module {idx + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => removeItem(idx)}
+                  className="text-xs font-semibold text-red-500 hover:text-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Module title (e.g. Module 1: Foundations)"
+                value={item.title}
+                onChange={(e) => updateItem(idx, "title", e.target.value)}
+                className="mb-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+              />
+
+              {/* Description points (stored as JSON array, not free text) */}
+              <label className="mb-1 block text-xs font-medium text-slate-500">
+                Description Points
+              </label>
+
+              {points.length > 0 && (
+                <ul className="mb-2 space-y-1.5">
+                  {points.map((pt, pIdx) => (
+                    <li
+                      key={pIdx}
+                      className="flex items-start justify-between gap-2 rounded-md bg-slate-50 px-2.5 py-1.5 text-sm text-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
+                    >
+                      <span className="flex-1">• {pt}</span>
+                      <button
+                        type="button"
+                        onClick={() => removePoint(idx, pIdx)}
+                        className="text-xs font-semibold text-red-500 hover:text-red-700"
+                      >
+                        ✕
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Type a point and press Enter"
+                  value={pointDraft[idx] || ""}
+                  onChange={(e) => setPointDraft((d) => ({ ...d, [idx]: e.target.value }))}
+                  onKeyDown={(e) => handlePointKeyDown(idx, e)}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
+                />
+                <button
+                  type="button"
+                  onClick={() => addPoint(idx)}
+                  className="rounded-lg border border-indigo-200 px-3 text-xs font-semibold text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-300 dark:hover:bg-indigo-950"
+                >
+                  Add
+                </button>
+              </div>
             </div>
-            <input
-              type="text"
-              placeholder="Module title (e.g. Module 1: Foundations)"
-              value={item.title}
-              onChange={(e) => updateItem(idx, "title", e.target.value)}
-              className="mb-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-            />
-            <textarea
-              rows={2}
-              placeholder="Module description"
-              value={item.desc}
-              onChange={(e) => updateItem(idx, "desc", e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-slate-600 dark:bg-slate-900"
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
       <button
         type="button"
@@ -176,7 +248,10 @@ const CourseFormPage = () => {
           tools: course.tools || [],
           eligibility: course.eligibility || [],
           careerRoles: course.careerRoles || [],
-          curriculum: course.curriculum || [],
+          curriculum: (course.curriculum || []).map((m) => ({
+            ...m,
+            desc: normalizeDescPoints(m.desc),
+          })),
           capstoneProjects: course.capstoneProjects || [],
         });
       })

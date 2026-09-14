@@ -43,14 +43,15 @@ const DEFAULT_TOOLS = [
   "Python", "Kali Linux", "Nmap", "Metasploit", "Wireshark", "Burp Suite", "Nessus", "Hashcat",
 ];
 
+ 
 const DEFAULT_CURRICULUM = [
-  { title: "Module 1: Foundations & Core Concepts", desc: "Build the base knowledge you'll rely on through the rest of the program." },
-  { title: "Module 2: Core Tools & Environment Setup", desc: "Get hands-on with the primary tools and workflows used in the field." },
-  { title: "Module 3: Hands-On Project Sprint 1", desc: "Apply what you've learned to a guided, real-world style project." },
-  { title: "Module 4: Advanced Topics & Techniques", desc: "Go deeper into advanced concepts and industry-standard practices." },
-  { title: "Module 5: Hands-On Project Sprint 2", desc: "A second project sprint to reinforce and extend your skills." },
-  { title: "Module 6: Capstone Project", desc: "Bring everything together in a portfolio-ready capstone build." },
-  { title: "Module 7: Interview Preparation & Mock Interviews", desc: "Resume building, mock interviews and career guidance to help you land the role." },
+  { title: "Module 1: Foundations & Core Concepts", desc: ["Build the base knowledge you'll rely on through the rest of the program."] },
+  { title: "Module 2: Core Tools & Environment Setup", desc: ["Get hands-on with the primary tools and workflows used in the field."] },
+  { title: "Module 3: Hands-On Project Sprint 1", desc: ["Apply what you've learned to a guided, real-world style project."] },
+  { title: "Module 4: Advanced Topics & Techniques", desc: ["Go deeper into advanced concepts and industry-standard practices."] },
+  { title: "Module 5: Hands-On Project Sprint 2", desc: ["A second project sprint to reinforce and extend your skills."] },
+  { title: "Module 6: Capstone Project", desc: ["Bring everything together in a portfolio-ready capstone build."] },
+  { title: "Module 7: Interview Preparation & Mock Interviews", desc: ["Resume building, mock interviews and career guidance to help you land the role."] },
 ];
 
 const DEFAULT_CAPSTONE_PROJECTS = [
@@ -142,34 +143,46 @@ const SectionHeading = ({ eyebrow, title, subtitle, center, accent = "text-prima
   </div>
 );
 
-const AccordionItem = ({ item, isOpen, onToggle, color }) => (
-  <div
-    className={`overflow-hidden rounded-xl border-2 bg-white shadow-sm transition-colors dark:bg-slate-800/50 ${
-      isOpen ? "border-transparent" : "border-slate-200 dark:border-slate-700"
-    }`}
-  >
-    <button
-      type="button"
-      onClick={onToggle}
-      className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left ${
-        isOpen ? `bg-gradient-to-r ${color} text-white` : ""
+const AccordionItem = ({ item, isOpen, onToggle, color }) => {
+  const points = Array.isArray(item.desc)
+    ? item.desc
+    : item.desc
+    ? [item.desc]
+    : [];
+ 
+  return (
+    <div
+      className={`overflow-hidden rounded-xl border-2 bg-white shadow-sm transition-colors dark:bg-slate-800/50 ${
+        isOpen ? "border-transparent" : "border-slate-200 dark:border-slate-700"
       }`}
     >
-      <span className={`font-semibold ${isOpen ? "text-white" : "text-slate-800 dark:text-slate-100"}`}>
-        {item.title}
-      </span>
-      <HiChevronDown
-        className={`h-5 w-5 flex-shrink-0 transition-transform ${isOpen ? "rotate-180 text-white" : "text-slate-400"}`}
-      />
-    </button>
-    {isOpen && item.desc && (
-      <div className="border-t border-slate-100 px-5 py-4 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300">
-        {item.desc}
-      </div>
-    )}
-  </div>
-);
-
+      <button
+        type="button"
+        onClick={onToggle}
+        className={`flex w-full items-center justify-between gap-4 px-5 py-4 text-left ${
+          isOpen ? `bg-gradient-to-r ${color} text-white` : ""
+        }`}
+      >
+        <span className={`font-semibold ${isOpen ? "text-white" : "text-slate-800 dark:text-slate-100"}`}>
+          {item.title}
+        </span>
+        <HiChevronDown
+          className={`h-5 w-5 flex-shrink-0 transition-transform ${isOpen ? "rotate-180 text-white" : "text-slate-400"}`}
+        />
+      </button>
+      {isOpen && points.length > 0 && (
+        <ul className="space-y-2 border-t border-slate-100 px-5 py-4 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-300">
+          {points.map((pt, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-current opacity-60" />
+              <span>{pt}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
 const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
